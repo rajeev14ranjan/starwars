@@ -3,7 +3,7 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.1. [Visit here to see live website running](https://starenterprisewars.000webhostapp.com)
 
 ## Node Modules Needed
-This Angular Project requires 'node_modules' to run. Run npm install to download depedencies. 
+This Angular Project requires `node_modules` to run. Run `npm install` to download depedencies. 
 
 ## Development server
 
