@@ -1,0 +1,39 @@
+<div class="center">
+        <float-text #floater></float-text>
+        <div class="center card row" style="margin-top: 80px;" (mouseenter)="inprogress=true" (mouseleave)="inprogress=false">
+        <form #loginForm="ngForm">
+                <div class="col-md-12 text-center">
+                        <h4 class="text-info">Welcome to StarLabs Enterprise</h4><br/>
+                </div>
+                <div class="col-sm-12 form-group text-left" *ngIf="isRegMode">
+                        <input type="text" class="form-control" id="fullName" name="fullName" maxlength="25" required pattern="[a-zA-Z]+[a-zA-Z ]*"
+                        [(ngModel)]="fn" placeholder="Enter Full Name" />          
+                </div>
+                <div class="col-sm-12 form-group text-left">
+                        <input type="text" class="form-control" name="userName" id="userName" maxlength="25" (change)="verifyUserName()" required [(ngModel)]="un" [placeholder]="(isRegMode?'Select':'Enter') + ' Username'" pattern="[^ ]+" />
+                </div>
+                <div class="col-sm-12 form-group text-left">    
+                        <input class="form-control" [type]="shwPass?'text':'password'" id="passWrd" name="passWrd" maxlength="25" required [(ngModel)]="pw" [placeholder]="(isRegMode?'Select':'Enter') +'  Password'" pattern="[^ ]+" />
+                </div>
+                
+                <div class="col-sm-12 form-group text-left col-mt-5">
+                        <button [disabled]="loginForm.invalid || (!isSignUpAllowed && isRegMode)" type="button"
+                        [ngClass]="loginForm.invalid  ?'btn-outline-success':'btn-success'" 
+                        class="btn btn-sm  col-mr-5" 
+                        (click)="login()">
+                                {{isRegMode?'Sign Up': 'Login'}}
+                        </button>
+                        <button class="btn btn-sm col-mr-10 btn-outline-danger" type="button" [disabled]="(!un&&!pw&&!fn)" (click)="clear()">
+                                Reset
+                        </button>
+                        <a class="text-info" 
+                                (click)="isRegMode = !isRegMode; clear();">
+                                {{isRegMode?'Back to Login':'Sign Up'}}
+                        </a> 
+                </div>
+        </form>
+                <br/>
+                <marquee [ngClass]="inprogress?'text-mute':'blank'">Please Login with your StarLabs login credentials. Sign Up if you are new User. Copiright © Rajeev Ranjan. </marquee>
+        </div>
+
+</div>

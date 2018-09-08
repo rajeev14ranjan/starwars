@@ -1,0 +1,26 @@
+.floater{
+    position: absolute;
+    top: 70px;
+    right: 15px;
+    border-radius: 3px;
+    z-index: 999;
+    box-shadow: 8px 8px 16px grey;
+}
+
+.text{
+    color: white;
+    margin:auto;
+    padding: 15px 35px;
+}
+
+.info{
+    background-color: #0064ff;
+}
+
+.error{
+    background-color: red;
+}
+
+.success{
+    background-color: green;
+}

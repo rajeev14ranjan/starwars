@@ -1,0 +1,60 @@
+<div class="center">
+  <float-text #floater></float-text>
+  <br/>
+  <div>
+    <h4> {{isAdmin ? 'Welcome to Admin Page': 'About me'}} </h4>
+  </div>
+
+  <br/>
+  <div class="row col-md-12" style="text-align: center">
+    <table *ngIf="isAdmin" class="table table-bordered table-hover">
+      <tr>
+        <th>No</th>
+        <th>Full Name</th>
+        <th>UserName</th>
+        <th>Action</th>
+      </tr>
+      <tr *ngFor="let user of allUsers; let i = index">
+        <td>{{i+1}}</td>
+        <td>{{user.fullName}}</td>
+        <td>{{user.userName}}</td>
+        <td>
+          <button class="btn btn-sm btn-danger" *ngIf="isDelete(user.fullName,user.userName)" (click)="deleteUserConfirmation(i)">Delete</button>
+        </td>
+
+      </tr>
+    </table>
+    <div *ngIf="!isAdmin" style="margin:20px">
+      <div class="col-md-12">
+            <div class="col-md-4" style="float:left">
+            <img src="../../rajeev.jpg" class="dev" alt="Developer"/><br/><br/>
+            Rajeev Ranjan<br/>IIT Roorkee
+            </div>
+            <div class="col-md-8" style="word-break:break-word;float:left;padding: 10px;text-align: left;">
+              <p>I'm an experienced, detailed-oriented, front-end web developer. I have three years of hands-on experience in efficiently coding websites and applications using modern HTML, CSS, JavaScript, and Angular.
+              </p>
+              <p>Known for creating robust, high-speed web and mobile apps, my web development work has helped grow revenues, accelerate customer acquisition, increase web traffic and deliver an industry-leading competitive advantage.</p>
+              <p>If you like my work you can hire me as freelancer at 
+                <a href="https://www.freelancer.in/u/rajeev14ranjan" target="blank">www.freelancer.in</a></p>
+            </div>
+      </div>
+    </div>
+    <br/>
+    <br/>
+    <div *ngIf="isAdmin" class="row col-md-12  col-m-5">
+      <button class="btn btn-sm btn-info col-m-5" (click)="goTo('game')">Game Page</button>
+      <button class="btn btn-sm btn-info col-m-5" (click)="goTo('login')">Login Page</button>    
+      <button class="btn btn-sm btn-info col-m-5" (click)="goTo('error')">Error Page</button>  
+      <button class="btn btn-sm btn-info col-m-5" (click)="createUser()">Create User</button>        
+      <button class="btn btn-sm btn-success col-m-5" (click)="showTestNotification()">Test Notification</button> 
+
+    </div>
+    <br/>
+  </div>
+</div>
+
+
+<pop-up #newUserConfirmation 
+        [popUpProp]="popUpProp"
+        (onClicked)="successCallBack($event)">
+</pop-up>

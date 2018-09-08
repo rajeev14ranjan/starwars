@@ -1,0 +1,15 @@
+.center{
+    position: absolute;
+    top:10%;
+    left:24%;
+    margin:50px;
+    padding:50px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px gray;
+}
+
+a{
+    color: blue;
+    cursor: pointer;
+}

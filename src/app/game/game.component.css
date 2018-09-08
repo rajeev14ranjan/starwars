@@ -1,0 +1,135 @@
+.footer{
+    position: absolute;
+    bottom: 0px;
+    left:0px;
+    background: black;
+    height:50px;
+    width:100%;
+}
+
+.score{
+    position: absolute;
+    left:1%;
+    top:10%;
+    padding: 10px;
+    
+}
+
+dot{
+    position: absolute !important;
+}
+
+.gun{
+    position: absolute;
+    bottom: 0;
+    left:calc(50% - 30px);
+    width: 60px;
+}
+
+.top{
+    margin:0px 15px;
+    background: yellow;
+    top:0px;
+    height: 23px;
+    width:30px;
+}
+
+.PowerGun{
+    background: limegreen !important;
+}
+
+.base{
+    background: yellow;
+    height: 27px;
+    width:60px;
+}
+
+
+.center{
+    max-width: 80%;
+    margin: auto;
+    align-items: center;
+    text-align: center;
+    
+}
+
+.col-p-10{
+    padding: 10px;
+}
+
+.col-m-5{
+    margin: 5px;
+}
+label{
+    color:gray;
+}
+
+td{
+    padding:10px 0px;
+}
+a{
+    cursor: pointer;
+}
+.center{
+    max-width: 80%;
+    margin: auto;
+    align-items: center;
+    text-align: center;
+}
+
+.card{
+    background-color: white;
+    max-width: 60%;
+    padding: 30px;
+    border:1px solid lightgray;
+    border-radius: 5px;
+    box-shadow : gray 5px 5px 10px;
+
+}
+
+
+.col-ml-5{
+    margin-left: 5px;
+}
+.col-ml-10{
+    margin-left: 10px;
+}
+.col-mr-10{
+    margin-right: 10px;
+}
+.col-mr-5{
+    margin-right: 5px;
+}
+.col-mt-5{
+    margin-top: 5px;
+}
+.col-mb-5{
+    margin-bottom: 5px;
+}
+
+.col-mb-25{
+    margin-bottom: 25px;
+}
+
+.col-pt-10{
+    padding-top: 10px;
+}
+
+.text-mute{
+    color:rgb(91, 189, 255);
+    font-size:11px;
+}
+
+.sml{
+    font-size:11px;
+}
+
+.blank{
+    color:white;
+    font-size:11px;
+}
+
+.btn-default{
+    border: 1px solid gray;
+    border-radius: .2rem;
+}

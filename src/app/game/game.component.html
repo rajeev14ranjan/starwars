@@ -1,0 +1,39 @@
+<div class="center">
+  <float-text #floater></float-text>
+  <div class="score text-info">
+    High Score : {{highScore?.highScore}} by {{highScore?.user}}<br/>
+    Your Score : {{score}}<br/>
+    <span *ngFor="let life of getLifeCount()">💚</span><br/>
+    <p *ngIf="powerGun">POWER GUN ACQUIRED!!!</p>
+    <p *ngIf="highScored">🏆 This is NEW HIGH SCORE 🏆</p>
+  </div>
+  <br/>
+  
+  <dot *ngFor="let dot of enemyArry" [x]="dot.x" [y]="0" [master]="dot.m"  (outY)="dot.y=$event" [down]="true" ></dot>
+  <dot *ngFor="let dot of bulletArry" [x]="dot.x" [y]="625" [master]="dot.m" (outY)="dot.y=$event" [down]="false"></dot>
+
+  <div *ngIf="gamePreview" class="col-p-10 col-m-5" style="font-size: 20px;">
+    <br/>
+    <b>Welcome to SUPER GALAXY HUNTER</b><br/>  
+    Earth is under attack by alien spaceships, shoot them down before they land and destroy your city. You have a space gun with unlimited missiles.<br/> Shoot down the Master Space ships to gain access to PowerGun with tripple firing capacity.<br/> Master ships are harder to shoot as they can dodge your missiles.
+    <div class="text-info">
+      <br/>
+      Press [A] to move your gun Left<br/>
+      Press [D] to move your gun Right<br/>
+      Press [W] to shoot enemy spaceships<br/>
+      Press [ SpaceBar ] to START GAME<br/> 
+    </div>
+  </div>
+
+  <div *ngIf="gameOver"  style="font-size: 120px">
+    GAME OVER <br/>
+    <h3 *ngIf="highScored">Congratulation for Scoring Highest Score of {{score}}</h3>
+    <h4>Press [ SpaceBar ] to PLAY AGAIN</h4>
+  </div>
+
+  <div class="footer">
+    <div class="gun" [ngStyle]="{'left.px': gunPosition}">
+      <img style="height:60px;width: 68px" src="../../chopper.gif" alt="" />
+
+  </div>
+</div>

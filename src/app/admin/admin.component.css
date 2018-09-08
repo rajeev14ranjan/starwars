@@ -1,0 +1,21 @@
+.center{
+    max-width: 80%;
+    margin: auto;
+    align-items: center;
+    text-align: center;
+    background: lightgray;
+}
+
+.col-p-10{
+    padding: 10px;
+}
+
+.col-m-5{
+    margin: 5px;
+}
+
+.dev{
+    width: 150px;
+    height: 193px;
+    box-shadow: 1px 1px 7px grey;
+}
