@@ -12,6 +12,8 @@
     left:1%;
     top:10%;
     padding: 10px;
+
+    text-align: left;
     
 }
 
@@ -22,7 +24,6 @@ dot{
 .gun{
     position: absolute;
     bottom: 0;
-    left:calc(50% - 30px);
     width: 60px;
 }
 

@@ -1,21 +1,50 @@
+
+
 <div class="center">
+
+    <dot [isDotGun]="true"
+    [x]="gunPosition"
+    [y]="footerPos.top - 70">
+</dot>
+
+<dot *ngFor="let dot of enemyArry" 
+    [x]="dot.x" 
+    [y]="0" 
+    [master]="dot.m"  
+    (outY)="dot.y=$event" 
+    [down]="true" >
+</dot>
+<dot *ngFor="let dot of bulletArry" 
+    [x]="dot.x" 
+    [y]="dot.y" 
+    [master]="dot.m" 
+    (outY)="dot.y=$event" 
+    [down]="false">
+</dot>
+
   <float-text #floater></float-text>
   <div class="score text-info">
     High Score : {{highScore?.highScore}} by {{highScore?.user}}<br/>
-    Your Score : {{score}}<br/>
+    Your Score : {{score}}<br/><br/>
     <span *ngFor="let life of getLifeCount()">💚</span><br/>
     <p *ngIf="powerGun">POWER GUN ACQUIRED!!!</p>
     <p *ngIf="highScored">🏆 This is NEW HIGH SCORE 🏆</p>
+    <div  *ngIf="!isUserAdmin"><br/>
+    <p>Screen Size: {{width}} X {{height}} <br/>
+       Playing Area: {{playingArea.width}} X {{playingArea.height}} <br/>
+       Range X: [{{playingArea.xMin}}, {{playingArea.xMax}}]   <br/>
+       Range Y: [{{playingArea.yMin}}, {{playingArea.yMax}}] <br/>
+       Gun Pos: {{this.gunPosition}} <br/>
+       Footer Pos: {{footerPos.top}} <br/>
+    </p>
+   </div>
   </div>
   <br/>
-  
-  <dot *ngFor="let dot of enemyArry" [x]="dot.x" [y]="0" [master]="dot.m"  (outY)="dot.y=$event" [down]="true" ></dot>
-  <dot *ngFor="let dot of bulletArry" [x]="dot.x" [y]="625" [master]="dot.m" (outY)="dot.y=$event" [down]="false"></dot>
 
   <div *ngIf="gamePreview" class="col-p-10 col-m-5" style="font-size: 20px;">
     <br/>
-    <b>Welcome to SUPER GALAXY HUNTER</b><br/>  
-    Earth is under attack by alien spaceships, shoot them down before they land and destroy your city. You have a space gun with unlimited missiles.<br/> Shoot down the Master Space ships to gain access to PowerGun with tripple firing capacity.<br/> Master ships are harder to shoot as they can dodge your missiles.
+    <h3>Welcome to SUPER GALAXY HUNTER</h3>  
+    Earth is under attack by alien spaceships, shoot them down before they land and destroy your city. You have a space gun with unlimited missiles.<br/> Shoot down the Master Space ships to gain Extra life.<br/> Master ships are harder to shoot as they can dodge your missiles.
     <div class="text-info">
       <br/>
       Press [A] to move your gun Left<br/>
@@ -31,9 +60,11 @@
     <h4>Press [ SpaceBar ] to PLAY AGAIN</h4>
   </div>
 
-  <div class="footer">
-    <div class="gun" [ngStyle]="{'left.px': gunPosition}">
-      <img style="height:60px;width: 68px" src="../../chopper.gif" alt="" />
-
-  </div>
+  <div id="footerDiv" class="footer"></div>
+    
 </div>
+
+
+
+
+

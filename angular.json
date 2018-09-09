@@ -24,7 +24,8 @@
               "src/missile.png",
               "src/rajeev.jpg",
               "src/ufo-smiley.gif",
-              "src/chopper.gif"
+              "src/chopper.gif",
+              "src/blast.gif"
             ],
             "styles": [
               "src/styles.css",

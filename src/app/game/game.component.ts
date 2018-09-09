@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { BrowserStorageService} from '../service/browser-storage.service';
 import { Router } from '@angular/router';
 import { FloatTextComponent } from '../float-text/float-text.component';
+import { RoutingService } from 'src/app/service/routing-service.service';
 
 @Component({
   selector: 'game-page',
@@ -12,7 +13,7 @@ import { FloatTextComponent } from '../float-text/float-text.component';
 export class GameComponent implements OnInit {
   public enemyArry = new Array<Point>();
   public bulletArry = new Array<Point>();
-  public gunPosition = 783;
+  public gunPosition = 0;
   public gameOver = false;
   public score: number = 0;
   public lifeCount = 10;
@@ -23,21 +24,52 @@ export class GameComponent implements OnInit {
   public leftCounter = 0;
   public rightMove = 30;
   public rightCounter = 0;
-  public powerGun = false;
   public lifeWarning = true;
   public scoreMilestone = 500;
+  public footerPos = {top :0 , left : 0};
+  public isUserAdmin : boolean;
+
+  public width = window.innerWidth;
+  public height = window.innerHeight;
+
+  public playingArea ={
+    xMin : 0,
+    xMax:  0,
+    yMin : 0,
+    yMax : 0,
+    width: 0,
+    height: 0
+  }
+
 
   @ViewChild('floater') floater : FloatTextComponent;
   
 
-  constructor(private _title: Title, private _router: Router, private _localStorage : BrowserStorageService) {
+  constructor(private _title: Title, private _router: Router, private _localStorage : BrowserStorageService, private _routinService : RoutingService) {
     //this._localStorage.checkForLogin();
     this.highScore = _localStorage.getHighScore();
+    this.calculatePlayingArea();
    }
+
 
   ngOnInit() {
     this._title.setTitle('Game Page');
+    this.footerPos = this._routinService.getCoordinate(document.getElementById('footerDiv'));
+    this.isUserAdmin = this._localStorage.isAdmin();
   }
+
+  public calculatePlayingArea(){
+    let playingWidth = Math.floor(0.6 * this.width);
+    let playingHeight = Math.floor(0.8 * this.height);
+
+    this.playingArea.width = playingWidth;
+    this.playingArea.height = playingHeight;
+    this.playingArea.xMin = -1 * Math.floor(playingWidth/2);
+    this.playingArea.xMax = Math.floor(playingWidth/2);
+    this.playingArea.yMin = 0;
+    this.playingArea.yMax = playingHeight;
+  }
+
 
   public detechCollision(){
     var ccId = setInterval(()=>{
@@ -45,7 +77,7 @@ export class GameComponent implements OnInit {
         this.collisionCheck();
       }else{
         clearInterval(ccId);
-        this.gunPosition=783;
+        this.gunPosition= 0;
       }
     },100);
   }
@@ -55,18 +87,17 @@ export class GameComponent implements OnInit {
     this.floater.showText('Game Started, Best of Luck!','I');
     this.lifeWarning = true;
     var itId = setInterval(() => {
-      let x = Math.floor((Math.random() * 1000 - 500));
+      let x = Math.floor((Math.random() - 0.5) * this.playingArea.width);
       x = Math.floor(x / 30) * 30;
-      let y = 0;
-      let master = Math.floor((Math.random()*10)) > (this.powerGun ? 5:8);
-      this.enemyArry.push({ 'x': x, 'y': y ,'m': master});
-      if(this.enemyArry.length > 10){
+      let y = this.playingArea.yMin;
+      let master = Math.floor((Math.random()*10)) > 8;
+      this.enemyArry.push({ 'x': x, 'y': y ,'m': master? 1 : 0});
+      if(this.enemyArry.length > 20){
         this.lifeCount --;
         this.enemyArry.unshift();
       }
       if (this.lifeCount < 1 ) {
         this.gameOver = true;
-        this.powerGun=false;
         this.enemyArry = new Array<Point>();
         if(this.highScored){
           this._localStorage.saveHighScore(this.score);
@@ -75,7 +106,7 @@ export class GameComponent implements OnInit {
         clearInterval(itId);
       }
       if(this.lifeWarning && this.lifeCount < 4){
-        this.floater.showText('Play Carefully, Only 3 lifes left', 'E');
+        this.floater.showText('Play Carefully, Only 3 life left', 'E');
         this.lifeWarning = false;
       }
     }, 2000);
@@ -83,53 +114,58 @@ export class GameComponent implements OnInit {
 
   //checks the collision between bullet and enemy
   public collisionCheck() {
-    for(let index = -510; index < 500; index += 30){
-      let enemy = this.enemyArry.findIndex(e=> e.x == index);
-      let bullet = this.bulletArry.findIndex(e=> e.x == index);
-      if(enemy > -1 && bullet > -1 && 
-        (this.enemyArry[enemy].y + (this.powerGun ? 120 : 60) > this.bulletArry[bullet].y )){
-          if(this.enemyArry[enemy].m){
-            this.score += 200;
-            if(!this.powerGun){
-              this.floater.showText('You have acquired Power Gun','G');
+      for(let e=0; e < this.enemyArry.length; e++){
+          let enemy = this.enemyArry[e];
+          let b = this.bulletArry.findIndex(blt => blt.x == enemy.x);
+          if(b > -1 && enemy.m < 2){
+            let bullet = this.bulletArry[b];
+      
+            if(enemy.y + 60 > bullet.y){
+              if(enemy.m){
+                this.score += 200;
+                this.floater.showText('You have gained a Life by killing Master Ship','I');
+                this.lifeCount++;
             }
-            this.powerGun = true;
-         }
-         this.score += Math.ceil(this.enemyArry[enemy].y/10) ;
-          this.enemyArry.splice(enemy,1);
-          this.bulletArry.splice(bullet,1);
+            this.score += Math.ceil((this.playingArea.yMax - enemy.y)/5) ;
+            enemy.m = 2; // Change it in blast
 
-          if(this.score > this.scoreMilestone){
-            this.floater.showText(`You have crossed ${this.scoreMilestone} mark!`,'S');
-            this.scoreMilestone *= 2;
+            setTimeout(()=>enemy.m=3,600);
+            this.bulletArry.splice(b,1);
+
+            if(this.score > this.scoreMilestone){
+              this.floater.showText(`You have crossed ${this.scoreMilestone} mark!`,'S');
+              this.scoreMilestone *= 2;
+            }
+            
+            if(!this.highScored && this.score > parseInt(this.highScore.highScore)){
+                this.floater.showText('Congratulations! This is new high score 🏆','I');
+                this.highScored = true;
+                this._localStorage.saveHighScore(this.score);
+            }
           }
-          
-          if(!this.highScored && this.score > parseInt(this.highScore.highScore)){
-              this.floater.showText('Congratulations! This is new high score 🏆','I');
-              this.highScored = true;
-              this._localStorage.saveHighScore(this.score);
-          }
-      } else if (enemy > -1  && this.enemyArry[enemy].y > 630){
-          this.enemyArry.splice(enemy,1);
-          this.lifeCount -= 1;
-      } else if (bullet > -1 && this.bulletArry[bullet].y < -199){
-          this.bulletArry.splice(bullet,1);
+      }//end collision check
+
+      if(enemy.y > this.playingArea.yMax){
+        this.enemyArry.splice(e,1);
+        if(enemy.m < 3) this.lifeCount -= 1;
+      }
+    }
+
+    for(let b =0; b< this.bulletArry.length; b++){
+      if(this.bulletArry[b].y < this.playingArea.yMin){
+        this.bulletArry.splice(b,1);
       }
     }
   }
+
 
   public goTo(url: string) {
     this._router.navigateByUrl(url);
   }
 
   public fireBullet(xIndex: number) {
-    this.bulletArry.push({ 'x': xIndex, 'y': 625,'m': false });
-    if(this.powerGun){
-    this.bulletArry.push({ 'x': xIndex-30, 'y': 625,'m': true });
-    this.bulletArry.push({ 'x': xIndex, 'y': 625,'m': true });
-    this.bulletArry.push({ 'x': xIndex+30, 'y': 625,'m': true });      
-    }
-    if(this.bulletArry.length > 40){
+    this.bulletArry.push({ 'x': xIndex, 'y': this.playingArea.yMax ,'m': 0 });
+    if(this.bulletArry.length > 10){
       this.bulletArry.splice(0,1);
     }
   }
@@ -140,14 +176,14 @@ export class GameComponent implements OnInit {
 
   @HostListener('document:keypress', ['$event']) handleKeyboardEvent(event: KeyboardEvent) {
     let x = event.keyCode;
-    if ((x == 97 ||x == 65) && this.gunPosition > 60) {
+    if ((x == 97 || x == 65) && this.gunPosition > this.playingArea.xMin - 100) {
       this.gunPosition -= this.leftMove;
       this.leftCounter++;
       this.rightCounter = 0;
       this.leftMove = this.getXPos(this.leftCounter);
       this.rightMove = 30;
     } 
-    else if ((x == 100||x == 68) && this.gunPosition < 1300) {
+    else if ((x == 100||x == 68) && this.gunPosition < this.playingArea.xMax + 100) {
       this.gunPosition += this.rightMove;
       this.rightCounter++;
       this.leftCounter = 0;
@@ -155,7 +191,7 @@ export class GameComponent implements OnInit {
       this.leftMove = 30;
     } 
     else if ((x == 119||x == 87) && !this.gameOver) {
-      this.fireBullet(this.gunPosition - 753);
+      this.fireBullet(this.gunPosition);
       this.rightCounter = 0;
       this.leftCounter = 0;
     }
@@ -186,10 +222,8 @@ export class GameComponent implements OnInit {
   }
 }
 
-
-
 class Point {
   public x?: number;
   public y?: number;
-  public m?: boolean;
+  public m?: number; //0: normal, 1: masterShip, 2: hit, 3: killed
 }
