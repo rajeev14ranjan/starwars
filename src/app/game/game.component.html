@@ -27,9 +27,8 @@
     High Score : {{highScore?.highScore}} by {{highScore?.user}}<br/>
     Your Score : {{score}}<br/><br/>
     <span *ngFor="let life of getLifeCount()">💚</span><br/>
-    <p *ngIf="powerGun">POWER GUN ACQUIRED!!!</p>
     <p *ngIf="highScored">🏆 This is NEW HIGH SCORE 🏆</p>
-    <div  *ngIf="!isUserAdmin"><br/>
+    <div><br/>
     <p>Screen Size: {{width}} X {{height}} <br/>
        Playing Area: {{playingArea.width}} X {{playingArea.height}} <br/>
        Range X: [{{playingArea.xMin}}, {{playingArea.xMax}}]   <br/>

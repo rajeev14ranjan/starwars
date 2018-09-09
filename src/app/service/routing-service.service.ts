@@ -6,10 +6,16 @@ export class RoutingService {
   constructor() { }
 
   public getCoordinate(el) {
+    if(el){
     let rect = el.getBoundingClientRect();
     let scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    return { top: rect.top + scrollTop, right : rect.right,bottom: rect.bottom, left: rect.left+scrollLeft }
+    return { 
+      top: Math.floor(rect.top + scrollTop), 
+      right : Math.floor(rect.right),
+      bottom: Math.floor(rect.bottom), 
+      left: Math.floor(rect.left+scrollLeft) }
+    }
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component,ViewChild } from '@angular/core';
+import { Component,ViewChild, AfterViewInit } from '@angular/core';
 import { BrowserStorageService } from '../service/browser-storage.service';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { FloatTextComponent } from '../float-text/float-text.component';
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css']
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements AfterViewInit {
   public title = 'login-page';
   public un = '';
   public pw = '';
@@ -29,6 +29,17 @@ export class LoginPageComponent {
   constructor(private _localStorage: BrowserStorageService, private _title: Title, private _router: Router) {
     this.clearError();
     this._title.setTitle('Login Page');
+  }
+
+  ngAfterViewInit(){
+    setTimeout(()=> {
+    let aElt = document.querySelectorAll('a');
+    for(let i = 0; i < aElt.length ; i++){
+      if(aElt[i].title.includes('Hosted on free')){
+        aElt[i].remove();
+        break;
+      }
+    }},100);
   }
 
   public clearError() {

@@ -46,7 +46,7 @@ export class GameComponent implements OnInit {
   
 
   constructor(private _title: Title, private _router: Router, private _localStorage : BrowserStorageService, private _routinService : RoutingService) {
-    //this._localStorage.checkForLogin();
+    this._localStorage.checkForLogin();
     this.highScore = _localStorage.getHighScore();
     this.calculatePlayingArea();
    }
@@ -59,6 +59,10 @@ export class GameComponent implements OnInit {
   }
 
   public calculatePlayingArea(){
+    this.width = window.innerWidth;
+    this.height = window.innerHeight;
+    this.footerPos = this._routinService.getCoordinate(document.getElementById('footerDiv'));
+
     let playingWidth = Math.floor(0.6 * this.width);
     let playingHeight = Math.floor(0.8 * this.height);
 
@@ -94,13 +98,14 @@ export class GameComponent implements OnInit {
       this.enemyArry.push({ 'x': x, 'y': y ,'m': master? 1 : 0});
       if(this.enemyArry.length > 20){
         this.lifeCount --;
-        this.enemyArry.unshift();
+        this.enemyArry.shift();
       }
       if (this.lifeCount < 1 ) {
         this.gameOver = true;
         this.enemyArry = new Array<Point>();
         if(this.highScored){
           this._localStorage.saveHighScore(this.score);
+          this.highScore = false;
         }
         this.floater.showText('Game Over, You played really well', 'S');
         clearInterval(itId);
@@ -166,7 +171,7 @@ export class GameComponent implements OnInit {
   public fireBullet(xIndex: number) {
     this.bulletArry.push({ 'x': xIndex, 'y': this.playingArea.yMax ,'m': 0 });
     if(this.bulletArry.length > 10){
-      this.bulletArry.splice(0,1);
+      this.bulletArry.shift();
     }
   }
 
@@ -200,6 +205,8 @@ export class GameComponent implements OnInit {
       this.gameOver = false;
       this.lifeCount = 10;
       this.score=0;
+      this.highScore = false;
+      this.calculatePlayingArea();
       this.startGame();
       this.detechCollision();
     }
