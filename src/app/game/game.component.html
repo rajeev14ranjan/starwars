@@ -24,10 +24,10 @@
 
   <float-text #floater></float-text>
   <div class="score text-info">
-    High Score : {{highScore?.highScore}} by {{highScore?.user}}<br/>
-    Your Score : {{score}}<br/><br/>
+    High Score : <span *ngIf="highScoreFlag">{{score}} by You!</span>
+    <span *ngIf="!highScoreFlag">{{highScore?.highScore}} by {{highScore?.user}}</span><br/>
+    Your Score : {{score}} <span *ngIf="highScoreFlag">🏆</span><br/><br/>
     <span *ngFor="let life of getLifeCount()">💚</span><br/>
-    <p *ngIf="highScored">🏆 This is NEW HIGH SCORE 🏆</p>
     <div><br/>
     <p>Screen Size: {{width}} X {{height}} <br/>
        Playing Area: {{playingArea.width}} X {{playingArea.height}} <br/>
@@ -55,7 +55,7 @@
 
   <div *ngIf="gameOver"  style="font-size: 120px">
     GAME OVER <br/>
-    <h3 *ngIf="highScored">Congratulation for Scoring Highest Score of {{score}}</h3>
+    <h3 *ngIf="highScoreFlag">Congratulation for Scoring Highest Score of {{score}}</h3>
     <h4>Press [ SpaceBar ] to PLAY AGAIN</h4>
   </div>
 

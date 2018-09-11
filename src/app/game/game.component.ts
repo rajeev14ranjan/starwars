@@ -19,7 +19,7 @@ export class GameComponent implements OnInit {
   public lifeCount = 10;
   public gamePreview = true;
   public highScore : any;
-  public highScored : boolean;
+  public highScoreFlag : boolean;
   public leftMove = 30;
   public leftCounter = 0;
   public rightMove = 30;
@@ -47,7 +47,7 @@ export class GameComponent implements OnInit {
 
   constructor(private _title: Title, private _router: Router, private _localStorage : BrowserStorageService, private _routinService : RoutingService) {
     this._localStorage.checkForLogin();
-    this.highScore = _localStorage.getHighScore();
+    this.highScore = this._localStorage.getHighScore();
     this.calculatePlayingArea();
    }
 
@@ -56,6 +56,20 @@ export class GameComponent implements OnInit {
     this._title.setTitle('Game Page');
     this.footerPos = this._routinService.getCoordinate(document.getElementById('footerDiv'));
     this.isUserAdmin = this._localStorage.isAdmin();
+    if(!this.isUserAdmin){
+    setTimeout(() => {
+      this.floater.showText('↑ click on About tab to know more about this Project', 'I');
+    }, 2000);}
+  }
+
+  public resetToNewGame(){
+    this.highScore = this._localStorage.getHighScore();
+    this.gamePreview = false;
+    this.gameOver = false;
+    this.lifeCount = 10;
+    this.score=0;
+    this.highScoreFlag = false;
+    this.calculatePlayingArea();
   }
 
   public calculatePlayingArea(){
@@ -103,9 +117,8 @@ export class GameComponent implements OnInit {
       if (this.lifeCount < 1 ) {
         this.gameOver = true;
         this.enemyArry = new Array<Point>();
-        if(this.highScored){
+        if(this.highScoreFlag){
           this._localStorage.saveHighScore(this.score);
-          this.highScore = false;
         }
         this.floater.showText('Game Over, You played really well', 'S');
         clearInterval(itId);
@@ -130,11 +143,11 @@ export class GameComponent implements OnInit {
                 this.score += 200;
                 this.floater.showText('You have gained a Life by killing Master Ship','I');
                 this.lifeCount++;
-            }
+              }
             this.score += Math.ceil((this.playingArea.yMax - enemy.y)/5) ;
             enemy.m = 2; // Change it in blast
 
-            setTimeout(()=>enemy.m=3,600);
+            setTimeout(()=>enemy.m=3,800);
             this.bulletArry.splice(b,1);
 
             if(this.score > this.scoreMilestone){
@@ -142,9 +155,9 @@ export class GameComponent implements OnInit {
               this.scoreMilestone *= 2;
             }
             
-            if(!this.highScored && this.score > parseInt(this.highScore.highScore)){
-                this.floater.showText('Congratulations! This is new high score 🏆','I');
-                this.highScored = true;
+            if(!this.highScoreFlag && this.score > parseInt(this.highScore.highScore)){
+                this.floater.showText('🏆 Congratulations! This is a new high score 🏆','I');
+                this.highScoreFlag = true;
                 this._localStorage.saveHighScore(this.score);
             }
           }
@@ -201,12 +214,7 @@ export class GameComponent implements OnInit {
       this.leftCounter = 0;
     }
     else if(x==32){
-      this.gamePreview = false;
-      this.gameOver = false;
-      this.lifeCount = 10;
-      this.score=0;
-      this.highScore = false;
-      this.calculatePlayingArea();
+      this.resetToNewGame();
       this.startGame();
       this.detechCollision();
     }

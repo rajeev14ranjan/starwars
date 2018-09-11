@@ -25,8 +25,9 @@ export class BrowserStorageService {
       return h? JSON.parse(h): { user : 'SYSYEM', highScore  : 0 };
   }
 
-  public saveHighScore(highScore : number){
-        let newHighScore = { user : this.loggedUserName, highScore  : highScore}
+  public saveHighScore(score : number){
+        let highScoreUser = this.loggedUserName || 'SYSTEM';
+        let newHighScore = { user : highScoreUser, highScore  : score}
         localStorage.setItem(this.highScoreKey, JSON.stringify(newHighScore));
   }
 

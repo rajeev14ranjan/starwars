@@ -19,3 +19,7 @@
     height: 193px;
     box-shadow: 1px 1px 7px grey;
 }
+
+.backArrow{
+    cursor: pointer;
+}

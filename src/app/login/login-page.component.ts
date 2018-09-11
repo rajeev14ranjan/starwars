@@ -40,6 +40,18 @@ export class LoginPageComponent implements AfterViewInit {
         break;
       }
     }},100);
+
+    setTimeout(() => {
+      this.floater.showText('Sign Up if you are new to this Page 🙂', 'I');
+    }, 1500);
+
+    setTimeout(() => {
+      this.floater.showText(`It won't take much time 😊`, 'S');
+    }, 5300);
+
+    setTimeout(() => {
+      this.floater.showText(`You can also login as a Guest 😃`, 'S');
+    }, 9400);
   }
 
   public clearError() {
@@ -93,6 +105,12 @@ export class LoginPageComponent implements AfterViewInit {
       }
     }
     this.floater.showText(this.errorMsg[0].msg, this.errorMsg[0].type);
+  }
+
+  public loginAsGuest(){
+    this._localStorage.loggedUserID = 'guest';
+    this._localStorage.loggedUserName = 'Guest';
+    this._router.navigateByUrl('game');
   }
 
 
