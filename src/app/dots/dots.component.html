@@ -3,17 +3,17 @@
 
 <img *ngIf="down && !isDotGun && master < 3" 
      style="width:45px" 
-     [src]="master == 2 ?'../../blast.gif' :'../../ufo-smiley.gif'" 
+     [src]="master == 2 ?'../../assets/blast.gif' :'../../assets/ufo-smiley.gif'" 
      alt="👽" />
 
 <img *ngIf="!down && !isDotGun" 
      style="height:45px" 
-     src="../../missile.png" 
+     src="../../assets/missile.png" 
      alt="☢️" />
 
 <img *ngIf="isDotGun" 
      style="height:60px;width: 68px;bottom: 0px;" 
-     src="../../chopper.gif" 
+     src="../../assets/chopper.gif" 
      alt="GUN" />
 
 </div>

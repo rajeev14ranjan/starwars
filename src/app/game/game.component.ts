@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener,ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { BrowserStorageService} from '../service/browser-storage.service';
+import { StorageService} from '../service/browser-storage.service';
 import { Router } from '@angular/router';
 import { FloatTextComponent } from '../float-text/float-text.component';
 import { RoutingService } from 'src/app/service/routing-service.service';
@@ -18,7 +18,7 @@ export class GameComponent implements OnInit {
   public score: number = 0;
   public lifeCount = 10;
   public gamePreview = true;
-  public highScore : any;
+  public highScore = {"user":'SYSTEM',"highScore": 0};
   public highScoreFlag : boolean;
   public leftMove = 30;
   public leftCounter = 0;
@@ -28,6 +28,8 @@ export class GameComponent implements OnInit {
   public scoreMilestone = 500;
   public footerPos = {top :0 , left : 0};
   public isUserAdmin : boolean;
+  public isGuestUser : boolean;
+
 
   public width = window.innerWidth;
   public height = window.innerHeight;
@@ -45,10 +47,19 @@ export class GameComponent implements OnInit {
   @ViewChild('floater') floater : FloatTextComponent;
   
 
-  constructor(private _title: Title, private _router: Router, private _localStorage : BrowserStorageService, private _routinService : RoutingService) {
+  constructor(private _title: Title, private _router: Router, private _localStorage : StorageService, private _routinService : RoutingService) {
     this._localStorage.checkForLogin();
-    this.highScore = this._localStorage.getHighScore();
+    this.getHighScore();
     this.calculatePlayingArea();
+   }
+
+   public getHighScore(){
+    this._localStorage.getHighScore().subscribe(
+      highSc =>{
+        this.highScore.highScore = highSc.score;
+        this.highScore.user = highSc.fullname;
+      }
+    )
    }
 
 
@@ -56,6 +67,7 @@ export class GameComponent implements OnInit {
     this._title.setTitle('Game Page');
     this.footerPos = this._routinService.getCoordinate(document.getElementById('footerDiv'));
     this.isUserAdmin = this._localStorage.isAdmin();
+    this.isGuestUser = this._localStorage.isGuestUser;
     if(!this.isUserAdmin){
     setTimeout(() => {
       this.floater.showText('↑ click on About tab to know more about this Project', 'I');
@@ -63,7 +75,6 @@ export class GameComponent implements OnInit {
   }
 
   public resetToNewGame(){
-    this.highScore = this._localStorage.getHighScore();
     this.gamePreview = false;
     this.gameOver = false;
     this.lifeCount = 10;
@@ -138,7 +149,7 @@ export class GameComponent implements OnInit {
           if(b > -1 && enemy.m < 2){
             let bullet = this.bulletArry[b];
       
-            if(enemy.y + 60 > bullet.y){
+            if(enemy.y + 100 > bullet.y){
               if(enemy.m){
                 this.score += 200;
                 this.floater.showText('You have gained a Life by killing Master Ship','I');
@@ -155,10 +166,11 @@ export class GameComponent implements OnInit {
               this.scoreMilestone *= 2;
             }
             
-            if(!this.highScoreFlag && this.score > parseInt(this.highScore.highScore)){
+            if(!this.highScoreFlag && this.score > this.highScore.highScore){
                 this.floater.showText('🏆 Congratulations! This is a new high score 🏆','I');
                 this.highScoreFlag = true;
                 this._localStorage.saveHighScore(this.score);
+                this._localStorage.highScore = this.score;
             }
           }
       }//end collision check

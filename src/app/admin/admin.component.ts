@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { BrowserStorageService ,UserDetail} from '../service/browser-storage.service';
+import { StorageService ,UserDetail, Logs} from '../service/browser-storage.service';
 import { Router } from '@angular/router';
 import { PopUpProp, PopUpComponent } from '../pop-up/pop-up.component';
 import { FloatTextComponent } from '../float-text/float-text.component';
+import { HttpHelperService } from '../service/http-helper.service';
+import { ModalDirective } from 'ngx-bootstrap';
+
 
 
 @Component({
@@ -13,28 +16,49 @@ import { FloatTextComponent } from '../float-text/float-text.component';
 })
 export class AdminComponent implements OnInit {
   public allUsers: Array<UserDetail>;
+  public userLogs: Array<Logs>;
   public popUpProp : PopUpProp;
   public tempIndex : number;
   public count : number;
   public isAdmin :boolean;
+  public isGuestUser : boolean;
+  public loggedUserID : number;
+
   @ViewChild('newUserConfirmation') public newUserConfirmation : PopUpComponent;
   @ViewChild('floater') floater : FloatTextComponent;
+  @ViewChild('logModal') logModal : ModalDirective; 
 
-  constructor(private _title: Title, private _localStorage: BrowserStorageService, private _router:Router) {
+  public testURL='./';
+  public postData = `{"un":"nid","fn":"nidhi bhade","pw":"love"}`;
+  public testResponse = '';
+  public isPost = false;
+
+  constructor(private _title: Title, private _localStorage: StorageService, private _router:Router, private _httpHelper : HttpHelperService) {
     this._localStorage.checkForLogin();
     
   }
 
   ngOnInit() {
     this.count=1;
-    this.allUsers = this._localStorage.getAllUsers();
     this.isAdmin = this._localStorage.isAdmin();
+    this.isGuestUser = this._localStorage.isGuestUser;
+    this.loggedUserID = this._localStorage.loggedUser.userid;
+    if(this.isAdmin){
+      this.fetchAllUser();
+    }
     this._title.setTitle(this.isAdmin? 'Admin Page':'About Page');
   }
 
+  public fetchAllUser(){
+    this._localStorage.getAllUsers()
+    .subscribe(res => {
+        this.allUsers = res;
+      },error => this.floater.showText(error,'E'));
+    }
+
   public deleteUser() {
-    this._localStorage.deleteUser(this.tempIndex);
-    this.allUsers = this._localStorage.getAllUsers();
+    //this._localStorage.deleteUser(this.tempIndex);
+    //this.allUsers = this._localStorage.getAllUsers();
     this.floater.showText('User Successfully Deleted', 'S', 2000);
   }
 
@@ -42,7 +66,7 @@ export class AdminComponent implements OnInit {
     this.tempIndex = index;
     let confirmUser = new PopUpProp();
     confirmUser.header = 'Delete User';
-    confirmUser.body = `Are you sure you want to delete ${this.allUsers[index].fullName} ?`;
+    confirmUser.body = `Are you sure you want to delete ${this.allUsers[index].fullname} ?`;
     confirmUser.btnDanger = 'Delete';
     confirmUser.btnNeutral = 'Cancel';
     confirmUser.operation = 'delete';
@@ -68,7 +92,7 @@ export class AdminComponent implements OnInit {
 
   public createDummyUser(){
     this._localStorage.CreateDummyUser(4);
-    this.allUsers = this._localStorage.getAllUsers();
+    //this.allUsers = this._localStorage.getAllUsers();
     this.floater.showText('Dummy User Created Successfully', 'S', 2000);
   }
 
@@ -97,4 +121,51 @@ export class AdminComponent implements OnInit {
     this.floater.showText(this.count++ + '  Test Notification Received', t)
   }
   
+
+  public testConnection(){
+    if(!this.testURL.startsWith('./') && !this.testURL.startsWith('http')) {this.testURL=='./' + this.testURL;}
+
+    let dataP = '';
+    try{
+      dataP = JSON.parse(this.postData);
+    } catch(e){
+      this.floater.showText(e,'E');
+      return;
+    }
+
+    if(this.isPost){
+      this._httpHelper.post(this.testURL, dataP).subscribe(res=>{
+        this.testResponse = res;
+        this.floater.showText("Sucess",'S');
+      },(error:string)=>{
+        this.testResponse = error;
+        this.floater.showText("Error Occurred",'E');
+      });
+    } else {
+      
+      this._httpHelper.get(this.testURL).subscribe(res=>{
+        this.testResponse = res;
+        this.floater.showText("Sucess",'S');
+      },(error:string)=>{
+        this.testResponse = error;
+        this.floater.showText("Error Occurred",'E');
+      });
+
+    }
+
+    
+  }
+
+  public openLogModal(userId : number){
+    this._localStorage.getLogforUser(userId).subscribe(
+      (logs:Array<Logs>)=>{
+        if(logs && logs.length > 0){
+           this.userLogs = logs;
+          this.logModal.show();
+        } else {
+          this.floater.showText('No logs available for this user','I');
+        }
+      },(error:string)=>{this.floater.showText(error,'E')});
+  }
+
 }

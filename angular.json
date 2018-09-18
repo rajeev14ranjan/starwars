@@ -19,13 +19,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/missile.png",
-              "src/rajeev.jpg",
-              "src/ufo-smiley.gif",
-              "src/chopper.gif",
-              "src/blast.gif"
+              "src/assets"
             ],
             "styles": [
               "src/styles.css",

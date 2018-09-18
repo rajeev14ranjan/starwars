@@ -1,5 +1,5 @@
 import { Component,ViewChild, AfterViewInit } from '@angular/core';
-import { BrowserStorageService } from '../service/browser-storage.service';
+import { StorageService } from '../service/browser-storage.service';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
@@ -26,7 +26,7 @@ export class LoginPageComponent implements AfterViewInit {
 
   public errorMsg: any;
 
-  constructor(private _localStorage: BrowserStorageService, private _title: Title, private _router: Router) {
+  constructor(private _localStorage: StorageService, private _title: Title, private _router: Router) {
     this.clearError();
     this._title.setTitle('Login Page');
   }
@@ -69,20 +69,25 @@ export class LoginPageComponent implements AfterViewInit {
 
 
   public verifyUserName() {
-    let fullName = this._localStorage.getFullUserNameValidity(this.un);
-    if (!fullName) {
-      this.isSignUpAllowed = true;
-      this.errorMsg[0].type = this.isRegMode ? 'S' : 'E';
-      this.errorMsg[0].msg = this.isRegMode ? "Username Available" : "No User found, Sign-up if new User";
-      this.isUserNameValid = !this.isRegMode;
-    } else {
-      this.isSignUpAllowed = false;
-      this.errorMsg[0].type = this.isRegMode ? 'E' : 'S';
-      this.errorMsg[0].msg = this.isRegMode ? `This Username is NOT Available` : `Welcome ${fullName}`;
-      this.isUserNameValid = this.isRegMode;
-    }
-
-    this.floater.showText(this.errorMsg[0].msg,this.errorMsg[0].type);
+    this._localStorage.getFullUserNameValidity(this.un)
+    .subscribe((res : Array<any>)=>{
+        if(res && res.length > 0){
+          let fullName = res[0]['fullname'];
+          this.isSignUpAllowed = false;
+          this.errorMsg[0].type = this.isRegMode ? 'E' : 'S';
+          this.errorMsg[0].msg = this.isRegMode ? `This Username is NOT Available` : `Welcome ${fullName}`;
+          this.isUserNameValid = this.isRegMode;
+        } else {
+          this.isSignUpAllowed = true;
+          this.errorMsg[0].type = this.isRegMode ? 'S' : 'E';
+          this.errorMsg[0].msg = this.isRegMode ? "Username Available" : "No User found, Sign-up if new User";
+          this.isUserNameValid = !this.isRegMode;
+        }
+        this.floater.showText(this.errorMsg[0].msg,this.errorMsg[0].type);
+      },
+    (error)=>{
+      this.floater.showText(error, 'E')
+    });
   }
 
   public login() {
@@ -95,24 +100,27 @@ export class LoginPageComponent implements AfterViewInit {
       this.errorMsg[0].msg = "SignUp Success. Please Login";
     } else {
       //Login
-      if (this._localStorage.checkCredentialValidity(this.un, this.pw)) {
-        this._router.navigateByUrl('game');
-      } else {
-        this.errorMsg[0].type = 'E';
-        this.errorMsg[0].msg = 'Incorrect Username or Password';
-        this.pw = '';
-        
-      }
+      this._localStorage.checkCredentialValidity(this.un, this.pw).subscribe(
+        (response : boolean)=> {
+          if (response) {
+            this._router.navigateByUrl('game');
+          } else {
+            this.pw = '';
+            this.floater.showText('Incorrect Username or Password', 'E');
+          }
+        }, error => {this.floater.showText(error, 'E')});
     }
-    this.floater.showText(this.errorMsg[0].msg, this.errorMsg[0].type);
   }
 
   public loginAsGuest(){
     this._localStorage.loggedUserID = 'guest';
     this._localStorage.loggedUserName = 'Guest';
+    this._localStorage.loggedUser.username = 'guest';
+    this._localStorage.loggedUser.fullname = 'Guest';
+    this._localStorage.loggedUser.userid = 2;
+    this._localStorage.loggedUser.access = 'user';
+    this._localStorage.loggedUser.data = 'User logged in as Guest';
+    this._localStorage.isGuestUser = true;
     this._router.navigateByUrl('game');
   }
-
-
-
 }

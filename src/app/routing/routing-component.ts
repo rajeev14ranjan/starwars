@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RoutingService} from '../service/routing-service.service'
 import { Router } from '@angular/router';
-import { BrowserStorageService } from '../service/browser-storage.service';
+import { StorageService } from '../service/browser-storage.service';
 
 @Component({
   selector: 'routing-page',
@@ -11,7 +11,7 @@ import { BrowserStorageService } from '../service/browser-storage.service';
 export class RoutingComponent implements OnInit {
 
 
-  constructor(private _router:Router, private _localStorage:BrowserStorageService) { }
+  constructor(private _router:Router, private _localStorage:StorageService) { }
 
   ngOnInit() {
 
@@ -35,6 +35,7 @@ export class RoutingComponent implements OnInit {
   }
 
   logout(){
+    this._localStorage.saveUserLog();
     this._localStorage.loggedUserName = null;
     this._router.navigateByUrl('login');
   }

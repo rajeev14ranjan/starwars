@@ -1,28 +1,39 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpHelperService} from './http-helper.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { UAParser } from 'ua-parser-js';
+
 
 @Injectable()
-export class BrowserStorageService {
+export class StorageService {
   private userListKey = 'userListKey';
   private highScoreKey = 'highScoreKey';
   private allUsers: Array<UserDetail>;
+  public loggedUser = new UserDetail();
   public loggedUserName: string;
   public loggedUserID: string;
+  public highScore = 0;
+  public parser = new UAParser();
+  public isGuestUser : boolean;
+  //public isBrowserOnline = Navigator.onLine;
 
-  constructor(private _router : Router){}
+  constructor(private _router : Router, private _dbcon : HttpHelperService){}
 
-  public getAllUsers(): Array<UserDetail> {
-      const allUserStr = localStorage.getItem(this.userListKey);
-      if (allUserStr) {
-          return JSON.parse(allUserStr);
-      } else {
-          return new Array<UserDetail>();
-      }
+  public getAllUsers(): Observable<Array<UserDetail>> {
+      return this._dbcon.get('./api/users.php') as Observable<Array<UserDetail>>;
   }
 
   public getHighScore(){
-      let h = localStorage.getItem(this.highScoreKey);
-      return h? JSON.parse(h): { user : 'SYSYEM', highScore  : 0 };
+      let url = `api/action.php?a=score`;
+
+      return this._dbcon.get(url).pipe(
+          map((res:Array<any>)=> {
+              if(res.length == 0) return {"fullname":'SYSTEM',"score": 0};
+              return res[0];
+            })
+      );
   }
 
   public saveHighScore(score : number){
@@ -38,60 +49,85 @@ export class BrowserStorageService {
   }
 
   public isAdmin(): boolean{
-    return (this.loggedUserID == 'rr' && this.loggedUserName.includes('Rajeev'));
+    return this.loggedUser.access == 'admin';
   }
 
-  public getFullUserNameValidity(checkUserName: string): string {
-      let allUsers = this.getAllUsers();
-      if (allUsers.length > 0) {
-          let user = allUsers.find(user => user.userName === checkUserName);
-          return user? user.fullName : null;
-      } else {
-          return null;
-      }
+  public getFullUserNameValidity(checkUserName: string) {
+      let url = `./api/action.php?a=validate&un=${checkUserName}`;
+      return this._dbcon.get(url);
   }
 
   public saveCredentials(fullName: string, userName: string, passWord: string) {
-      let passKey = this.hash(passWord);
-      let allUsers = this.getAllUsers();
-      let newUserDetail = new UserDetail(fullName, userName, passKey);
-      allUsers.push(newUserDetail);
-      localStorage.setItem(this.userListKey, JSON.stringify(allUsers));
-  }
+      if(fullName && userName && passWord){
 
-  public checkCredentialValidity(checkUserName: string, checkPassWord: string): boolean {
-      let allUsers = this.getAllUsers();
-      if (allUsers.length > 0) {
-          let successUser = allUsers.find(user => user.userName === checkUserName);
-          if(successUser){
-          this.loggedUserName = successUser.fullName;
-          this.loggedUserID = successUser.userName;
-          return (successUser.passKey === this.hash(checkPassWord));
-          } else {
-              this.loggedUserName = '';
-              return false;
-          }
-      } else {
-          this.loggedUserName = '';
-          return false;
+        const postData = {'fn': '','un': '','pw': ''};
+        postData.fn =  this.trim(fullName);
+        postData.un = this.trim(userName);
+        postData.pw = this.hash(this.trim(passWord));
+
+        this._dbcon.post('./api/action.php',postData)
+        .subscribe((res:any)=> {
+            if(res.status){
+                this.loggedUser = new UserDetail();
+                this.loggedUser.username = userName;
+                this.loggedUser.fullname = fullName;
+                this.loggedUser.access = 'user';
+            } else {
+                this.loggedUser = new UserDetail();
+            }
+        })
       }
   }
 
-  public deleteUser(index: number) {
-      let allUsers = this.getAllUsers();
-      if (index < allUsers.length) {
-          allUsers.splice(index, 1);
-          localStorage.setItem(this.userListKey, JSON.stringify(allUsers));
+  public trim(text:string){
+      return (text && typeof text == 'string' ? text.trim() : text);
+  }
+
+  public checkCredentialValidity(checkUserName: string, checkPassWord: string): Observable<boolean> {
+        let url = `./api/action.php?a=login&un=${checkUserName}&pw=${this.hash(checkPassWord)}`
+
+        return this._dbcon.get(url).pipe(
+            map((res : Array<UserDetail>)=>{
+            if(res && res.length > 0){
+                this.loggedUser = res[0];
+                this.loggedUserName = res[0].fullname;
+                this.loggedUserID = res[0].username;
+                this.isGuestUser = false;
+                return true;
+            } else {
+                this.loggedUserName = '';
+                return false;
+            }
+        }));
+  }
+
+  public saveUserLog(){
+    let postData= {
+        'id': this.loggedUser.userid,
+        'sc': this.highScore,
+        'ua': this.getOsBrowser()
       }
+      this._dbcon.post('./api/logs.php', postData).subscribe();
+  }
+
+  public getLogforUser(userId : number) : Observable<Array<Logs>>{
+      let url = `./api/logs.php?id=${userId}`;
+      return this._dbcon.get(url) as Observable<Array<Logs>>;
+  }
+
+  public deleteUser(userId: number, userName : string) {
+    //   let allUsers = this.getAllUsers();
+    //   if (index < allUsers.length) {
+    //       allUsers.splice(index, 1);
+    //       localStorage.setItem(this.userListKey, JSON.stringify(allUsers));
+    //   }
 
   }
 
   public hash(passText: string) {
-      /* Simple hash function. */
       var a = 1, c = 0, iterator, o;
       if (passText) {
           a = 0;
-          /*jshint plusplus:false bitwise:false*/
           for (iterator = passText.length - 1; iterator >= 0; iterator--) {
               o = passText.charCodeAt(iterator);
               a = (a << 6 & 268435455) + o + (o << 14);
@@ -99,7 +135,7 @@ export class BrowserStorageService {
               a = c !== 0 ? a ^ c >> 21 : a;
           }
       }
-      return a.toString(36);
+      return a.toString(36).toUpperCase();
   }
 
   public CreateDummyUser(userlenth : number){
@@ -121,12 +157,31 @@ export class BrowserStorageService {
   public randomLetter(isCaptial = false){
       return String.fromCharCode(Math.floor(Math.random() * 26) + (isCaptial ? 65: 97));
   }
+
+  public getOsBrowser(): string {
+    let userAgent = navigator.userAgent;
+    return `${this.parser.getBrowser(userAgent).name} on ${this.parser.getOS(userAgent).name}`
+  }
+
 }
 
 export class UserDetail {
   constructor(
-      public fullName?: string,
-      public userName?: string,
-      public passKey?: string
+      public userid?: number,
+      public username?: string,
+      public fullname?: string,
+      public access?: string,
+      public data?: string,
+      public authkey?: string
   ) { }
 }
+
+export class Logs {
+    constructor(
+        public userid?: number,
+        public fullname?: string,
+        public timestamp?: Date,
+        public useragent?: string,
+        public score?: string
+    ) { }
+  }

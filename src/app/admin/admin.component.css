@@ -10,8 +10,16 @@
     padding: 10px;
 }
 
+.col-pt-25{
+    padding-top: 25px;
+}
+
 .col-m-5{
     margin: 5px;
+}
+
+.col-ml-5{
+    margin-left: 5px;
 }
 
 .dev{
