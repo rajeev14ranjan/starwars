@@ -108,6 +108,8 @@ export class LoginPageComponent implements AfterViewInit {
       this._localStorage.checkCredentialValidity(this.un, this.pw).subscribe(
         (response : boolean)=> {
           if (response) {
+            this._localStorage.uniquieLogid = this.getUniqueID();
+            this._localStorage.saveUserLog();
             this._router.navigateByUrl('game');
           } else {
             this.pw = '';
@@ -115,6 +117,10 @@ export class LoginPageComponent implements AfterViewInit {
           }
         }, error => {this.floater.showText(error, 'E')});
     }
+  }
+
+  public getUniqueID(): string{
+     return (Date.now()).toString(36).toUpperCase();
   }
 
   public loginAsGuest(){

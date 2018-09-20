@@ -11,6 +11,7 @@ export class StorageService {
   private userListKey = 'userListKey';
   private highScoreKey = 'highScoreKey';
   private allUsers: Array<UserDetail>;
+  public uniquieLogid : string;
   public loggedUser = new UserDetail();
   public loggedUserName: string;
   public loggedUserID: string;
@@ -78,8 +79,8 @@ export class StorageService {
                     } else {
                         this.loggedUser = new UserDetail();
                     }
-            } else{
-                this.getAllUsers().subscribe();
+            }else{
+                this.getAllUsers();
             }
         })
       }
@@ -116,6 +117,9 @@ export class StorageService {
         'scr': `${window.innerWidth} x ${window.innerHeight}`,
         'action' : 'insertLog'
       }
+      if(this.uniquieLogid){
+          postData['logid'] = this.uniquieLogid;
+      }
       this._dbcon.post('./api/stars.php', postData).subscribe();
   }
 
@@ -150,7 +154,7 @@ export class StorageService {
 
   public CreateDummyUser(userlenth : number){
     
-    let isInValid, fn,un,ps ='';
+    let isInValid, fn,un,ps ='', cnt = 10;
       do{
             fn = '';
             for(let i = 0; i < 2*userlenth; i++){
@@ -159,9 +163,18 @@ export class StorageService {
             un = fn.split(' ')[0].substr(0,2) + fn.split(' ')[1].substr(0,2);
             un = un.toLowerCase();
             ps = un;
+            cnt--;
             isInValid = this.allUsers.some(user=> user.username == un);
-        } while(!isInValid);
-        this.saveCredentials(fn,un,ps,false);
+        } while(isInValid && cnt > 0);
+        
+        if(cnt > 0){
+            this.saveCredentials(fn,un,ps,false);
+            return true;
+        }else{
+            return false;
+        }
+        
+        
   }
 
   public randomLetter(isCaptial = false){

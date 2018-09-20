@@ -96,8 +96,9 @@ export class AdminComponent implements OnInit {
   }
 
   public createDummyUser(){
-    this._localStorage.CreateDummyUser(5);
-    this.floater.showText('Dummy User Created Successfully', 'E', 2000);
+    this._localStorage.CreateDummyUser(5)?
+    this.floater.showText('Dummy User Created Successfully', 'I', 2000):
+    this.floater.showText(`Dummy User creation failed`, 'E', 2000);
   }
 
   
