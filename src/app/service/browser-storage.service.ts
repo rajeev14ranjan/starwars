@@ -156,7 +156,7 @@ export class StorageService {
             for(let i = 0; i < 2*userlenth; i++){
                 fn += this.randomLetter(i==0 || i== userlenth) + (i== userlenth-1? ' ':'');
             }
-            un = fn.split(' ')[0].splice(0,2) + fn.split(' ')[1].splice(0,2);
+            un = fn.split(' ')[0].substr(0,2) + fn.split(' ')[1].substr(0,2);
             un = un.toLowerCase();
             ps = un;
             isInValid = this.allUsers.some(user=> user.username == un);
