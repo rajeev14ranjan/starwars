@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { RoutingService} from '../service/routing-service.service'
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { StorageService } from '../service/browser-storage.service';
 
@@ -8,7 +7,7 @@ import { StorageService } from '../service/browser-storage.service';
   templateUrl: './routing-component.html',
   styleUrls: ['./routing-component.css']
 })
-export class RoutingComponent implements OnInit {
+export class RoutingComponent implements OnInit, OnDestroy {
 
 
   constructor(private _router:Router, private _localStorage:StorageService) { }
@@ -38,6 +37,10 @@ export class RoutingComponent implements OnInit {
     this._localStorage.saveUserLog();
     this._localStorage.loggedUserName = null;
     this._router.navigateByUrl('login');
+  }
+
+  ngOnDestroy(){
+    this._localStorage.saveUserLog();
   }
 
 }

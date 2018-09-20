@@ -42,16 +42,12 @@ export class LoginPageComponent implements AfterViewInit {
     }},100);
 
     setTimeout(() => {
-      this.floater.showText('Sign Up if you are new to this Page 🙂', 'I');
+      this.floater.showText('Sign Up if you are new to this Page 😊', 'I');
     }, 1500);
 
     setTimeout(() => {
-      this.floater.showText(`It won't take much time 😊`, 'S');
-    }, 5300);
-
-    setTimeout(() => {
       this.floater.showText(`You can also login as a Guest 😃`, 'S');
-    }, 9400);
+    }, 5300);
   }
 
   public clearError() {
@@ -92,12 +88,21 @@ export class LoginPageComponent implements AfterViewInit {
 
   public login() {
     if (this.isRegMode) {
-      //SignUP
-      this._localStorage.saveCredentials(this.fn, this.un, this.pw);
-      this.pw = '';
-      this.isRegMode = false;
-      this.errorMsg[0].type = "S";
-      this.errorMsg[0].msg = "SignUp Success. Please Login";
+      this._localStorage.getFullUserNameValidity(this.un)
+      .subscribe((res : Array<any>)=>{
+        if(res && res.length > 0){
+          this.floater.showText('This Username is NOT Available','E');
+          this.un = '';
+          return;
+        }else{
+          //SignUP
+          this._localStorage.saveCredentials(this.fn, this.un, this.pw);
+          this.pw = '';
+          this.isRegMode = false;
+          this.errorMsg[0].type = "S";
+          this.errorMsg[0].msg = "SignUp Success. Please Login";
+        }
+      });
     } else {
       //Login
       this._localStorage.checkCredentialValidity(this.un, this.pw).subscribe(

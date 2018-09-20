@@ -21,7 +21,7 @@
         <td>{{user.username}}</td>
         <td>
             <button class="btn btn-sm btn-info" (click)="openLogModal(user.userid)">Logs</button>
-          <button class="btn btn-sm btn-danger" style="margin-left:5px" *ngIf="isDelete(user.fullname,user.username)" (click)="deleteUserConfirmation(i)">Delete</button>
+          <button class="btn btn-sm btn-danger" style="margin-left:5px" *ngIf="isDelete(user)" (click)="deleteUserConfirmation(user)">Delete</button>
         </td>
       </tr>
     </table>
@@ -95,16 +95,16 @@
       <div class="modal-body" style="max-height: 500px; overflow-y: auto; width: 100%;">
           <table class="table table-bordered table-hover">
               <tr>
-                <th>Full Name</th>
                 <th>Time Stamp</th>
-                <th>User Agent</th>
-                <th>Score</th>
+                <th>Match Score</th>
+                <th>Device Details</th>
+                <th>Screen Size</th>
               </tr>
               <tr *ngFor="let log of userLogs; let i = index">
-                <td>{{log.fullname}} </td>
                 <td>{{log.timestamp | date : 'long'}}</td>
-                <td>{{log.useragent}}</td>                
                 <td>{{log.score}}</td>                
+                <td>{{log.useragent}}</td>                
+                <td>{{log.screen}}</td>                
               </tr>
             </table>
       </div>

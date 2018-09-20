@@ -18,7 +18,7 @@ export class AdminComponent implements OnInit {
   public allUsers: Array<UserDetail>;
   public userLogs: Array<Logs>;
   public popUpProp : PopUpProp;
-  public tempIndex : number;
+  public tempUser : UserDetail;
   public count : number;
   public isAdmin :boolean;
   public isGuestUser : boolean;
@@ -57,17 +57,22 @@ export class AdminComponent implements OnInit {
     }
 
   public deleteUser() {
-    //this._localStorage.deleteUser(this.tempIndex);
-    //this.allUsers = this._localStorage.getAllUsers();
-    this.floater.showText('User Successfully Deleted', 'S', 2000);
+    this._localStorage.deleteUser(this.tempUser.userid, this.tempUser.username).subscribe(
+      res=> {
+        if(res.status){
+          this.fetchAllUser();
+        }
+        this.floater.showText(res.status_message, res.status?'S':'E', 2000);
+      }
+    )    
   }
 
-  public deleteUserConfirmation(index:number){
-    this.tempIndex = index;
+  public deleteUserConfirmation(user: UserDetail){
+    this.tempUser = user;
     let confirmUser = new PopUpProp();
-    confirmUser.header = 'Delete User';
-    confirmUser.body = `Are you sure you want to delete ${this.allUsers[index].fullname} ?`;
-    confirmUser.btnDanger = 'Delete';
+    confirmUser.header = `Delete ${user.fullname}`;
+    confirmUser.body = `This user will no longer be able to login. Deleting user will also delete their log history. Do you want to delete ?`;
+    confirmUser.btnDanger = `Delete ${user.fullname}`;
     confirmUser.btnNeutral = 'Cancel';
     confirmUser.operation = 'delete';
     this.popUpProp = confirmUser;
@@ -78,8 +83,8 @@ export class AdminComponent implements OnInit {
     this._router.navigateByUrl(url);
   }
 
-  public isDelete(fn:string, un:string):boolean{
-    return (un !='rr' || !fn.includes('Rajeev'));
+  public isDelete(user: UserDetail):boolean{
+    return (user.access =='user');
   }
 
   public successCallBack(obj: any){
@@ -91,9 +96,8 @@ export class AdminComponent implements OnInit {
   }
 
   public createDummyUser(){
-    this._localStorage.CreateDummyUser(4);
-    //this.allUsers = this._localStorage.getAllUsers();
-    this.floater.showText('Dummy User Created Successfully', 'S', 2000);
+    this._localStorage.CreateDummyUser(5);
+    this.floater.showText('Dummy User Created Successfully', 'E', 2000);
   }
 
   

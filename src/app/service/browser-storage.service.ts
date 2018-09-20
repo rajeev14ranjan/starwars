@@ -22,11 +22,17 @@ export class StorageService {
   constructor(private _router : Router, private _dbcon : HttpHelperService){}
 
   public getAllUsers(): Observable<Array<UserDetail>> {
-      return this._dbcon.get('./api/users.php') as Observable<Array<UserDetail>>;
+    let url = `api/stars.php?a=getUser`;
+    return this._dbcon.get(url).pipe(
+        map((res:Array<UserDetail>)=>{
+            this.allUsers = res;
+            return res;
+        })
+    );
   }
 
   public getHighScore(){
-      let url = `api/action.php?a=score`;
+      let url = `api/stars.php?a=score`;
 
       return this._dbcon.get(url).pipe(
           map((res:Array<any>)=> {
@@ -36,11 +42,6 @@ export class StorageService {
       );
   }
 
-  public saveHighScore(score : number){
-        let highScoreUser = this.loggedUserName || 'SYSTEM';
-        let newHighScore = { user : highScoreUser, highScore  : score}
-        localStorage.setItem(this.highScoreKey, JSON.stringify(newHighScore));
-  }
 
   public checkForLogin(){
       if(!this.loggedUserName){
@@ -53,27 +54,32 @@ export class StorageService {
   }
 
   public getFullUserNameValidity(checkUserName: string) {
-      let url = `./api/action.php?a=validate&un=${checkUserName}`;
-      return this._dbcon.get(url);
+      let url = './api/stars.php';
+      let postData = {'action': 'validate', 'un' : checkUserName};
+      return this._dbcon.post(url, postData);
   }
 
-  public saveCredentials(fullName: string, userName: string, passWord: string) {
+  public saveCredentials(fullName: string, userName: string, passWord: string, isLogin = true) {
       if(fullName && userName && passWord){
 
-        const postData = {'fn': '','un': '','pw': ''};
+        const postData = {'fn': '','un': '','pw': '','action':'createUser'};
         postData.fn =  this.trim(fullName);
         postData.un = this.trim(userName);
         postData.pw = this.hash(this.trim(passWord));
 
-        this._dbcon.post('./api/action.php',postData)
+        this._dbcon.post('./api/stars.php',postData)
         .subscribe((res:any)=> {
-            if(res.status){
-                this.loggedUser = new UserDetail();
-                this.loggedUser.username = userName;
-                this.loggedUser.fullname = fullName;
-                this.loggedUser.access = 'user';
-            } else {
-                this.loggedUser = new UserDetail();
+            if(isLogin){
+                    if(res.status){
+                        this.loggedUser = new UserDetail();
+                        this.loggedUser.username = userName;
+                        this.loggedUser.fullname = fullName;
+                        this.loggedUser.access = 'user';
+                    } else {
+                        this.loggedUser = new UserDetail();
+                    }
+            } else{
+                this.getAllUsers().subscribe();
             }
         })
       }
@@ -84,9 +90,10 @@ export class StorageService {
   }
 
   public checkCredentialValidity(checkUserName: string, checkPassWord: string): Observable<boolean> {
-        let url = `./api/action.php?a=login&un=${checkUserName}&pw=${this.hash(checkPassWord)}`
+        let url = `./api/stars.php`;
+        const postData = {'un': checkUserName,'pw': this.hash(checkPassWord), 'action':'login'};
 
-        return this._dbcon.get(url).pipe(
+        return this._dbcon.post(url, postData).pipe(
             map((res : Array<UserDetail>)=>{
             if(res && res.length > 0){
                 this.loggedUser = res[0];
@@ -105,22 +112,25 @@ export class StorageService {
     let postData= {
         'id': this.loggedUser.userid,
         'sc': this.highScore,
-        'ua': this.getOsBrowser()
+        'ua': this.getOsBrowser(),
+        'scr': `${window.innerWidth} x ${window.innerHeight}`,
+        'action' : 'insertLog'
       }
-      this._dbcon.post('./api/logs.php', postData).subscribe();
+      this._dbcon.post('./api/stars.php', postData).subscribe();
   }
 
   public getLogforUser(userId : number) : Observable<Array<Logs>>{
-      let url = `./api/logs.php?id=${userId}`;
+      let url = `./api/stars.php?a=getLogs&id=${userId}`;
       return this._dbcon.get(url) as Observable<Array<Logs>>;
   }
 
   public deleteUser(userId: number, userName : string) {
-    //   let allUsers = this.getAllUsers();
-    //   if (index < allUsers.length) {
-    //       allUsers.splice(index, 1);
-    //       localStorage.setItem(this.userListKey, JSON.stringify(allUsers));
-    //   }
+    let postData= {
+        'usr': userName,
+        'uid': userId,
+        'action' : 'deleteUser'
+      }
+      return this._dbcon.post('./api/stars.php',postData);
 
   }
 
@@ -140,18 +150,18 @@ export class StorageService {
 
   public CreateDummyUser(userlenth : number){
     
-    let valid, fn,un,ps ='';
+    let isInValid, fn,un,ps ='';
       do{
             fn = '';
             for(let i = 0; i < 2*userlenth; i++){
                 fn += this.randomLetter(i==0 || i== userlenth) + (i== userlenth-1? ' ':'');
             }
-            un = fn.split(' ')[0][0] + fn.split(' ')[1][0];
+            un = fn.split(' ')[0].splice(0,2) + fn.split(' ')[1].splice(0,2);
             un = un.toLowerCase();
             ps = un;
-            valid = this.getFullUserNameValidity(un);
-        } while(valid || un == 'rr');
-        this.saveCredentials(fn,un,ps);
+            isInValid = this.allUsers.some(user=> user.username == un);
+        } while(!isInValid);
+        this.saveCredentials(fn,un,ps,false);
   }
 
   public randomLetter(isCaptial = false){
@@ -160,7 +170,7 @@ export class StorageService {
 
   public getOsBrowser(): string {
     let userAgent = navigator.userAgent;
-    return `${this.parser.getBrowser(userAgent).name} on ${this.parser.getOS(userAgent).name}`
+    return `${this.parser.getBrowser(userAgent).name} on ${this.parser.getOS(userAgent).name}`;
   }
 
 }
@@ -182,6 +192,7 @@ export class Logs {
         public fullname?: string,
         public timestamp?: Date,
         public useragent?: string,
-        public score?: string
+        public score?: string,
+        public screen?: string
     ) { }
   }

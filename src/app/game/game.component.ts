@@ -129,7 +129,7 @@ export class GameComponent implements OnInit {
         this.gameOver = true;
         this.enemyArry = new Array<Point>();
         if(this.highScoreFlag){
-          this._localStorage.saveHighScore(this.score);
+          this._localStorage.highScore = this.score;
         }
         this.floater.showText('Game Over, You played really well', 'S');
         clearInterval(itId);
@@ -169,7 +169,6 @@ export class GameComponent implements OnInit {
             if(!this.highScoreFlag && this.score > this.highScore.highScore){
                 this.floater.showText('🏆 Congratulations! This is a new high score 🏆','I');
                 this.highScoreFlag = true;
-                this._localStorage.saveHighScore(this.score);
                 this._localStorage.highScore = this.score;
             }
           }
