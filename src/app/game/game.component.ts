@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener,ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener,ViewChild, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { StorageService} from '../service/browser-storage.service';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { RoutingService } from 'src/app/service/routing-service.service';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy{
   public enemyArry = new Array<Point>();
   public bulletArry = new Array<Point>();
   public gunPosition = 0;
@@ -18,7 +18,7 @@ export class GameComponent implements OnInit {
   public score: number = 0;
   public lifeCount = 10;
   public gamePreview = true;
-  public highScore = {"user":'SYSTEM',"highScore": 0};
+  public highScore = {"timestamp":'',"highScore": 0};
   public highScoreFlag : boolean;
   public leftMove = 30;
   public leftCounter = 0;
@@ -57,7 +57,7 @@ export class GameComponent implements OnInit {
     this._localStorage.getHighScore().subscribe(
       highSc =>{
         this.highScore.highScore = highSc.score;
-        this.highScore.user = highSc.fullname;
+        this.highScore.timestamp = highSc.timestamp;
       }
     )
    }
@@ -79,6 +79,7 @@ export class GameComponent implements OnInit {
     this.gameOver = false;
     this.lifeCount = 10;
     this.score=0;
+    this._localStorage.logScore = 0;
     this.highScoreFlag = false;
     this.calculatePlayingArea();
   }
@@ -128,7 +129,6 @@ export class GameComponent implements OnInit {
       if (this.lifeCount < 1 ) {
         this.gameOver = true;
         this.enemyArry = new Array<Point>();
-        this._localStorage.highScore = this.score;
         this.floater.showText('Game Over, You played really well', 'S');
         clearInterval(itId);
       }
@@ -147,7 +147,7 @@ export class GameComponent implements OnInit {
           if(b > -1 && enemy.m < 2){
             let bullet = this.bulletArry[b];
       
-            if(enemy.y + 100 > bullet.y){
+            if(enemy.y + 150 > bullet.y){
               if(enemy.m){
                 this.score += 200;
                 this.floater.showText('You have gained a Life by killing Master Ship','I');
@@ -167,8 +167,8 @@ export class GameComponent implements OnInit {
             if(!this.highScoreFlag && this.score > this.highScore.highScore){
                 this.floater.showText('🏆 Congratulations! This is a new high score 🏆','I');
                 this.highScoreFlag = true;
-                this._localStorage.highScore = this.score;
             }
+            this._localStorage.logScore = this.score;
           }
       }//end collision check
 
@@ -191,7 +191,7 @@ export class GameComponent implements OnInit {
   }
 
   public fireBullet(xIndex: number) {
-    this.bulletArry.push({ 'x': xIndex, 'y': this.playingArea.yMax ,'m': 0 });
+    this.bulletArry.push({ 'x': xIndex + 30, 'y': this.playingArea.yMax - 60,'m': 0 });
     if(this.bulletArry.length > 10){
       this.bulletArry.shift();
     }
@@ -243,6 +243,10 @@ export class GameComponent implements OnInit {
       case 9: return 120;
       default: return 120;
     }
+  }
+
+  ngOnDestroy(){
+    this._localStorage.saveUserLog();
   }
 }
 

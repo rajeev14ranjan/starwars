@@ -70,9 +70,9 @@ export class AdminComponent implements OnInit {
   public deleteUserConfirmation(user: UserDetail){
     this.tempUser = user;
     let confirmUser = new PopUpProp();
-    confirmUser.header = `Delete ${user.fullname}`;
-    confirmUser.body = `This user will no longer be able to login. Deleting user will also delete their log history. Do you want to delete ?`;
-    confirmUser.btnDanger = `Delete ${user.fullname}`;
+    confirmUser.header = user.userid > 2 ? `Delete User`: 'Clear all Logs';
+    confirmUser.body = user.userid > 2 ? `${user.fullname} will no longer be able to login. This will also delete their log history. Do you want to delete ?` : `This will all log history of ${user.fullname}. Do you want to clear ?`;
+    confirmUser.btnDanger = user.userid > 2 ?`Delete ${user.fullname}`:`Clear All Logs`;
     confirmUser.btnNeutral = 'Cancel';
     confirmUser.operation = 'delete';
     this.popUpProp = confirmUser;

@@ -25,10 +25,11 @@
   <float-text #floater></float-text>
   <div class="score text-info">
     High Score : <span *ngIf="highScoreFlag">{{score}} by You!</span>
-    <span *ngIf="!highScoreFlag">{{highScore?.highScore}} by {{highScore?.user}}</span><br/>
+    <span *ngIf="!highScoreFlag">{{highScore?.highScore}} on {{highScore?.timestamp | date : 'short'}}</span><br/>
     Your Score : {{score}} <span *ngIf="highScoreFlag">🏆</span><br/><br/>
-    <span *ngFor="let life of getLifeCount()">💚</span><br/>
+    <span *ngFor="let life of getLifeCount()">{{lifeCount > 6 ?'💚': lifeCount > 3 ? '💛' : '❤️'}}</span><br/>
     <div><br/>
+
     <p>Screen Size: {{width}} X {{height}} <br/>
        Playing Area: {{playingArea.width}} X {{playingArea.height}} <br/>
        Range X: [{{playingArea.xMin}}, {{playingArea.xMax}}]   <br/>

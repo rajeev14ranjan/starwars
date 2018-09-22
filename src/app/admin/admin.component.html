@@ -21,7 +21,7 @@
         <td>{{user.username}}</td>
         <td>
             <button class="btn btn-sm btn-info" (click)="openLogModal(user.userid)">Logs</button>
-          <button class="btn btn-sm btn-danger" style="margin-left:5px" *ngIf="isDelete(user)" (click)="deleteUserConfirmation(user)">Delete</button>
+          <button class="btn btn-sm " [ngClass]="user.userid > 2 ? 'btn-danger':'btn-warning'" style="margin-left:5px" (click)="deleteUserConfirmation(user)">{{user.userid > 2 ? 'Delete':'Clear'}}</button>
         </td>
       </tr>
     </table>
@@ -40,8 +40,8 @@
               <p>If you like my work you can hire me as a freelancer at 
                 <a href="https://www.freelancer.in/u/rajeev14ranjan" target="blank">www.freelancer.in</a></p>
                 <br/><br/>
-              <a (click)="goTo('game')" class="text-info backArrow">← Go Back to Game</a>
-              <a *ngIf="!isGuestUser" (click)="openLogModal(loggedUserID)" class="text-success float-right">My Login History</a>
+              <a (click)="goTo('game')" class="text-info arrow">← Go back to Game</a>
+              <a *ngIf="!isGuestUser" (click)="openLogModal(loggedUserID)" class="text-success float-right arrow">Show my Login History</a>
             </div>
             
       </div>

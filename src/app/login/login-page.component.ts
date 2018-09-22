@@ -132,6 +132,8 @@ export class LoginPageComponent implements AfterViewInit {
     this._localStorage.loggedUser.access = 'user';
     this._localStorage.loggedUser.data = 'User logged in as Guest';
     this._localStorage.isGuestUser = true;
+    this._localStorage.uniquieLogid = this.getUniqueID();
+    this._localStorage.saveUserLog();
     this._router.navigateByUrl('game');
   }
 }

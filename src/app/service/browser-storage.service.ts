@@ -15,7 +15,7 @@ export class StorageService {
   public loggedUser = new UserDetail();
   public loggedUserName: string;
   public loggedUserID: string;
-  public highScore = 0;
+  public logScore = 0;
   public parser = new UAParser();
   public isGuestUser : boolean;
   //public isBrowserOnline = Navigator.onLine;
@@ -112,7 +112,7 @@ export class StorageService {
   public saveUserLog(){
     let postData= {
         'id': this.loggedUser.userid,
-        'sc': this.highScore,
+        'sc': this.logScore,
         'ua': this.getOsBrowser(),
         'scr': `${window.innerWidth} x ${window.innerHeight}`,
         'action' : 'insertLog'
