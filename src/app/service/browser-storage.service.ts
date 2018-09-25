@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpHelperService} from './http-helper.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UAParser } from 'ua-parser-js';
 
@@ -60,7 +60,7 @@ export class StorageService {
       return this._dbcon.post(url, postData);
   }
 
-  public saveCredentials(fullName: string, userName: string, passWord: string, isLogin = true) {
+  public saveCredentials(fullName: string, userName: string, passWord: string, isLogin = true):Observable<boolean> {
       if(fullName && userName && passWord){
 
         const postData = {'fn': '','un': '','pw': '','action':'createUser'};
@@ -68,8 +68,8 @@ export class StorageService {
         postData.un = this.trim(userName);
         postData.pw = this.hash(this.trim(passWord));
 
-        this._dbcon.post('./api/stars.php',postData)
-        .subscribe((res:any)=> {
+        return this._dbcon.post('./api/stars.php',postData).pipe(
+        map((res:any)=> {
             if(isLogin){
                     if(res.status){
                         this.loggedUser = new UserDetail();
@@ -79,10 +79,11 @@ export class StorageService {
                     } else {
                         this.loggedUser = new UserDetail();
                     }
+                    return true;  
             }else{
-                this.getAllUsers();
+                return true;
             }
-        })
+        }));
       }
   }
 
@@ -117,6 +118,8 @@ export class StorageService {
         'scr': `${window.innerWidth} x ${window.innerHeight}`,
         'action' : 'insertLog'
       }
+      this.logScore = 0;
+      
       if(this.uniquieLogid){
           postData['logid'] = this.uniquieLogid;
       }
@@ -152,7 +155,7 @@ export class StorageService {
       return a.toString(36).toUpperCase();
   }
 
-  public CreateDummyUser(userlenth : number){
+  public CreateDummyUser(userlenth : number): Observable<boolean>{
     
     let isInValid, fn,un,ps ='', cnt = 10;
       do{
@@ -168,10 +171,10 @@ export class StorageService {
         } while(isInValid && cnt > 0);
         
         if(cnt > 0){
-            this.saveCredentials(fn,un,ps,false);
-            return true;
+            return this.saveCredentials(fn,un,ps,false);
+            
         }else{
-            return false;
+            return of(false);
         }
         
         

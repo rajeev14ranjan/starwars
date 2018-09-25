@@ -26,6 +26,7 @@
     "ngx-bootstrap": "^3.0.1",
     "popper": "^1.0.1",
     "rxjs": "~6.2.0",
+    "web-animations-js": "^2.3.1",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

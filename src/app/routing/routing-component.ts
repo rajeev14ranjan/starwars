@@ -34,16 +34,13 @@ export class RoutingComponent implements OnInit, OnDestroy {
   }
 
   logout(){
-    this._localStorage.saveUserLog();
     this._localStorage.loggedUserName = null;
     this._localStorage.uniquieLogid = null;
-    this._localStorage.logScore = 0;
     this._router.navigateByUrl('login');
   }
 
   ngOnDestroy(){
     this._localStorage.saveUserLog();
-    this._localStorage.logScore = 0;
     this._localStorage.uniquieLogid = null;
   }
 
