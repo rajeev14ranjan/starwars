@@ -27,7 +27,7 @@
     High Score : <span *ngIf="highScoreFlag">{{score}} by You!</span>
     <span *ngIf="!highScoreFlag">{{highScore?.highScore}} on {{highScore?.timestamp | date : 'short'}}</span><br/>
     Your Score : {{score}} <span *ngIf="highScoreFlag">🏆</span><br/><br/>
-    <span *ngFor="let life of getLifeCount()">{{lifeCount > 6 ?'💚': lifeCount > 3 ? '💛' : '❤️'}}</span><br/>
+    <span *ngFor="let life of getLifeCount()">{{lifeCount > 6 ?'💚': lifeCount > 3 ? '🧡' : '❤️'}}</span><br/>
     <div><br/>
 
     <p>Screen Size: {{width}} X {{height}} <br/>
@@ -41,8 +41,10 @@
   <br/>
 
   <div *ngIf="gamePreview" class="col-p-10 col-m-5" style="font-size: 20px;">
+    <img style="height:45px;margin-left: 60px;" 
+     src="../../assets/alien.gif">
     <br/>
-    <h3>Welcome to SUPER GALAXY HUNTER</h3>  
+    <h2>WELCOME TO STARS WARS GAME</h2>  
     Earth is under attack by alien spaceships, shoot them down before they land and destroy your city. You have a space gun with unlimited missiles.<br/> Shoot down the Master Space ships to gain Extra life.<br/> Master ships are harder to shoot as they can dodge your missiles.
     <div class="text-info">
       <br/>
@@ -55,7 +57,7 @@
 
   <div *ngIf="gameOver"  style="font-size: 120px">
     GAME OVER <br/>
-    <h3 *ngIf="highScoreFlag">Congratulation for Scoring Highest Score of {{score}}</h3>
+    <h3 *ngIf="highScoreFlag">Congratulation for Scoring High Score of {{score}}</h3>
     <h4>Press [ SpaceBar ] to PLAY AGAIN</h4>
   </div>
 

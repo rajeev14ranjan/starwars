@@ -3,7 +3,7 @@
 
 <img *ngIf="down && !isDotGun && master < 3" 
      style="width:45px" 
-     [src]="master == 2 ?'../../assets/blast.gif' :'../../assets/ufo-smiley.gif'" 
+     [src]="master == 2 ?'../../assets/blast.gif' : master == 1 ? '../../assets/mss.gif' : '../../assets/ufo-smiley.gif'" 
      alt="👽" />
 
 <img *ngIf="!down && !isDotGun" 
