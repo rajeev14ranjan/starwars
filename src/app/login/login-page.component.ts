@@ -23,12 +23,14 @@ export class LoginPageComponent implements AfterViewInit {
   public isRegMode = false;
   public isSignUpAllowed = true;
   public isUserNameValid = true;
+  public isAutoLogin = false;
   @ViewChild('loginForm') loginForm : NgForm;
   @ViewChild('floater') floater : FloatTextComponent;
   @ViewChild('feedback') feedback : FeedbackComponent;
 
   constructor(private _localStorage: StorageService, private _title: Title, private _router: Router) {
     this._title.setTitle('Login Page');
+    this._localStorage.autoLoginIfTokenAvailable();
   }
 
   ngAfterViewInit(){
@@ -107,12 +109,13 @@ export class LoginPageComponent implements AfterViewInit {
           if (response) {
             this._localStorage.uniquieLogid = this.getUniqueID();
             this._localStorage.saveUserLog();
+            this.isAutoLogin ? this._localStorage.saveAutoLoginToken(this.un, this.pw) : this._localStorage.deleteAutoLoginToken();
             this._router.navigateByUrl('game');
           } else {
             this.pw = '';
             this.floater.showText('Incorrect Username or Password', 'E');
           }
-        }, error => {this.floater.showText(error, 'E')});
+        }, error => {this.floater.showText('Server Connection cannot be established', 'E')});
     }
   }
 

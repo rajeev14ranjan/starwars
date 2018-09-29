@@ -8,8 +8,7 @@ import { UAParser } from 'ua-parser-js';
 
 @Injectable()
 export class StorageService {
-  private userListKey = 'userListKey';
-  private highScoreKey = 'highScoreKey';
+  private autoLoginToken = 'starAut0L0g1nTok3n';
   private allUsers: Array<UserDetail>;
   public uniquieLogid : string;
   public loggedUser = new UserDetail();
@@ -48,6 +47,37 @@ export class StorageService {
       if(!this.loggedUserName){
         this._router.navigateByUrl('login');
       }
+  }
+
+  public autoLoginIfTokenAvailable(){
+        try{
+            let token : LoginToken = JSON.parse(localStorage.getItem(this.autoLoginToken));
+            if(token){
+                this.checkCredentialValidity(token.userName, token.passHash, true).subscribe(
+                    (response : boolean)=> {
+                      if (response) {
+                        this.uniquieLogid = (Date.now()).toString(36).toUpperCase();
+                        this.saveUserLog();
+                        this._router.navigateByUrl('game');
+                      } else {
+                        this.deleteAutoLoginToken();
+                      }
+                    });
+            }
+        } 
+        catch
+        {
+            this.deleteAutoLoginToken();
+        }
+  }
+
+  public deleteAutoLoginToken(){
+      localStorage.removeItem(this.autoLoginToken);
+  }
+
+  public saveAutoLoginToken(un:string, pw :string){
+      let token = new LoginToken(un, this.hash(pw));
+      localStorage.setItem(this.autoLoginToken, JSON.stringify(token));
   }
 
   public isAdmin(): boolean{
@@ -91,9 +121,9 @@ export class StorageService {
       return (text && typeof text == 'string' ? text.trim() : text);
   }
 
-  public checkCredentialValidity(checkUserName: string, checkPassWord: string): Observable<boolean> {
+  public checkCredentialValidity(checkUserName: string, checkPassWord: string, hashed = false): Observable<boolean> {
         let url = `./api/stars.php`;
-        const postData = {'un': checkUserName,'pw': this.hash(checkPassWord), 'action':'login'};
+        const postData = {'un': checkUserName,'pw': hashed?checkPassWord:this.hash(checkPassWord), 'action':'login'};
 
         return this._dbcon.post(url, postData).pipe(
             map((res : Array<UserDetail>)=>{
@@ -206,6 +236,13 @@ export class StorageService {
     return `${this.parser.getBrowser(userAgent).name} on ${this.parser.getOS(userAgent).name}`;
   }
 
+}
+
+class LoginToken{
+    constructor(
+        public userName ?: string,
+        public passHash ?: string
+    ){}
 }
 
 export class UserDetail {

@@ -36,6 +36,7 @@ export class RoutingComponent implements OnInit, OnDestroy {
   logout(){
     this._localStorage.loggedUserName = null;
     this._localStorage.uniquieLogid = null;
+    this._localStorage.deleteAutoLoginToken();
     this._router.navigateByUrl('login');
   }
 
