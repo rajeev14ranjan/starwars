@@ -70,6 +70,10 @@ a{
     font-size:11px;
 }
 
+.lost{
+    opacity: 0.5;
+}
+
 .btn-default{
     border: 1px solid gray;
     border-radius: .2rem;

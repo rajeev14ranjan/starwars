@@ -4,6 +4,8 @@ import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { FloatTextComponent } from '../float-text/float-text.component';
+import { FeedbackComponent } from '../feedback/feedback.component';
+
 
 @Component({
   selector: 'login-page',
@@ -23,11 +25,9 @@ export class LoginPageComponent implements AfterViewInit {
   public isUserNameValid = true;
   @ViewChild('loginForm') loginForm : NgForm;
   @ViewChild('floater') floater : FloatTextComponent;
-
-  public errorMsg: any;
+  @ViewChild('feedback') feedback : FeedbackComponent;
 
   constructor(private _localStorage: StorageService, private _title: Title, private _router: Router) {
-    this.clearError();
     this._title.setTitle('Login Page');
   }
 
@@ -50,39 +50,33 @@ export class LoginPageComponent implements AfterViewInit {
     }, 5300);
   }
 
-  public clearError() {
-    this.errorMsg = [{
-      "type": "",
-      "msg": ""
-    }]
-  }
 
   public clear() {
     this.shwPass = false;
-    this.clearError();
     this.loginForm.form.reset();
   }
 
 
   public verifyUserName() {
+    let messageObj = {msg:'',type:''};
     this._localStorage.getFullUserNameValidity(this.un)
     .subscribe((res : Array<any>)=>{
         if(res && res.length > 0){
           let fullName = res[0]['fullname'];
           this.isSignUpAllowed = false;
-          this.errorMsg[0].type = this.isRegMode ? 'E' : 'S';
-          this.errorMsg[0].msg = this.isRegMode ? `This Username is NOT Available` : `Welcome ${fullName}`;
+          messageObj.type = this.isRegMode ? 'E' : 'S';
+          messageObj.msg = this.isRegMode ? `This Username is NOT Available` : `Welcome ${fullName}`;
           this.isUserNameValid = this.isRegMode;
         } else {
           this.isSignUpAllowed = true;
-          this.errorMsg[0].type = this.isRegMode ? 'S' : 'E';
-          this.errorMsg[0].msg = this.isRegMode ? "Username Available" : "No User found, Sign-up if new User";
+          messageObj.type = this.isRegMode ? 'S' : 'E';
+          messageObj.msg = this.isRegMode ? "Username Available" : "No User found, Sign-up if new User";
           this.isUserNameValid = !this.isRegMode;
         }
-        this.floater.showText(this.errorMsg[0].msg,this.errorMsg[0].type);
+        this.floater.showText(messageObj.msg, messageObj.type);
       },
     (error)=>{
-      this.floater.showText(error, 'E')
+      this.floater.showText('Cannot Validate Username from server', 'E')
     });
   }
 
@@ -96,13 +90,16 @@ export class LoginPageComponent implements AfterViewInit {
           return;
         }else{
           //SignUP
-          this._localStorage.saveCredentials(this.fn, this.un, this.pw);
-          this.pw = '';
-          this.isRegMode = false;
-          this.errorMsg[0].type = "S";
-          this.errorMsg[0].msg = "SignUp Success. Please Login";
+          this._localStorage.saveCredentials(this.fn, this.un, this.pw).subscribe(
+            (success : boolean)=>{
+              this.pw = '';
+              this.isRegMode = false;
+              this.floater.showText('SignUp Success. Please Login', 'S')
+            },(error:string)=>{this.floater.showText('SignUp Failed', 'E')}
+          );
+          
         }
-      });
+      },(error:string)=>{this.floater.showText('Server Connection cannot be established', 'E')});
     } else {
       //Login
       this._localStorage.checkCredentialValidity(this.un, this.pw).subscribe(
@@ -136,4 +133,9 @@ export class LoginPageComponent implements AfterViewInit {
     this._localStorage.saveUserLog();
     this._router.navigateByUrl('game');
   }
+
+  public feedbackThanks(isSuccess: boolean){
+    this.floater.showText('Thank you for your Valuable feedback','I');
+  }
+  
 }

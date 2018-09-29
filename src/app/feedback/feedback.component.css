@@ -1,0 +1,11 @@
+.col-ml-10{
+    margin-left: 10px;
+}
+.star{
+    margin-right: 5px;
+    border: 1px solid grey;
+}
+
+.status{
+    font-size: 15pt;
+}

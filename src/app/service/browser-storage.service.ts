@@ -126,6 +126,23 @@ export class StorageService {
       this._dbcon.post('./api/stars.php', postData).subscribe();
   }
 
+  public saveFeedback(rating : number, feedback : string){
+    let postData= {
+        'id': this.loggedUser.userid,
+        'rat': rating,
+        'fd': feedback,
+        'ua': this.getOsBrowser(),
+        'logid' : this.uniquieLogid,
+        'action' : 'feedback'
+      }
+      return this._dbcon.post('./api/stars.php', postData);
+  }
+
+  public getFeedback(userId : number): Observable<Array<Feedback>>{
+    let url = `./api/stars.php?a=getFeedback&id=${userId}`;
+    return this._dbcon.get(url);
+  }
+
   public getLogforUser(userId : number) : Observable<Array<Logs>>{
       let url = `./api/stars.php?a=getLogs&id=${userId}`;
       return this._dbcon.get(url) as Observable<Array<Logs>>;
@@ -212,3 +229,14 @@ export class Logs {
         public screen?: string
     ) { }
   }
+
+export class Feedback {
+    constructor(
+        public userid?: number,
+        public logid?: string,
+        public timestamp?: Date,
+        public useragent?: string,
+        public rating?: number,
+        public feedback?: string
+    ) { }
+}

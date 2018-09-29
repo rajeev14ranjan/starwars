@@ -15,7 +15,6 @@
                 <div class="col-sm-12 form-group text-left">    
                         <input class="form-control" [type]="shwPass?'text':'password'" id="passWrd" name="passWrd" maxlength="25" required [(ngModel)]="pw" [placeholder]="(isRegMode?'Select':'Enter') +'  Password'" pattern="[^ ]+" />
                 </div>
-                
                 <div class="col-sm-12 form-group text-left col-mt-5">
                         <button [disabled]="loginForm.invalid || (!isSignUpAllowed && isRegMode)" type="button"
                         [ngClass]="loginForm.invalid  ?'btn-outline-success':'btn-success'" 
@@ -26,15 +25,20 @@
                         <button class="btn btn-sm col-mr-10 btn-outline-danger" type="button" [disabled]="(!un&&!pw&&!fn)" (click)="clear()">
                                 Reset
                         </button>
+                </div>
+                <br/>
+                <div class="col-sm-12 form-group text-left col-mt-5" [ngClass]="inprogress?'':'lost'">
                         <a class="text-info" 
                                 (click)="isRegMode = !isRegMode; clear();">
-                                {{isRegMode?'Back':'SignUp'}}
+                                {{isRegMode?'⇦ Back':'SignUp'}}
                         </a> <span class="text-secondary"> | </span>
-                        <a (click)="loginAsGuest()" class="text-success">Continue as Guest</a> 
+                        <a (click)="loginAsGuest()" class="text-success">Login as Guest</a>
+                        <span class="text-secondary"> | </span>
+                        <a (click)="feedback.show()" class="text-primary">Provide Feedback</a>
                 </div>
         </form>
-                <br/>
-                <marquee [ngClass]="inprogress?'text-mute':'blank'">Please Login with your StarLabs login credentials. Sign Up if you are new User. Copiright © StarsWars 2018. </marquee>
         </div>
 
 </div>
+
+<feedback #feedback (done)="feedbackThanks($event)"></feedback>

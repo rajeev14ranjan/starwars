@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { StorageService ,UserDetail, Logs} from '../service/browser-storage.service';
+import { StorageService ,UserDetail, Logs, Feedback} from '../service/browser-storage.service';
 import { Router } from '@angular/router';
 import { PopUpProp, PopUpComponent } from '../pop-up/pop-up.component';
 import { FloatTextComponent } from '../float-text/float-text.component';
 import { HttpHelperService } from '../service/http-helper.service';
 import { ModalDirective } from 'ngx-bootstrap';
-
+import { FeedbackComponent } from '../feedback/feedback.component';
 
 
 @Component({
@@ -17,16 +17,20 @@ import { ModalDirective } from 'ngx-bootstrap';
 export class AdminComponent implements OnInit {
   public allUsers: Array<UserDetail>;
   public userLogs: Array<Logs>;
+  public feedbacks: Array<Feedback>;
   public popUpProp : PopUpProp;
   public tempUser : UserDetail;
   public count : number;
   public isAdmin :boolean;
   public isGuestUser : boolean;
   public loggedUserID : number;
+  public currentUserName : string;
 
   @ViewChild('newUserConfirmation') public newUserConfirmation : PopUpComponent;
   @ViewChild('floater') floater : FloatTextComponent;
+  @ViewChild('feedback') feedback : FeedbackComponent;
   @ViewChild('logModal') logModal : ModalDirective; 
+  @ViewChild('feedbackModal') feedbackModal : ModalDirective; 
 
   public testURL='./';
   public postData = `{"un":"nid","fn":"nidhi bhade","pw":"love"}`;
@@ -34,8 +38,7 @@ export class AdminComponent implements OnInit {
   public isPost = false;
 
   constructor(private _title: Title, private _localStorage: StorageService, private _router:Router, private _httpHelper : HttpHelperService) {
-    this._localStorage.checkForLogin();
-    
+    this._localStorage.checkForLogin();   
   }
 
   ngOnInit() {
@@ -168,15 +171,33 @@ export class AdminComponent implements OnInit {
   }
 
   public openLogModal(userId : number){
+    this.currentUserName = this.allUsers? this.allUsers.find(x=> x.userid == userId).fullname:'you';
     this._localStorage.getLogforUser(userId).subscribe(
       (logs:Array<Logs>)=>{
         if(logs && logs.length > 0){
            this.userLogs = logs;
           this.logModal.show();
         } else {
-          this.floater.showText('No logs available for this user','I');
+          this.floater.showText(`No logs available for ${this.currentUserName}`,'I');
         }
       },(error:string)=>{this.floater.showText(error,'E')});
+  }
+
+  public openFeedbackModal(userId : number){
+    this.currentUserName = this.allUsers? this.allUsers.find(x=> x.userid == userId).fullname:'';
+    this._localStorage.getFeedback(userId).subscribe(
+      (feedbacks:Array<Feedback>)=>{
+        if(feedbacks && feedbacks.length > 0){
+          this.feedbacks = feedbacks;
+          this.feedbackModal.show();
+       } else {
+         this.floater.showText(`No feedback available from ${this.currentUserName}`,'I');
+       }
+     },(error:string)=>{this.floater.showText(error,'E')});
+  }
+
+  public feedbackThanks(isSuccess: boolean){
+      this.floater.showText('Thank you for your Valuable feedback','I');
   }
 
 }

@@ -21,7 +21,8 @@
         <td>{{user.username}}</td>
         <td>
             <button class="btn btn-sm btn-info" (click)="openLogModal(user.userid)">Logs</button>
-          <button class="btn btn-sm " [ngClass]="user.userid > 2 ? 'btn-danger':'btn-warning'" style="margin-left:5px" (click)="deleteUserConfirmation(user)">{{user.userid > 2 ? 'Delete':'Clear'}}</button>
+            <button class="btn btn-sm btn-primary col-ml-5" (click)="openFeedbackModal(user.userid)">Feedback</button>
+            <button class="btn btn-sm col-ml-5" [ngClass]="user.userid > 2 ? 'btn-danger':'btn-warning'"  (click)="deleteUserConfirmation(user)">{{user.userid > 2 ? 'Delete':'Clear'}}</button>
         </td>
       </tr>
     </table>
@@ -41,7 +42,9 @@
                 <a href="https://www.freelancer.in/u/rajeev14ranjan" target="blank">www.freelancer.in</a></p>
                 <br/><br/>
               <a (click)="goTo('game')" class="text-info arrow">← Go back to Game</a>
-              <a *ngIf="!isGuestUser" (click)="openLogModal(loggedUserID)" class="text-success float-right arrow">Show my Login History</a>
+              <span class="text-secondary"> | </span>
+              <a (click)="feedback.show()" class="arrow text-primary">Provide Feedback</a>
+              <a *ngIf="!isGuestUser" (click)="openLogModal(loggedUserID)" class="arrow text-success float-right arrow">Show my Login History</a>
             </div>
             
       </div>
@@ -82,7 +85,7 @@
         (onClicked)="successCallBack($event)">
 </pop-up>
 
-<div class="modal fade" bsModal #logModal="bs-modal" [config]="{backdrop: 'static'}"
+<div class="modal fade" bsModal #logModal="bs-modal" [config]="{backdrop: true}"
      tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
   <div [ngClass]="'modal-dialog modal-lg'">
     <div class="modal-content" *ngIf="userLogs && userLogs.length > 0">
@@ -117,3 +120,43 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" bsModal #feedbackModal="bs-modal" [config]="{backdrop: true}"
+     tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+  <div [ngClass]="'modal-dialog modal-lg'">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-static-name" class="modal-title pull-left">Feedback & Suggestions from 
+          {{currentUserName}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="feedbackModal?.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div *ngIf="feedbacks && feedbacks.length > 0" class="modal-body" style="max-height: 500px; overflow-y: auto; width: 100%;">
+          <table class="table table-bordered table-hover">
+              <tr>
+                <th>Time Stamp</th>
+                <th>Rating</th>
+                <th>Device Details</th>
+                <th>Feedback & suggestions</th>
+              </tr>
+              <tr *ngFor="let feedback of feedbacks; let i = index">
+                <td>{{feedback.timestamp | date : 'long'}}</td>
+                <td>{{feedback.rating}}</td>                
+                <td>{{feedback.useragent}}</td>                
+                <td>{{feedback.feedback}}</td>                
+              </tr>
+            </table>
+      </div>
+      <div class="modal-footer">   
+        <button style="background-color: lightgray" 
+        class="btn btn-sm" (click)="feedbackModal?.hide()" >
+        close
+      </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<feedback #feedback (done)="feedbackThanks($event)"></feedback>

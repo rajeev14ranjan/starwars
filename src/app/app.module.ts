@@ -14,12 +14,11 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { RoutingService } from './service/routing-service.service';
 import { AdminComponent } from './admin/admin.component';
 import { DotsComponent } from './dots/dots.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule, RatingModule } from 'ngx-bootstrap';
 import { PopUpComponent } from './pop-up/pop-up.component';
 import { FloatTextComponent } from './float-text/float-text.component';
 import { HttpHelperService } from './service/http-helper.service';
-
-
+import { FeedbackComponent } from './feedback/feedback.component';
 
 
 @NgModule({
@@ -31,7 +30,8 @@ import { HttpHelperService } from './service/http-helper.service';
     AdminComponent,
     DotsComponent,
     PopUpComponent,
-    FloatTextComponent
+    FloatTextComponent,
+    FeedbackComponent
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),
@@ -41,7 +41,7 @@ import { HttpHelperService } from './service/http-helper.service';
     FormsModule,
     ModalModule.forRoot(),
     BrowserAnimationsModule,
-    
+    RatingModule.forRoot()
   ],
   providers: [StorageService, RoutingService, Title, HttpHelperService],
   bootstrap: [RoutingComponent]
