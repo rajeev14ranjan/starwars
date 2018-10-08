@@ -43,7 +43,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.count=1;
-    this.isAdmin = this._localStorage.isAdmin() || true;
+    this.isAdmin = this._localStorage.isAdmin();
     this.isGuestUser = this._localStorage.isGuestUser;
     this.loggedUserID = this._localStorage.loggedUser.userid;
     if(this.isAdmin){
