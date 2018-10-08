@@ -1,7 +1,7 @@
 .floater{
     position: absolute;
-    top: 70px;
-    right: 15px;
+    top: 6rem;
+    right: 1rem;
     border-radius: 3px;
     z-index: 999;
     box-shadow: 8px 8px 16px grey;

@@ -12,7 +12,7 @@ a{
     cursor: pointer;
 }
 .center{
-    max-width: 80%;
+    /* max-width: 80%; */
     margin: auto;
     align-items: center;
     text-align: center;
@@ -20,7 +20,7 @@ a{
 
 .card{
     background-color: white;
-    max-width: 70%;
+    /* max-width: 70%; */
     padding: 30px;
     border:1px solid lightgray;
     border-radius: 5px;
@@ -80,4 +80,35 @@ a{
 .btn-default{
     border: 1px solid gray;
     border-radius: .2rem;
+}
+
+.noWrap{
+    white-space: nowrap;
+}
+
+@media(max-width:500px){
+    .card{
+         font-size: .85rem;
+    }
+}
+
+@media(max-width:400px){
+    .card{
+         font-size: .75rem;
+    }
+}
+
+
+@media(min-width:767px){
+    .card{
+         max-width: 74%; 
+         
+    }
+}
+
+@media(min-width:992px){
+    .card{
+         max-width: 55%; 
+         font-size: 1.2rem;
+    }
 }

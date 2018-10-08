@@ -31,3 +31,30 @@
 span{
     cursor: pointer;
 }
+
+.navbar-expand-lg .navbar-collapse {
+    display: flex!important;
+    flex-basis: auto;
+}
+
+.navbar-toggler{
+    display: none;
+}
+
+@media(max-width:600px){
+
+}
+
+@media(max-width:500px){
+
+}
+
+@media(max-width:460px){
+    .navbar{
+         font-size: .65rem;
+         padding: .4rem;
+    }
+    .name{
+        display: none;
+    }
+}

@@ -40,8 +40,8 @@
   </div>
   <br/>
 
-  <div *ngIf="gamePreview" class="col-p-10 col-m-5" style="font-size: 20px;">
-    <img style="height:45px;margin-left: 60px;" 
+  <div *ngIf="gamePreview" class="col-p-10 col-m-5 rules">
+    <img class="walk" style="height:45px;" 
      src="../../assets/alien.gif">
     <br/>
     <h2>WELCOME TO STARS WARS GAME</h2>  
@@ -55,7 +55,7 @@
     </div>
   </div>
 
-  <div *ngIf="gameOver"  style="font-size: 120px">
+  <div *ngIf="gameOver"  style="font-size: 7rem">
     GAME OVER <br/>
     <h3 *ngIf="highScoreFlag">Congratulation for Scoring High Score of {{score}}</h3>
     <h4>Press [ SpaceBar ] to PLAY AGAIN</h4>

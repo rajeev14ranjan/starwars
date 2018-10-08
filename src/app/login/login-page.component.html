@@ -3,7 +3,7 @@
         <div class="center card row" style="margin-top: 80px;" (mouseenter)="inprogress=true" (mouseleave)="inprogress=false">
         <form #loginForm="ngForm">
                 <div class="col-md-12 text-center">
-                        <h4 class="text-info">Welcome to Starwars Game</h4><br/>
+                        <h3 class="text-info">Welcome to Starwars Game</h3><br/>
                 </div>
                 <div class="col-sm-12 form-group text-left" *ngIf="isRegMode">
                         <input type="text" class="form-control" id="fullName" name="fullName" maxlength="25" required pattern="[a-zA-Z]+[a-zA-Z ]*"
@@ -37,7 +37,7 @@
                         </div>
                 </div>
                 <br/>
-                <div class="col-sm-12 form-group text-left col-mt-5" [ngClass]="inprogress?'':'lost'">
+                <div class="col-sm-12 form-group text-left col-mt-5 noWrap" [ngClass]="inprogress?'':'lost'">
                         <a class="text-info" 
                                 (click)="isRegMode = !isRegMode; clear();">
                                 {{isRegMode?'⇦ Back':'SignUp'}}

@@ -17,6 +17,7 @@
     
 }
 
+
 dot{
     position: absolute !important;
 }
@@ -78,14 +79,8 @@ a{
     text-align: center;
 }
 
-.card{
-    background-color: white;
-    max-width: 60%;
-    padding: 30px;
-    border:1px solid lightgray;
-    border-radius: 5px;
-    box-shadow : gray 5px 5px 10px;
-
+.rules{
+    font-size: 20px;
 }
 
 
@@ -133,4 +128,60 @@ a{
 .btn-default{
     border: 1px solid gray;
     border-radius: .2rem;
+}
+
+.walk{
+    animation: walk 16s ease-out 0s infinite;
+    
+}
+
+@keyframes walk{
+    0%{transform: translateX(-195%);}
+    45%{transform: translateX(200%);}
+    50%{transform: translateX(195%) rotateY(180deg);}
+    95%{transform: translateX(-200%) rotateY(180deg);}
+    100%{transform: translateX(-195%) rotateY(0deg);}
+}
+
+@media(max-width:600px){
+    .score{
+         font-size: .95rem;
+    }
+    .rules{
+        font-size: 1rem;
+    }
+}
+
+@media(max-width:500px){
+    .score{
+         font-size: .85rem;
+    }
+    .rules{
+        font-size: .9rem;
+    }
+}
+
+@media(max-width:400px){
+    .score{
+         font-size: .65rem;
+    }
+    .rules{
+        font-size: .8rem;
+    }
+}
+
+
+@media(min-width:767px){
+    .card{
+         max-width: 74%; 
+         
+    }
+    
+}
+
+@media(min-width:992px){
+    .card{
+         max-width: 55%; 
+         font-size: 1.2rem;
+    }
 }
