@@ -33,14 +33,15 @@ export class AdminComponent implements OnInit {
   @ViewChild('feedbackModal') feedbackModal : ModalDirective; 
 
   public testURL='./';
-  public postData = `{"un":"nid","fn":"nidhi bhade","pw":"love"}`;
+  public postData = `{"un":"uid","fn":"sample user","pw":"passtext"}`;
   public testResponse = '';
   public isPost = false;
 
   constructor(private _title: Title, private _localStorage: StorageService, private _router:Router, private _httpHelper : HttpHelperService) {
-    //this._localStorage.checkForLogin();   
+    this._localStorage.checkForLogin();   
+    this.linkedInBadge();
   }
-
+  
   ngOnInit() {
     this.count=1;
     this.isAdmin = this._localStorage.isAdmin();
@@ -50,6 +51,25 @@ export class AdminComponent implements OnInit {
       this.fetchAllUser();
     }
     this._title.setTitle(this.isAdmin? 'Admin Page':'About Page');
+   
+  }
+
+  public linkedInBadge() {
+    let scripts = document.getElementsByTagName("script");
+    for (let i = 0; i < scripts.length; ++i) {
+        if (scripts[i].getAttribute('src') && scripts[i].getAttribute('src').includes("platform.linkedin.com")) {
+            scripts[i].remove();
+        }
+    }
+
+    let linkedInScripts = 'https://platform.linkedin.com/badges/js/profile.js';
+    let node = document.createElement('script');
+    node.src = linkedInScripts;
+    node.type = 'text/javascript';
+    node.async = false;
+    node.charset = 'utf-8';
+    document.getElementsByTagName('head')[0].appendChild(node);
+
   }
 
   public fetchAllUser(){
