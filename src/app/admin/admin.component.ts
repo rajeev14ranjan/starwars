@@ -38,7 +38,7 @@ export class AdminComponent implements OnInit {
   public isPost = false;
 
   constructor(private _title: Title, private _localStorage: StorageService, private _router:Router, private _httpHelper : HttpHelperService) {
-    this._localStorage.checkForLogin();   
+    //this._localStorage.checkForLogin();   
   }
 
   ngOnInit() {
