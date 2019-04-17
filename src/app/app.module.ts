@@ -19,6 +19,8 @@ import { PopUpComponent } from './pop-up/pop-up.component';
 import { FloatTextComponent } from './float-text/float-text.component';
 import { HttpHelperService } from './service/http-helper.service';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { SudokuComponent } from './sudoku/sudoku.component';
+import { DashBoardComponent } from './dash-board/dash-board.component';
 
 
 @NgModule({
@@ -31,7 +33,9 @@ import { FeedbackComponent } from './feedback/feedback.component';
     DotsComponent,
     PopUpComponent,
     FloatTextComponent,
-    FeedbackComponent
+    FeedbackComponent,
+    SudokuComponent,
+    DashBoardComponent
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),
@@ -40,7 +44,6 @@ import { FeedbackComponent } from './feedback/feedback.component';
     BrowserAnimationsModule,
     FormsModule,
     ModalModule.forRoot(),
-    BrowserAnimationsModule,
     RatingModule.forRoot()
   ],
   providers: [StorageService, RoutingService, Title, HttpHelperService],

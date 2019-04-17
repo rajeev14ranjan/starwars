@@ -1,0 +1,18 @@
+<div>
+
+  <div class="container">
+    <div class="item" (click)="goTo('game')" >Stars Wars</div>
+    <div class="item" (click)="goTo('sudoku')">Sudoku</div>
+    <div class="item" (click)="goTo('admin')" >{{isUserAdmin?'Admin':'About'}}</div>
+    <div class="item" (click)="feedback.show()">Feedback</div>
+    <div class="item" >Greetings</div>
+    <div class="item" >Coming Soon...</div>
+  
+  
+    
+
+  </div>
+</div>
+<float-text #floater></float-text>
+
+<feedback #feedback (done)="feedbackThanks($event)"></feedback>

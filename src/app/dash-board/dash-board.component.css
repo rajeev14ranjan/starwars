@@ -1,0 +1,24 @@
+.container{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 250px);
+    grid-gap: 4em;
+    padding: 7em 4em;
+    justify-content: center;
+    align-self: center;
+}
+
+.item{
+    background-color: #00204775;
+    border-radius: 3px;
+    color: white;
+    padding: 60px 0;
+    height: 150px;
+    text-align: center;
+    display: inline-block;
+    box-shadow: 10px 10px 15px #a09f9f;
+    cursor: pointer;
+    letter-spacing: 5px;
+    font-size: 18px;
+    white-space: nowrap;
+    text-transform: uppercase;
+}

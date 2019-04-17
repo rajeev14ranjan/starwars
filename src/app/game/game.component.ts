@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { StorageService} from '../service/browser-storage.service';
 import { Router } from '@angular/router';
 import { FloatTextComponent } from '../float-text/float-text.component';
-import { RoutingService } from 'src/app/service/routing-service.service';
+import { RoutingService } from '../service/routing-service.service';
 
 @Component({
   selector: 'game-page',
@@ -101,7 +101,7 @@ export class GameComponent implements OnInit, OnDestroy{
   }
 
 
-  public detechCollision(){
+  public detectCollision(){
     var ccId = setInterval(()=>{
       if(!this.gameOver){
         this.collisionCheck();
@@ -191,7 +191,7 @@ export class GameComponent implements OnInit, OnDestroy{
   }
 
   public fireBullet(xIndex: number) {
-    this.bulletArry.push({ 'x': xIndex + 30, 'y': this.playingArea.yMax - 60,'m': 0 });
+    this.bulletArry.push({ 'x': xIndex + 30, 'y': this.playingArea.yMax,'m': 0 });
     if(this.bulletArry.length > 10){
       this.bulletArry.shift();
     }
@@ -201,31 +201,33 @@ export class GameComponent implements OnInit, OnDestroy{
     return Array(this.lifeCount);
   }
 
+  @HostListener('document:keydown', ['$event'])
   @HostListener('document:keypress', ['$event']) handleKeyboardEvent(event: KeyboardEvent) {
-    let x = event.keyCode;
-    if ((x == 97 || x == 65) && this.gunPosition > this.playingArea.xMin - 100) {
+    let k = event.keyCode;
+
+    if (k == 37 && this.gunPosition > this.playingArea.xMin - 100) {
       this.gunPosition -= this.leftMove;
       this.leftCounter++;
       this.rightCounter = 0;
       this.leftMove = this.getXPos(this.leftCounter);
       this.rightMove = 30;
     } 
-    else if ((x == 100||x == 68) && this.gunPosition < this.playingArea.xMax + 100) {
+    else if (k == 39 && this.gunPosition < this.playingArea.xMax + 100) {
       this.gunPosition += this.rightMove;
       this.rightCounter++;
       this.leftCounter = 0;
       this.rightMove = this.getXPos(this.rightCounter);
       this.leftMove = 30;
     } 
-    else if ((x == 119||x == 87) && !this.gameOver) {
+    else if (k == 38 && !this.gameOver) {
       this.fireBullet(this.gunPosition);
       this.rightCounter = 0;
       this.leftCounter = 0;
     }
-    else if(x==32){
+    else if(k==32 && (this.gamePreview || this.gameOver)){
       this.resetToNewGame();
       this.startGame();
-      this.detechCollision();
+      this.detectCollision();
     }
   }
   

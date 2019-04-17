@@ -110,7 +110,7 @@ export class LoginPageComponent implements AfterViewInit {
             this._localStorage.uniquieLogid = this.getUniqueID();
             this._localStorage.saveUserLog();
             this.isAutoLogin ? this._localStorage.saveAutoLoginToken(this.un, this.pw) : this._localStorage.deleteAutoLoginToken();
-            this._router.navigateByUrl('game');
+            this._router.navigateByUrl('dashboard');
           } else {
             this.pw = '';
             this.floater.showText('Incorrect Username or Password', 'E');
@@ -134,7 +134,7 @@ export class LoginPageComponent implements AfterViewInit {
     this._localStorage.isGuestUser = true;
     this._localStorage.uniquieLogid = this.getUniqueID();
     this._localStorage.saveUserLog();
-    this._router.navigateByUrl('game');
+    this._router.navigateByUrl('dashboard');
   }
 
   public feedbackThanks(isSuccess: boolean){

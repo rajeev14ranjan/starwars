@@ -40,7 +40,7 @@
               <p>If you like my work you can hire me as a freelancer at 
                 <a href="https://www.freelancer.in/u/rajeev14ranjan" target="blank">www.freelancer.in</a></p>
                 <br/><br/>
-              <a (click)="goTo('game')" class="text-info arrow">← Go back to Game</a>
+              <a (click)="goTo('dashboard')" class="text-info arrow">← Go back to Dashboard</a>
               <span class="text-secondary"> | </span>
               <a (click)="feedback.show()" class="arrow text-primary">Provide Feedback</a>
               <a *ngIf="!isGuestUser" (click)="openLogModal(loggedUserID)" class="arrow text-success float-right arrow">Show my Login History</a>
@@ -48,7 +48,8 @@
             
       </div>
     </div>
-
+    
+    <!-- Depricated Section to debug Request -->
     <div *ngIf="false && isAdmin" class="col-md-12 col-pt-10">
         <div class="col-md-9" style="float:left">
             <input id="url"  placeholder="Enter URL" name="url" class="form-control" [(ngModel)]="testURL"/>

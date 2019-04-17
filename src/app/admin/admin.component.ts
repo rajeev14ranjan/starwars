@@ -39,7 +39,6 @@ export class AdminComponent implements OnInit {
 
   constructor(private _title: Title, private _localStorage: StorageService, private _router:Router, private _httpHelper : HttpHelperService) {
     this._localStorage.checkForLogin();   
-    this.linkedInBadge();
   }
   
   ngOnInit() {
@@ -49,6 +48,8 @@ export class AdminComponent implements OnInit {
     this.loggedUserID = this._localStorage.loggedUser.userid;
     if(this.isAdmin){
       this.fetchAllUser();
+    } else {
+      this.linkedInBadge();
     }
     this._title.setTitle(this.isAdmin? 'Admin Page':'About Page');
    
@@ -69,7 +70,6 @@ export class AdminComponent implements OnInit {
     node.async = false;
     node.charset = 'utf-8';
     document.getElementsByTagName('head')[0].appendChild(node);
-
   }
 
   public fetchAllUser(){

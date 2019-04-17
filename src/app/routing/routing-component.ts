@@ -18,7 +18,7 @@ export class RoutingComponent implements OnInit, OnDestroy {
 
   showBar() : boolean{
     let url:string = this._router.url;
-    return url == '/game' || url == '/admin';
+    return url == '/game' || url == '/admin' || url == '/sudoku' || url == '/dashboard';
   }
 
   isAdmin(){

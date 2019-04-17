@@ -4,6 +4,7 @@ import { HttpHelperService} from './http-helper.service';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UAParser } from 'ua-parser-js';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable()
@@ -44,7 +45,7 @@ export class StorageService {
 
 
   public checkForLogin(){
-      if(!this.loggedUserName){
+      if(!this.loggedUserName && environment.production){
         this._router.navigateByUrl('login');
       }
   }
