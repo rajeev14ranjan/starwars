@@ -1,16 +1,24 @@
 <div>
 
   <div class="container">
-    <div class="item" (click)="goTo('game')" >Stars Wars</div>
-    <div class="item" (click)="goTo('sudoku')">Sudoku</div>
-    <div class="item" (click)="goTo('admin')" >{{isUserAdmin?'Admin':'About'}}</div>
-    <div class="item" (click)="feedback.show()">Feedback</div>
-    <div class="item" >Greetings</div>
-    <div class="item" >Coming Soon...</div>
-  
-  
-    
+    <div class="item" (click)="goTo('game')" >
+      <span class="ribbon">Game</span>
+      Stars Wars</div>
 
+    <div class="item" (click)="goTo('sudoku')">
+        <span class="ribbon">Game</span>
+        Sudoku
+    </div>
+
+    <a class="item noDec" 
+    href="https://makemygreeting.000webhostapp.com/create.html" 
+    target="_blank">
+    <span class="ribbon" style="letter-spacing: normal">Utility</span>
+    Greetings
+    </a>
+    <div class="item" (click)="feedback.show()">Feedback</div>
+    <div class="item" (click)="goTo('admin')" >{{isUserAdmin?'Admin':'About'}}</div>
+    <div class="item" >Coming Soon...</div>
   </div>
 </div>
 <float-text #floater></float-text>
