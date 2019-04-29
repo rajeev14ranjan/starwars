@@ -59,7 +59,7 @@ export class StorageService {
                       if (response) {
                         this.uniquieLogid = (Date.now()).toString(36).toUpperCase();
                         this.saveUserLog();
-                        this._router.navigateByUrl('game');
+                        this._router.navigateByUrl('dashboard');
                       } else {
                         this.deleteAutoLoginToken();
                       }
