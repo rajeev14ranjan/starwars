@@ -29,7 +29,7 @@
 grid{
     float: right;
     padding:10px;
-    
+    white-space: nowrap;
 }
 
 .cell{

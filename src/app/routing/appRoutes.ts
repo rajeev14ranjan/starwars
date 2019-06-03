@@ -5,6 +5,7 @@ import { ErrorPageComponent } from '../error-page/error-page.component';
 import { AdminComponent } from '../admin/admin.component';
 import { SudokuComponent } from '../sudoku/sudoku.component';
 import { DashBoardComponent } from '../dash-board/dash-board.component';
+import { TicTacToeComponent } from '../tic-tac-toe/tic-tac-toe.component';
 
 
 export const AppRoutes: Routes = [
@@ -14,5 +15,6 @@ export const AppRoutes: Routes = [
     { path: 'game', component: GameComponent },
     { path: 'admin', component: AdminComponent },
     { path: 'sudoku', component: SudokuComponent },
+    { path: 'tictactoe', component: TicTacToeComponent },
     { path: '**', component: ErrorPageComponent }
 ]

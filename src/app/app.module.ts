@@ -21,6 +21,7 @@ import { HttpHelperService } from './service/http-helper.service';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { SudokuComponent } from './sudoku/sudoku.component';
 import { DashBoardComponent } from './dash-board/dash-board.component';
+import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { DashBoardComponent } from './dash-board/dash-board.component';
     FloatTextComponent,
     FeedbackComponent,
     SudokuComponent,
-    DashBoardComponent
+    DashBoardComponent,
+    TicTacToeComponent
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),
