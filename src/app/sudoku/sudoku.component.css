@@ -11,9 +11,7 @@
 }
 
 
-grid{
-    float: right;
-    padding:10px;
+.grid{
     white-space: nowrap;
 }
 
@@ -29,7 +27,7 @@ grid{
 
 .bottom{
     bottom: 5%;
-    right:10%;
+    left: 30%;
     text-align: center;
     position: absolute;
 }
@@ -37,7 +35,6 @@ grid{
 .disp{
     font-size: 1.5em;
     padding: 10px 15px;
-    border: 1px solid #b7b6b6;
-    border-radius: 10px;
+    border-bottom: 2px solid #b7b6b6;
     margin-left: 10%;
 }

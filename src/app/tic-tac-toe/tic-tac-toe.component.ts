@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../service/browser-storage.service';
 import { Title } from '@angular/platform-browser';
 import { timeout } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'tic-tac-toe',
@@ -15,7 +16,7 @@ export class TicTacToeComponent implements OnInit {
   hardness = 50;
   puzzle = [['O','O','O'],['O','O','O'],['O','O','O']];
   
-  constructor(private _title: Title, private _localStorage: StorageService) {
+  constructor(private _title: Title, private _localStorage: StorageService, private _router : Router) {
     this._localStorage.checkForLogin();
    }
 
@@ -33,5 +34,9 @@ export class TicTacToeComponent implements OnInit {
 
   public clickOnBox(r : number, c :number){
     this.puzzle[r][c] = 'X';
+  }
+
+  public goTo(url:string){
+    this._router.navigateByUrl(url);
   }
 }

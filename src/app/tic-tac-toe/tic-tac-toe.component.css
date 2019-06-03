@@ -24,7 +24,9 @@
     display: inline-block;
     border: 1px solid gray;
     cursor: pointer;
+    background-color: rgb(233, 223, 211);
 }
+
 
 .bottom{
     bottom: 5%;
