@@ -28,36 +28,7 @@ a{
 
 }
 
-.m-0{
-    margin: 0px;
-}
 
-.col-ml-5{
-    margin-left: 5px;
-}
-.col-ml-10{
-    margin-left: 10px;
-}
-.col-mr-10{
-    margin-right: 10px;
-}
-.col-mr-5{
-    margin-right: 5px;
-}
-.col-mt-5{
-    margin-top: 5px;
-}
-.col-mb-5{
-    margin-bottom: 5px;
-}
-
-.col-mb-25{
-    margin-bottom: 25px;
-}
-
-.col-pt-10{
-    padding-top: 10px;
-}
 
 .text-mute{
     color:rgb(91, 189, 255);

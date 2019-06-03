@@ -28,9 +28,9 @@
                         <button class="btn btn-sm col-mr-10 btn-outline-danger" type="button" [disabled]="(!un&&!pw&&!fn)" (click)="clear()">
                                 Reset
                         </button>
-                        <div *ngIf="!isRegMode" class="form-check-inline float-right m-0">
+                        <div *ngIf="!isRegMode" class="form-check-inline float-right col-m-0">
                         <label class="form-check-label text-secondary">
-                                <input type="checkbox" class="form-check-input m-0" name="autoLogin" 
+                                <input type="checkbox" class="form-check-input col-m-0" name="autoLogin" 
                                 [(ngModel)]="isAutoLogin" >
                                 Keep me logged in
                         </label>

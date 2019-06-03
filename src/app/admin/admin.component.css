@@ -5,22 +5,6 @@
     background: lightgray;
 }
 
-.col-p-10{
-    padding: 10px;
-}
-
-.col-pt-25{
-    padding-top: 25px;
-}
-
-.col-m-5{
-    margin: 5px;
-}
-
-.col-ml-5{
-    margin-left: 5px;
-}
-
 .dev{
     width: 150px;
     box-shadow: 1px 1px 7px grey;

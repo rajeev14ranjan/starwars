@@ -10,21 +10,6 @@
     text-align: center;
 }
 
-.col-p-10{
-    padding: 10px;
-}
-
-.col-pt-25{
-    padding-top: 25px;
-}
-
-.col-m-5{
-    margin: 5px;
-}
-
-.col-ml-5{
-    margin-left: 5px;
-}
 
 grid{
     float: right;
@@ -54,4 +39,5 @@ grid{
     padding: 10px 15px;
     border: 1px solid #b7b6b6;
     border-radius: 10px;
+    margin-left: 10%;
 }

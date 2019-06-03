@@ -22,7 +22,9 @@ export class SudokuComponent implements OnInit {
   public prefilled = new Map<number, boolean>();
   public error = {r : -1, c : -1};
 
-  constructor(private _title: Title, private _localStorage: StorageService, private _router: Router) { }
+  constructor(private _title: Title, private _localStorage: StorageService) { 
+    this._localStorage.checkForLogin();
+  }
 
   ngOnInit() {
     this.isAdmin = this._localStorage.isAdmin();

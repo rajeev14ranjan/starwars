@@ -1,3 +1,38 @@
-<p>
-  Wii do this later.
-</p>
+<div class="center"><br/>
+  <h3>Welcome to Game of TicTacToe</h3>
+  <br/><br/><br/>
+  <div class="row col-md-12">
+    <div class="col-md-6 col-pr-0">
+      <p class="disp">{{displayTxt}}</p>
+      <br/>
+
+      <div class="col-p-10">
+        <pre>
+          AI Score    :   0
+          Your Score  :   0
+          Games Won   :   5 out of 7
+      </pre>
+      </div>
+  
+      <div class="bottom">
+        <button class="btn btn-xs btn-primary col-mr-10" >Start Game</button>
+        <button class="btn btn-xs btn-outline-secondary col-ml-5" >Quit Game</button>
+      </div>
+      
+    </div>
+    <div class="col-md-6 col-pt-25">
+      <div class="grid">
+        <div *ngFor="let row of puzzle; let r= index">
+          <span *ngFor="let col of row; let c = index; trackBy: trackByFn" 
+                  [innerHTML]="puzzle[r][c]" 
+                  (click)="clickOnBox(r,c)"
+                  class="cell">
+                </span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  </div>

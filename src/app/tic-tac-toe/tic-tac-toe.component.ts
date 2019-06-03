@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { StorageService } from '../service/browser-storage.service';
+import { Title } from '@angular/platform-browser';
+import { timeout } from 'rxjs/operators';
 
 @Component({
   selector: 'tic-tac-toe',
@@ -7,9 +10,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TicTacToeComponent implements OnInit {
 
-  constructor() { }
+  
+  displayTxt = '"Play against me" - AI';
+  hardness = 50;
+  puzzle = [['O','O','O'],['O','O','O'],['O','O','O']];
+  
+  constructor(private _title: Title, private _localStorage: StorageService) {
+    this._localStorage.checkForLogin();
+   }
 
   ngOnInit() {
+    this._title.setTitle('Tic Tac Toe');
   }
 
+  public getPrfeillFlag(){
+    return Math.random() > 0.5 ? 'O' : 'X';
+  }
+
+  public trackByFn(index :number, item : any){
+    return index;
+  } 
+
+  public clickOnBox(r : number, c :number){
+    this.puzzle[r][c] = 'X';
+  }
 }
