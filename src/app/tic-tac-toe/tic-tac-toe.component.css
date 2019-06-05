@@ -11,7 +11,9 @@
 }
 
 .grid{
-    padding:10px;
+    margin: 20px;
+    box-shadow: 3px 3px 9px #888888;
+    display: inline-block;
     white-space: nowrap;
 }
 
@@ -24,6 +26,7 @@
     display: inline-block;
     border: 1px solid gray;
     cursor: pointer;
+    user-select: none;
     background-color: rgb(233, 223, 211);
 }
 
@@ -42,8 +45,15 @@
     margin-left: 10%;
 }
 
-pre{
+.pre{
     text-align: left;
+    margin-left: 25%;
+    white-space: pre;
+    font-family: consolas;
     font-size: 120%;
     color: #0061c3;
+}
+
+.ar{
+    text-align: right;
 }

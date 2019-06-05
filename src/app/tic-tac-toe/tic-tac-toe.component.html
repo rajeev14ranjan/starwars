@@ -6,33 +6,40 @@
       <p class="disp">{{displayTxt}}</p>
       <br/>
 
-      <div class="col-p-10">
-        <pre>
-          AI Score    :   0
-          Your Score  :   0
-          Games Won   :   5 out of 7
-      </pre>
+      <div class="col-p-10 pre">
+        <tr>
+          <td class="ar">AI Score :</td>
+          <td> {{aiScore}} </td></tr>
+        <tr>
+          <td class="ar">Your Score :</td>
+          <td> {{huScore}}</td></tr>
+        <tr>
+          <td class="ar">Games Won :</td>
+          <td> {{huWin}}/{{huWin+aiWin}}</td></tr>
       </div>
   
       <div class="bottom">
-        <button class="btn btn-xs btn-primary col-mr-10" >Start Game</button>
-        <button class="btn btn-xs btn-outline-secondary col-ml-5" (click)="goTo('dashboard')">Quit</button>
+        <button class="btn btn-xs btn-primary col-mr-10" 
+                [disabled]="isGameInProgress" 
+                (click)="startGame()">Start Game</button>
+        <button class="btn btn-xs btn-outline-secondary col-ml-5" 
+                (click)="goTo('dashboard')">Quit</button>
       </div>
       
     </div>
     <div class="col-md-6 col-pt-25">
       <div class="grid">
-        <div *ngFor="let row of puzzle; let r= index">
-          <span *ngFor="let col of row; let c = index; trackBy: trackByFn" 
-                  [innerHTML]="puzzle[r][c]" 
-                  (click)="clickOnBox(r,c)"
-                  class="cell">
-                </span>
-        </div>
+        <ng-container *ngFor="let box of ticTacBoard; let i= index; trackBy: trackByFn">
+          <span [ngStyle]="getBoxStyle(i)"
+                [innerHTML]="box" 
+                (click)="humanClickOnBox(i)"
+                class="cell">
+          </span>
+          <br *ngIf="(i==2||i == 5)" />
+      </ng-container>
       </div>
+      <br/><span class="text-muted">{{gameMessage}}</span>
     </div>
     
   </div>
-  
-  
-  </div>
+</div>
