@@ -4,24 +4,26 @@
   <div class="row col-md-12">
     <div class="col-md-6 col-pr-0">
       <p class="disp">{{displayTxt}}</p>
-      <br/>
+      <div class="progress">
+          <div class="bar" [ngStyle]="{width: completedPercent + '%'}"></div>
+        </div>
 
       <div class="col-p-10 pre">
         <tr>
+            <td class="ar">Your Score :</td>
+            <td> {{humanWin}}</td></tr>
+         <tr>
           <td class="ar">AI Score :</td>
-          <td> {{aiScore}} </td></tr>
+          <td> {{aiWin}} </td></tr>
         <tr>
-          <td class="ar">Your Score :</td>
-          <td> {{huScore}}</td></tr>
-        <tr>
-          <td class="ar">Games Won :</td>
-          <td> {{huWin}}/{{huWin+aiWin}}</td></tr>
+          <td class="ar">Total Games :</td>
+          <td> {{totalGame}}</td></tr>
       </div>
   
       <div class="bottom">
         <button class="btn btn-xs btn-primary col-mr-10" 
                 [disabled]="isGameInProgress" 
-                (click)="startGame()">Start Game</button>
+                (click)="startGame()">{{totalGame ? 'Play Again' : 'Start Game'}}</button>
         <button class="btn btn-xs btn-outline-secondary col-ml-5" 
                 (click)="goTo('dashboard')">Quit</button>
       </div>

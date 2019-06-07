@@ -23,6 +23,7 @@
     padding: 7px;
     display: inline-block;
     border : 1px solid gray;
+    user-select: none;
 }
 
 .bottom{

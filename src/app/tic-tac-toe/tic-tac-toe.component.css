@@ -40,8 +40,7 @@
 
 .disp{
     font-size: 1.5em;
-    padding: 10px 15px;
-    border-bottom: 2px solid #b7b6b6;
+    padding: 10px 15px 0px 10px;
     margin-left: 10%;
 }
 
@@ -56,4 +55,18 @@
 
 .ar{
     text-align: right;
+}
+
+.progress{
+    margin-left: 10%;
+    margin-bottom: 15px;
+    height: 2px;
+    overflow: hidden; 
+    background-color: #b7b6b6
+}
+
+.progress .bar{
+    background-color: darkgreen;
+    transition: width 1s;
+    transition-timing-function : linear;
 }
