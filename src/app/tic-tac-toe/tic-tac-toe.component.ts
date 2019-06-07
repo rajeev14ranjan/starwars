@@ -24,7 +24,7 @@ export class TicTacToeComponent implements OnInit {
 
   public styles = {
     'E': { color: '#e9dfd3' },
-    'G': { backgroundColor: '#94dc94' },
+    'G': { backgroundColor: '#94dc94', color: '#006400' },
     'X': { backgroundColor: '#e9dfd3', color: '#2a78cd' },
     'O': { backgroundColor: '#e9dfd3', color: '#b53030' },
   }
@@ -58,13 +58,13 @@ export class TicTacToeComponent implements OnInit {
 
   public gameOver(winner?: string) {
     if (winner == this.aiMark) {
-      this.gameMessage = 'Ha Ha! I defeated you. Want to play again ?';
+      this.gameMessage = 'You are defeated. I won! Want to play again ?';
       this.aiWin++;
     } else if (winner == this.humanMark) {
       this.gameMessage = 'You won this time, Want to play again ?';
       this.humanWin++;
     } else {
-      this.gameMessage = 'Game Tie! I am Impressed by you. Want to play again ?';
+      this.gameMessage = 'Game Tie! You\'re Impressive. Want to play again ?';
     }
 
     this.totalGame++;
@@ -108,7 +108,7 @@ export class TicTacToeComponent implements OnInit {
     if (this.isAIPlayingFirst = !this.isAIPlayingFirst) {
       this.isAIThinking = true;
       setTimeout(this.playAITurn.bind(this), (Math.random() + 1) * 1000);
-      this.gameMessage = `IT'S MY TURN, let me think where I should play first...`;
+      this.gameMessage = `MY TURN, let me think where I should play first...`;
     } else {
       this.isAIThinking = false;
       this.gameMessage = `YOUR TURN! Click on the board to place ${this.humanMark}`;
