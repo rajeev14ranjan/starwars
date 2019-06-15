@@ -11,18 +11,25 @@
       </select>
 
       <span class=" one">Endpoint URL</span>
-      <input type="text" class="two" name="apiUrl" class="form-control" 
+      <input type="text" class="two" name="apiUrl" class="form-control" spellcheck="false"
       [(ngModel)]="apiUrl" />
 
       <span *ngIf="requestType == 'post'" class=" one ">POST Object</span>
-      <textarea *ngIf="requestType == 'post'" class="form-control two" 
+      <textarea *ngIf="requestType == 'post'" class="form-control two" spellcheck="false"
         id="postObj" name="postObj" rows="3" [(ngModel)]="postObj"></textarea> 
 
       <span class=" one">Response</span>
-      <textarea id="response" name="response" class="form-control two" rows="10" 
-      [ngModel]="response|json"></textarea>
+      <textarea id="response" 
+                name="response" 
+                class="form-control two" 
+                rows="10" 
+                readonly="true"
+                spellcheck="false"
+                [ngStyle]="bgColor"
+                [ngModel]="response|json">
+        </textarea>
 
-      <button class="btn btn-success two" (click)="fetchData()">Fetch Data</button>
+      <button class="btn btn-success two" [disabled]="isFetching" (click)="fetchData()">Fetch Data</button>
 
   </div>
 

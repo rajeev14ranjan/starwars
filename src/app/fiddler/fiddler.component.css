@@ -7,7 +7,7 @@
 }
 
 .middle{
-    max-width: 75%;
+    max-width: 90%;
     margin: auto;
 }
 
@@ -36,5 +36,5 @@ textarea{
     overflow: auto;
     white-space: pre;
     font-weight: 300;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
 }
