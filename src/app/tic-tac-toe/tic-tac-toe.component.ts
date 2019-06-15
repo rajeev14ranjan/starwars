@@ -44,10 +44,6 @@ export class TicTacToeComponent implements OnInit {
     this._title.setTitle('Tic Tac Toe');
   }
 
-  public getPrfeillFlag() {
-    return Math.random() > 0.5 ? this.humanMark : this.aiMark;
-  }
-
   getBoxStyle(box: number) {
     return this.styles[this.boxStyle[box]];
   }
@@ -72,13 +68,13 @@ export class TicTacToeComponent implements OnInit {
     this.computeProgressBar();
   }
 
-  public computeProgressBar(){
+  public computeProgressBar() {
     let filled = this.ticTacBoard.filter(x => x !== this.emptyMark).length;
-    this.completedPercent = (filled/9)*100;
+    this.completedPercent = (filled / 9) * 100;
   }
 
   public humanClickOnBox(box: number) {
-    if (!this.isGameInProgress || this.isAIThinking || this.ticTacBoard[box] !== 'E') return false;
+    if (!this.isGameInProgress || this.isAIThinking || this.ticTacBoard[box] !== this.emptyMark) return false;
 
     this.ticTacBoard[box] = this.boxStyle[box] = this.humanMark;
 
@@ -163,8 +159,8 @@ export class TicTacToeComponent implements OnInit {
   //Provides empty boxes of board
   public emptyIndexies(newBoard: Array<string>) {
     return newBoard.map((x, i) => x == this.emptyMark ? i : -1)
-                   .filter(x => x > -1)
-                   .sort((a,b) => Math.random() > 0.5 ? 1 : -1);
+      .filter(x => x > -1)
+      .sort((a, b) => Math.random() > 0.5 ? 1 : -1);
   }
 
   public getBestTicTacMove(newBoard: Array<string>, playerMark: string) {

@@ -22,6 +22,7 @@ import { FeedbackComponent } from './feedback/feedback.component';
 import { SudokuComponent } from './sudoku/sudoku.component';
 import { DashBoardComponent } from './dash-board/dash-board.component';
 import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
+import { FiddlerComponent } from './fiddler/fiddler.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
     FeedbackComponent,
     SudokuComponent,
     DashBoardComponent,
-    TicTacToeComponent
+    TicTacToeComponent,
+    FiddlerComponent
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),

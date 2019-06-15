@@ -24,6 +24,9 @@
 
     <div class="item" (click)="feedback.show()">Feedback</div>
     <div class="item" (click)="goTo('admin')" >{{isUserAdmin?'Admin':'About'}}</div>
+    <div class="item" *ngIf="isUserAdmin" (click)="goTo('fiddler')" >
+      <span class="ribbon">Dev</span>
+      Fiddler</div>
   </div>
 </div>
 <float-text #floater></float-text>

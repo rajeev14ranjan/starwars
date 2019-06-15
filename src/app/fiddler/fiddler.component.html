@@ -1,0 +1,29 @@
+<div class="center"><br/>
+  <h3>Enter request details to get response</h3>
+  <br/>
+  <div class="form-group middle grid">
+
+      <span class="one">Request Type</span>
+      <select class="form-control two" id="rtype" name="requestType" 
+      [(ngModel)]="requestType">
+        <option value="get">GET</option>
+        <option value="post">POST</option>
+      </select>
+
+      <span class=" one">Endpoint URL</span>
+      <input type="text" class="two" name="apiUrl" class="form-control" 
+      [(ngModel)]="apiUrl" />
+
+      <span *ngIf="requestType == 'post'" class=" one ">POST Object</span>
+      <textarea *ngIf="requestType == 'post'" class="form-control two" 
+        id="postObj" name="postObj" rows="3" [(ngModel)]="postObj"></textarea> 
+
+      <span class=" one">Response</span>
+      <textarea id="response" name="response" class="form-control two" rows="10" 
+      [ngModel]="response|json"></textarea>
+
+      <button class="btn btn-success two" (click)="fetchData()">Fetch Data</button>
+
+  </div>
+
+  <div>

@@ -1,0 +1,40 @@
+.center{
+    margin: auto;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 80px;
+    background: lightgray;
+}
+
+.middle{
+    max-width: 75%;
+    margin: auto;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: 50px 140px auto 50px;
+    grid-gap: 10px;
+}
+
+.one{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    justify-self: end;
+    align-self: center;
+    padding-right: 20px;
+    color: #17a2b8;
+}
+
+.two{
+    grid-column-start: 3;
+    grid-column-end: 4
+}
+
+textarea{
+    resize: none;
+    overflow: auto;
+    white-space: pre;
+    font-weight: 300;
+    font-size: 0.85rem;
+}
