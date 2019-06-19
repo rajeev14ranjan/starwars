@@ -22,7 +22,7 @@ export class RoutingComponent implements OnInit, OnDestroy {
   }
 
   isAdmin(){
-    return (this._localStorage.loggedUserID == 'rr' && this._localStorage.loggedUserName.includes('Rajeev'));
+    return this._localStorage.isAdmin();
   }
 
   goTO(urlStr:string){

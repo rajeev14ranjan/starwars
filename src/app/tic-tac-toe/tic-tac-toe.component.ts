@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { StorageService } from '../service/browser-storage.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { StorageService, UserScore } from '../service/browser-storage.service';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   templateUrl: './tic-tac-toe.component.html',
   styleUrls: ['./tic-tac-toe.component.css']
 })
-export class TicTacToeComponent implements OnInit {
+export class TicTacToeComponent implements OnInit, OnDestroy {
   public humanWin = 0;
   public aiWin = 0;
   public totalGame = 0;
@@ -21,6 +21,7 @@ export class TicTacToeComponent implements OnInit {
   public boxStyle = ['G', 'E', 'O', 'O', 'G', 'O', 'E', 'O', 'G'];
   public winningConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
   public isAIPlayingFirst = true;
+  public gameName = 'tictac';
 
   public styles = {
     'E': { color: '#e9dfd3' },
@@ -42,10 +43,31 @@ export class TicTacToeComponent implements OnInit {
 
   ngOnInit() {
     this._title.setTitle('Tic Tac Toe');
+    this.getOldScore();
   }
 
   getBoxStyle(box: number) {
     return this.styles[this.boxStyle[box]];
+  }
+
+  public getOldScore() {
+    this._storage.getUserScore(this.gameName).subscribe(
+      (response: Array<UserScore>) => {
+        if (response.length) {
+          let scores = response[0].score.split(',').map(x => parseInt(x));
+          this.humanWin = scores[0];
+          this.aiWin = scores[1];
+          this.totalGame = scores[2];
+        }
+      }
+    )
+  }
+
+  public saveCurrentUserScore() {
+    this._storage.saveUserScore(this.gameName, `${this.humanWin},${this.aiWin},${this.totalGame}`).subscribe(
+      response => { },
+      error => { }
+    )
   }
 
   public trackByFn(index: number, item: any) {
@@ -66,6 +88,7 @@ export class TicTacToeComponent implements OnInit {
     this.totalGame++;
     this.isGameInProgress = false;
     this.computeProgressBar();
+    if (!(this.totalGame % 5)) this.saveCurrentUserScore();
   }
 
   public computeProgressBar() {
@@ -210,5 +233,7 @@ export class TicTacToeComponent implements OnInit {
     return allMoves[bestMove];
   }
 
-
+  ngOnDestroy() {
+    this.saveCurrentUserScore();
+  }
 }

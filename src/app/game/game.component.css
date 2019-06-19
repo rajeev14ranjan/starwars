@@ -46,15 +46,6 @@ dot{
     width:60px;
 }
 
-
-.center{
-    max-width: 80%;
-    margin: auto;
-    align-items: center;
-    text-align: center;
-    
-}
-
 .col-p-10{
     padding: 10px;
 }
@@ -132,6 +123,12 @@ a{
     }
     .rules{
         font-size: .9rem;
+    }
+    .center{
+        max-width: 99%;
+    }
+    .screenInfo{
+        display: none;
     }
 }
 

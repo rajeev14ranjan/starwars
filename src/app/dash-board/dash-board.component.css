@@ -1,11 +1,12 @@
 .container{
     display: grid;
     grid-template-columns: repeat(auto-fill, 250px);
-    grid-gap: 3em;
-    padding: 7em 4em;
+    grid-gap: 4em;
+    padding: 7em 0;
     justify-content: center;
     align-self: center;
 }
+
 
 .item{
     position: relative;
@@ -49,3 +50,15 @@
     from {opacity: 1;}
     to {opacity: 0;}
   }
+
+
+  @media(max-width:500px){
+    .container{
+        grid-gap: 1.5em;
+        padding: 2em 0;
+    }
+    .item{
+        padding: 50px 0;
+        height: 130px;
+    }
+}
