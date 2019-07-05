@@ -90,13 +90,13 @@ export class GameComponent implements OnInit, OnDestroy {
     this.height = window.innerHeight;
     this.footerPos = this._routinService.getCoordinate(document.getElementById('footerDiv'));
 
-    let playingWidth = (0.6 * this.width) >> 0;
-    let playingHeight = (0.8 * this.height) >> 0;
+    let playingWidth = this.floor(0.6 * this.width);
+    let playingHeight = this.floor(0.8 * this.height);
 
     this.playingArea.width = playingWidth;
     this.playingArea.height = playingHeight;
-    this.playingArea.xMin =  (-1 * playingWidth / 2) >> 0;
-    this.playingArea.xMax = (playingWidth / 2) >> 0;
+    this.playingArea.xMax = this.floor(playingWidth / 2);
+    this.playingArea.xMin = -1 * this.playingArea.xMax;
     this.playingArea.yMin = 0;
     this.playingArea.yMax = playingHeight;
   }
@@ -113,15 +113,19 @@ export class GameComponent implements OnInit, OnDestroy {
     }, 100);
   }
 
+  public floor(n:number){
+    return n>>0;
+  }
+
 
   public startGame() {
     this.floater.showText('Game Started, Best of Luck!', 'I');
     this.lifeWarning = true;
     var itId = setInterval(() => {
-      let x = Math.floor((Math.random() - 0.5) * this.playingArea.width);
-      x = Math.floor(x / 30) * 30;
+      let x = this.floor((Math.random() - 0.5) * this.playingArea.width);
+      x = this.floor(x / 30) * 30;
       let y = this.playingArea.yMin;
-      let master = Math.floor((Math.random() * 10)) > 8;
+      let master = this.floor((Math.random() * 10)) > 8;
       this.enemyArry.push({ 'x': x, 'y': y, 'm': master ? 1 : 0 });
       if (this.enemyArry.length > 20) {
         this.lifeCount--;
