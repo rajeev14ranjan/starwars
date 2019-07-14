@@ -67,11 +67,6 @@ export class GameComponent implements OnInit, OnDestroy {
     this.footerPos = this._routinService.getCoordinate(document.getElementById('footerDiv'));
     this.isUserAdmin = this._localStorage.isAdmin();
     this.isGuestUser = this._localStorage.isGuestUser;
-    if (!this.isUserAdmin) {
-      setTimeout(() => {
-        this.floater.showText('↑ click on About tab to know more about this Project', 'I');
-      }, 2000);
-    }
     this.calculatePlayingArea();
   }
 
