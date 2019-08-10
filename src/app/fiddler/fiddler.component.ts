@@ -12,37 +12,43 @@ export class FiddlerComponent {
   public requestType = 'get';
   public apiUrl = 'api/stars.php';
   public postObj = '{}';
-  public response : any;
-  public bgColor = {backgroundColor : 'white'};
+  public response: any;
+  public bgColor = { backgroundColor: 'white' };
   public errorBg = '#f6bebe';
   public successBg = '#bef6cd';
   public isFetching = false;
-  constructor(private _storage : StorageService, private _dbcon : HttpHelperService) { 
+  constructor(
+    private _storage: StorageService,
+    private _dbcon: HttpHelperService
+  ) {
     this._storage.checkForLogin();
   }
 
-  fetchData(){
+  fetchData() {
     this.response = 'fetching response....';
     this.bgColor.backgroundColor = 'white';
-    let requestObs : Observable<any>;
+    let $requestObs: Observable<any>;
 
-    if(this.requestType === 'get'){
-      requestObs = this._dbcon.get(this.apiUrl);
-    }else{
+    if (this.requestType === 'get') {
+      $requestObs = this._dbcon.get(this.apiUrl);
+    } else {
       let postData = {};
-      try{
+      try {
         postData = JSON.parse(this.postObj);
-      }catch(e){
+      } catch (e) {
         this.bgColor.backgroundColor = this.errorBg;
-        this.response = {Error: 'Invalid Post data Object', Description: e};
+        this.response = {
+          Error: 'Invalid Post data Object',
+          Description: e.toString()
+        };
         return;
-      };
-      requestObs = this._dbcon.post(this.apiUrl, postData);
+      }
+      $requestObs = this._dbcon.post(this.apiUrl, postData);
     }
 
     this.isFetching = true;
 
-    requestObs.subscribe(
+    $requestObs.subscribe(
       response => {
         this.response = response;
         this.bgColor.backgroundColor = this.successBg;
@@ -53,9 +59,6 @@ export class FiddlerComponent {
         this.bgColor.backgroundColor = this.errorBg;
         this.isFetching = false;
       }
-    )
+    );
   }
-
-
-
 }
