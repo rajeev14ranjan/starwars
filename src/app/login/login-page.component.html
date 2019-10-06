@@ -13,7 +13,7 @@
                         <input type="text" class="form-control" name="userName" id="userName" maxlength="25" (change)="verifyUserName()" required [(ngModel)]="un" [placeholder]="(isRegMode?'Select':'Enter') + ' Username'" pattern="[^ ]+" />
                 </div>
                 <div class="col-sm-12 input-group mb-3 text-left">
-                        <input [type]="shwPass?'text':'password'" class="form-control" id="passWrd" name="passWrd" maxlength="25" required [(ngModel)]="pw" [placeholder]="(isRegMode?'Select':'Enter') +'  Password'" pattern="[^ ]+" (keyup)="pw?'':shwPass = false" >
+                        <input [type]="shwPass?'text':'password'" class="form-control" id="passWrd" name="passWrd" maxlength="25" required [(ngModel)]="pw" [placeholder]="(isRegMode?'Select':'Enter') +'  Password'" pattern="[^ ]+" (keydown.enter)="(loginForm.invalid || (!isSignUpAllowed && isRegMode)) ? '' : login()">
                         <div class="input-group-append">
                           <button [disabled]="!pw" class="btn btn-sm" [ngClass]="shwPass?'btn-danger':'btn-default'" (click)="shwPass=!shwPass" type="button">{{shwPass?'Hide':'Show'}}</button> 
                         </div>
