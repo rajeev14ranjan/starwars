@@ -50,17 +50,19 @@ export class SplitWiseComponent {
     if (expdetail) {
       const eachExpanse = expdetail.split(' ');
       const total = eachExpanse.reduce((sum, bill) => {
-        const ratio = bill.split(':')[1];
-        sum += parseFloat(ratio ? ratio.trim() : '0');
+        const [name, ratio] = bill.split(':');
+        if (this.payees.some(payeeName => this.startsWith(name, payeeName))) {
+          sum += parseFloat(ratio ? ratio.trim() : '1');
+        }
         return sum;
       }, 0);
       eachExpanse.forEach(eachShare => {
         const [name, ratio] = eachShare.split(':');
 
         shares.forEach(share => {
-          if (this.matchI(name, share.name)) {
+          if (this.startsWith(name, share.name)) {
             const hisTotal =
-              (parseFloat(ratio ? ratio.trim() : '0') * amount) / total;
+              (parseFloat(ratio ? ratio.trim() : '1') * amount) / total;
             share.amount = this.round(hisTotal);
           }
         });
@@ -156,9 +158,12 @@ export class SplitWiseComponent {
     return str.substr(0, 1).toUpperCase() + str.substr(1);
   }
 
-  matchI(searchStr: string, fullName: string): boolean {
-    searchStr = searchStr ? searchStr.trim().toLowerCase() : searchStr;
-    return fullName.toLowerCase().startsWith(searchStr);
+  startsWith(name: string, fullName: string): boolean {
+    if (!name || !fullName) {
+      return false;
+    }
+    name = name ? name.trim().toLowerCase() : name;
+    return fullName.toLowerCase().startsWith(name);
   }
 
   trackByExp(index: number, item) {
