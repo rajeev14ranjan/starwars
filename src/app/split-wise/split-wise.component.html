@@ -4,7 +4,8 @@
     <div class="btn-group col-p-10">
       <button type="button" class="btn" [ngClass]="userInputType === 0 ? 'btn-primary':'btn-light'"
         (click)="changeInputType(0)">Add Peoples</button>
-      <button type="button" class="btn" [ngClass]="userInputType === 1 ? 'btn-primary':'btn-light'">Add
+      <button type="button" class="btn" [ngClass]="userInputType === 1 ? 'btn-primary':'btn-light'"
+        [disabled]="!payees.length" (click)="changeInputType(1)">Add
         Expenses</button>
     </div>
     <input class="form-control user-input col-m-10" spellcheck="false" [(ngModel)]="userInput"

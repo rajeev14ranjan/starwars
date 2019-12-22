@@ -91,7 +91,12 @@ export class SplitWiseComponent {
     } else {
       this.detailedExpense = `Person Entered : <code><ol>${list
         .map(name => `<li>${name}</li>`)
-        .join('')}</ol></code>Press enter to Add`;
+        .join('')}</ol> 
+        ${
+          this.expenses.length
+            ? '⚠️ This will delete all current expenses<br/>'
+            : ''
+        }</code>Press enter to Add`;
     }
   }
 
@@ -113,11 +118,12 @@ export class SplitWiseComponent {
       this.changeInputType(1);
       this.calculateTotalExpense();
     } else {
-      this.detailedExpense = `Expense detailed : <code><ul>
+      this.detailedExpense = `Entered Expense details : <code><ul>
       <li>Description : ${desc}</li>
       <li>Amount : ${this.currency + amount}</li>
       <li>Shares : <ol>
         ${shares
+          .filter(s => s.amount)
           .map(s => `<li>${s.name} - ${this.currency + s.amount}</li>`)
           .join('')}
         </oi>
