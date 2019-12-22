@@ -49,11 +49,12 @@ export class SplitWiseComponent {
 
     if (expdetail) {
       const eachExpanse = expdetail.split(' ');
-      const total = eachExpanse.reduce((sum, bill) => {
+      const totalRatio = eachExpanse.reduce((sum, bill) => {
         const [name, ratio] = bill.split(':');
-        if (this.payees.some(payeeName => this.startsWith(name, payeeName))) {
-          sum += parseFloat(ratio ? ratio.trim() : '1');
-        }
+        const totalMatch = this.payees.filter(payeeName =>
+          this.startsWith(name, payeeName)
+        ).length;
+        sum += parseFloat(ratio ? ratio : '1') * totalMatch;
         return sum;
       }, 0);
       eachExpanse.forEach(eachShare => {
@@ -62,7 +63,7 @@ export class SplitWiseComponent {
         shares.forEach(share => {
           if (this.startsWith(name, share.name)) {
             const hisTotal =
-              (parseFloat(ratio ? ratio.trim() : '1') * amount) / total;
+              (parseFloat(ratio ? ratio : '1') * amount) / totalRatio;
             share.amount = this.round(hisTotal);
           }
         });
