@@ -7,6 +7,7 @@ import { SudokuComponent } from '../sudoku/sudoku.component';
 import { DashBoardComponent } from '../dash-board/dash-board.component';
 import { TicTacToeComponent } from '../tic-tac-toe/tic-tac-toe.component';
 import { FiddlerComponent } from '../fiddler/fiddler.component';
+import { SplitWiseComponent } from '../split-wise/split-wise.component';
 
 
 export const AppRoutes: Routes = [
@@ -18,5 +19,6 @@ export const AppRoutes: Routes = [
     { path: 'sudoku', component: SudokuComponent },
     { path: 'tictactoe', component: TicTacToeComponent },
     { path: 'fiddler', component: FiddlerComponent },
-    { path: '**', component: ErrorPageComponent }
-]
+    { path: 'splitwise', component: SplitWiseComponent },
+    { path: '**', component: ErrorPageComponent },
+];

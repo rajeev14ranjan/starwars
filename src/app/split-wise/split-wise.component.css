@@ -1,0 +1,49 @@
+.split {
+  padding: 25px;
+}
+
+.title {
+  font-size: 2em;
+  text-transform: capitalize;
+}
+
+.box {
+  border: 1px solid lightgray;
+  border-radius: 2px;
+}
+
+.add {
+  padding: 10px;
+  margin: 20px 0;
+  background-color: #e6e6e6;
+}
+.btn-light {
+  background-color: #dbdbdb8f;
+  border: 1px solid lightgray;
+}
+
+input,
+input:focus {
+  background-color: #ededed;
+  font-size: 1.2em;
+  color: black;
+  width: 98%;
+}
+
+.title:focus,
+button:focus,
+input:focus {
+  outline: none;
+}
+
+.table {
+  background-color: #e6e6e6;
+}
+
+.delete-link {
+  width: 100px;
+  text-align: center;
+  color: #007bff;
+  cursor: pointer;
+  border-left: 1px solid lightgray;
+}

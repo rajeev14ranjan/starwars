@@ -1,13 +1,13 @@
 <div>
 
   <div class="container">
-    <div class="item" (click)="goTo('game')" >
+    <div class="item" (click)="goTo('game')">
       <span class="ribbon">Game</span>
       Stars Wars</div>
 
     <div class="item" (click)="goTo('sudoku')">
-        <span class="ribbon">Game</span>
-        Sudoku
+      <span class="ribbon">Game</span>
+      Sudoku
     </div>
 
     <div class="item" (click)="goTo('tictactoe')">
@@ -15,23 +15,24 @@
       Tic Tac Toe
     </div>
 
-    <a class="item noDec" 
-    href="https://makemygreeting.000webhostapp.com/create.html" 
-    target="_blank">
-    <span class="ribbon">2020</span>
-    Greetings
+    <div class="item" (click)="goTo('splitwise')">
+      <span class="ribbon">₹$£</span>
+      Split Wise
+    </div>
+
+    <a class="item noDec" href="https://makemygreeting.000webhostapp.com/create.html" target="_blank">
+      <span class="ribbon">2020</span>
+      Greetings
     </a>
 
-    <a class="item noDec" 
-    href="https://starenterprisewars.000webhostapp.com/time.html" 
-    target="_blank">
-    <span class="ribbon">React</span>
-    Time
+    <a class="item noDec" href="https://starenterprisewars.000webhostapp.com/time.html" target="_blank">
+      <span class="ribbon">React</span>
+      Time
     </a>
 
     <div class="item" (click)="feedback.show()">Feedback</div>
-    <div class="item" (click)="goTo('admin')" >{{isUserAdmin?'Admin':'About'}}</div>
-    <div class="item" *ngIf="isUserAdmin" (click)="goTo('fiddler')" >
+    <div class="item" (click)="goTo('admin')">{{isUserAdmin?'Admin':'About'}}</div>
+    <div class="item" *ngIf="isUserAdmin" (click)="goTo('fiddler')">
       <span class="ribbon">Dev</span>
       Fiddler</div>
   </div>

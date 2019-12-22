@@ -23,6 +23,7 @@ import { SudokuComponent } from './sudoku/sudoku.component';
 import { DashBoardComponent } from './dash-board/dash-board.component';
 import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
 import { FiddlerComponent } from './fiddler/fiddler.component';
+import { SplitWiseComponent } from './split-wise/split-wise.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { FiddlerComponent } from './fiddler/fiddler.component';
     SudokuComponent,
     DashBoardComponent,
     TicTacToeComponent,
-    FiddlerComponent
+    FiddlerComponent,
+    SplitWiseComponent
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),

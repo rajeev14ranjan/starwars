@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { StorageService, UserDetail, Logs, Feedback } from '../service/browser-storage.service';
+import { StorageService } from '../service/browser-storage.service';
+import { UserDetail, Logs, Feedback } from '../model/app.model';
 import { Router } from '@angular/router';
 import { PopUpProp, PopUpComponent } from '../pop-up/pop-up.component';
 import { FloatTextComponent } from '../float-text/float-text.component';
 import { HttpHelperService } from '../service/http-helper.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { FeedbackComponent } from '../feedback/feedback.component';
-
 
 @Component({
   selector: 'app-admin',
@@ -37,7 +37,12 @@ export class AdminComponent implements OnInit {
   public testResponse = '';
   public isPost = false;
 
-  constructor(private _title: Title, private _localStorage: StorageService, private _router: Router, private _httpHelper: HttpHelperService) {
+  constructor(
+    private _title: Title,
+    private _localStorage: StorageService,
+    private _router: Router,
+    private _httpHelper: HttpHelperService
+  ) {
     this._localStorage.checkForLogin();
   }
 
@@ -52,18 +57,21 @@ export class AdminComponent implements OnInit {
       this.linkedInBadge();
     }
     this._title.setTitle(this.isAdmin ? 'Admin Page' : 'About Page');
-
   }
 
   public linkedInBadge() {
     const scripts = document.getElementsByTagName('script');
     for (let i = 0; i < scripts.length; ++i) {
-      if (scripts[i].getAttribute('src') && scripts[i].getAttribute('src').includes('platform.linkedin.com')) {
+      if (
+        scripts[i].getAttribute('src') &&
+        scripts[i].getAttribute('src').includes('platform.linkedin.com')
+      ) {
         scripts[i].remove();
       }
     }
 
-    const linkedInScripts = 'https://platform.linkedin.com/badges/js/profile.js';
+    const linkedInScripts =
+      'https://platform.linkedin.com/badges/js/profile.js';
     const node = document.createElement('script');
     node.src = linkedInScripts;
     node.type = 'text/javascript';
@@ -73,29 +81,35 @@ export class AdminComponent implements OnInit {
   }
 
   public fetchAllUser() {
-    this._localStorage.getAllUsers()
-      .subscribe(res => {
+    this._localStorage.getAllUsers().subscribe(
+      res => {
         this.allUsers = res;
-      }, error => this.floater.showText(error, 'E'));
+      },
+      error => this.floater.showText(error, 'E')
+    );
   }
 
   public deleteUser() {
-    this._localStorage.deleteUser(this.tempUser.userid, this.tempUser.username).subscribe(
-      res => {
+    this._localStorage
+      .deleteUser(this.tempUser.userid, this.tempUser.username)
+      .subscribe(res => {
         if (res.status) {
           this.fetchAllUser();
         }
         this.floater.showText(res.status_message, res.status ? 'S' : 'E', 2000);
-      }
-    );
+      });
   }
 
   public deleteUserConfirmation(user: UserDetail) {
     this.tempUser = user;
     const confirmUser = new PopUpProp();
     confirmUser.header = user.userid > 2 ? `Delete User` : 'Clear all Logs';
-    confirmUser.body = user.userid > 2 ? `${user.fullname} will no longer be able to login. This will also delete their log history. Do you want to delete ?` : `This will all log history of ${user.fullname}. Do you want to clear ?`;
-    confirmUser.btnDanger = user.userid > 2 ? `Delete ${user.fullname}` : `Clear All Logs`;
+    confirmUser.body =
+      user.userid > 2
+        ? `${user.fullname} will no longer be able to login. This will also delete their log history. Do you want to delete ?`
+        : `This will all log history of ${user.fullname}. Do you want to clear ?`;
+    confirmUser.btnDanger =
+      user.userid > 2 ? `Delete ${user.fullname}` : `Clear All Logs`;
     confirmUser.btnNeutral = 'Cancel';
     confirmUser.operation = 'delete';
     this.popUpProp = confirmUser;
@@ -107,7 +121,7 @@ export class AdminComponent implements OnInit {
   }
 
   public isDelete(user: UserDetail): boolean {
-    return (user.access === 'user');
+    return user.access === 'user';
   }
 
   public successCallBack(obj: any) {
@@ -127,9 +141,7 @@ export class AdminComponent implements OnInit {
         this.floater.showText(`Dummy User creation failed`, 'E', 2000);
       }
     });
-
   }
-
 
   public createUser() {
     if (this.allUsers.length > 7) {
@@ -155,7 +167,6 @@ export class AdminComponent implements OnInit {
     this.floater.showText(this.count++ + '  Test Notification Received', t);
   }
 
-
   public testConnection() {
     if (!this.testURL.startsWith('./') && !this.testURL.startsWith('http')) {
       this.testURL = './' + this.testURL;
@@ -170,56 +181,75 @@ export class AdminComponent implements OnInit {
     }
 
     if (this.isPost) {
-      this._httpHelper.post(this.testURL, dataP).subscribe(res => {
-        this.testResponse = res;
-        this.floater.showText('Sucess', 'S');
-      }, (error: string) => {
-        this.testResponse = error;
-        this.floater.showText('Error Occurred', 'E');
-      });
+      this._httpHelper.post(this.testURL, dataP).subscribe(
+        res => {
+          this.testResponse = res;
+          this.floater.showText('Sucess', 'S');
+        },
+        (error: string) => {
+          this.testResponse = error;
+          this.floater.showText('Error Occurred', 'E');
+        }
+      );
     } else {
-
-      this._httpHelper.get(this.testURL).subscribe(res => {
-        this.testResponse = res;
-        this.floater.showText('Sucess', 'S');
-      }, (error: string) => {
-        this.testResponse = error;
-        this.floater.showText('Error Occurred', 'E');
-      });
-
+      this._httpHelper.get(this.testURL).subscribe(
+        res => {
+          this.testResponse = res;
+          this.floater.showText('Sucess', 'S');
+        },
+        (error: string) => {
+          this.testResponse = error;
+          this.floater.showText('Error Occurred', 'E');
+        }
+      );
     }
-
-
   }
 
   public openLogModal(userId: number) {
-    this.currentUserName = this.allUsers ? this.allUsers.find(x => x.userid === userId).fullname : 'you';
+    this.currentUserName = this.allUsers
+      ? this.allUsers.find(x => x.userid === userId).fullname
+      : 'you';
     this._localStorage.getLogforUser(userId).subscribe(
       (logs: Array<Logs>) => {
         if (logs && logs.length > 0) {
           this.userLogs = logs;
           this.logModal.show();
         } else {
-          this.floater.showText(`No logs available for ${this.currentUserName}`, 'I');
+          this.floater.showText(
+            `No logs available for ${this.currentUserName}`,
+            'I'
+          );
         }
-      }, (error: string) => { this.floater.showText(error, 'E'); });
+      },
+      (error: string) => {
+        this.floater.showText(error, 'E');
+      }
+    );
   }
 
   public openFeedbackModal(userId: number) {
-    this.currentUserName = this.allUsers ? this.allUsers.find(x => x.userid === userId).fullname : '';
+    this.currentUserName = this.allUsers
+      ? this.allUsers.find(x => x.userid === userId).fullname
+      : '';
     this._localStorage.getFeedback(userId).subscribe(
       (feedbacks: Array<Feedback>) => {
         if (feedbacks && feedbacks.length > 0) {
           this.feedbacks = feedbacks;
           this.feedbackModal.show();
         } else {
-          this.floater.showText(`No feedback available from ${this.currentUserName}`, 'I');
+          this.floater.showText(
+            `No feedback available from ${this.currentUserName}`,
+            'I'
+          );
         }
-      }, (error: string) => { this.floater.showText(error, 'E'); });
+      },
+      (error: string) => {
+        this.floater.showText(error, 'E');
+      }
+    );
   }
 
   public feedbackThanks(isSuccess: boolean) {
     this.floater.showText('Thank you for your Valuable feedback', 'I');
   }
-
 }

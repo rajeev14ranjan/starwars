@@ -1,0 +1,42 @@
+<div class="split">
+  <div class="title text-primary" contentEditable="true">Expense Calculator</div>
+  <div class="add box">
+    <div class="btn-group col-p-10">
+      <button type="button" class="btn" [ngClass]="userInputType === 0 ? 'btn-primary':'btn-light'"
+        (click)="changeInputType(0)">Add Peoples</button>
+      <button type="button" class="btn" [ngClass]="userInputType === 1 ? 'btn-primary':'btn-light'">Add
+        Expenses</button>
+    </div>
+    <input class="form-control user-input col-m-10" spellcheck="false" [(ngModel)]="userInput"
+      (keyup)="entryChanged($event)" />
+    <div class="col-m-10 text-info" [innerHtml]="detailedExpense">
+    </div>
+  </div>
+  <div class="summary">
+
+    <div class="expenses">
+      <table *ngIf="payees.length" class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th style="min-width: 40%">Expense Description</th>
+            <th *ngFor="let payee of payees">{{payee}}</th>
+            <th>Total</th>
+            <th class="delete-link">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let exp of expenses;trackBy: trackByExp">
+            <td>{{exp.id+1}}. {{exp.description}}</td>
+            <td *ngFor="let share of exp.shares">{{currency + share.amount}}</td>
+            <td>{{currency + exp.amount}}</td>
+            <td class="delete-link"><a (click)="deleteExpense(exp.id)">✘</a></td>
+          </tr>
+          <tr *ngIf="expenses.length" class="table-info">
+            <td *ngFor="let item of totalExp">{{item}}</td>
+            <td class="delete-link" (click)="deleteAllExpense()">✘✘✘</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
