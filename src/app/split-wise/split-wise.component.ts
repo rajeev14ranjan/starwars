@@ -13,6 +13,7 @@ export class SplitWiseComponent {
   public userInputType = 0; // 0: people, 1: Bills
   public userInput: string;
   public currency = '₹ ';
+  public expenseListKey = 0;
   private preDefinedDetails = [
     'Enter comma (,) seperated name of all people involved',
     'Add Expense detail in below format <br/><code>[Description , Amount , Individual Shares]</code>'
@@ -91,7 +92,7 @@ export class SplitWiseComponent {
     } else {
       this.detailedExpense = `Person Entered : <code><ol>${list
         .map(name => `<li>${name}</li>`)
-        .join('')}</ol> 
+        .join('')}</ol>
         ${
           this.expenses.length
             ? '⚠️ This will delete all current expenses<br/>'
@@ -108,7 +109,7 @@ export class SplitWiseComponent {
     const { desc, amount, shares } = this.getExpenseBreakup();
     if (isSubmit) {
       const expense = new Expense(
-        this.expenses.length,
+        this.expenseListKey++,
         this.firstCapital(desc),
         amount,
         shares
@@ -173,7 +174,7 @@ export class SplitWiseComponent {
     return fullName.toLowerCase().startsWith(name);
   }
 
-  trackByExp(index: number, item) {
+  trackByExp(index: number, item: Expense) {
     return item.id;
   }
 }

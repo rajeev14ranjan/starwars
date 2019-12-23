@@ -26,8 +26,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let exp of expenses;trackBy: trackByExp">
-            <td>{{exp.id+1}}. {{exp.description}}</td>
+          <tr *ngFor="let exp of expenses;let idx=index;trackBy: trackByExp">
+            <td>{{idx+1}}. {{exp.description}}</td>
             <td *ngFor="let share of exp.shares">{{currency + share.amount}}</td>
             <td>{{currency + exp.amount}}</td>
             <td class="delete-link"><a (click)="deleteExpense(exp.id)">✘</a></td>
