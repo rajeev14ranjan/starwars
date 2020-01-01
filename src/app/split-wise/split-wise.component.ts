@@ -222,7 +222,7 @@ export class SplitWiseComponent {
       const cPayer = allExpenseDues[0];
       const cReceiver = allExpenseDues[allExpenseDues.length - 1];
 
-      if (Math.abs(cPayer.amount) - cReceiver.amount < 0.001) {
+      if (Math.abs(Math.abs(cPayer.amount) - cReceiver.amount) < 0.001) {
         this.simpleTransactions.push(
           new Tranasaction(
             cPayer.name,
