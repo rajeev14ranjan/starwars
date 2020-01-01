@@ -18,7 +18,7 @@ export class SplitWiseComponent {
   public simpleTransactions: Array<Tranasaction>;
   private preDefinedDetails = [
     'Enter comma (,) seperated name of all people involved, with first being default payee',
-    'Add Expense detail in below format <br/><code>[Description , Amount , Individual Shares, Payer]</code>'
+    'Add Expense detail in below format <br/><code>[Description, Amount, Individual Shares, Payer]</code>'
   ];
   private helpingText = [
     'expense description',
@@ -222,7 +222,7 @@ export class SplitWiseComponent {
       const cPayer = allExpenseDues[0];
       const cReceiver = allExpenseDues[allExpenseDues.length - 1];
 
-      if (Math.abs(cPayer.amount) === cReceiver.amount) {
+      if (Math.abs(cPayer.amount) - cReceiver.amount < 0.001) {
         this.simpleTransactions.push(
           new Tranasaction(
             cPayer.name,
