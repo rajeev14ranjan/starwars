@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Expense } from '../model/app.model';
+import { Expense, Graph, Tranasaction } from '../model/app.model';
 
 @Component({
   selector: 'app-split-wise',
@@ -12,11 +12,19 @@ export class SplitWiseComponent {
   public totalExp: Array<string | number>;
   public userInputType = 0; // 0: people, 1: Bills
   public userInput: string;
-  public currency = '₹ ';
+  public currency = '₹';
   public expenseListKey = 0;
+  public expenseGraph: Graph;
+  public simpleTransactions: Array<Tranasaction>;
   private preDefinedDetails = [
-    'Enter comma (,) seperated name of all people involved',
-    'Add Expense detail in below format <br/><code>[Description , Amount , Individual Shares]</code>'
+    'Enter comma (,) seperated name of all people involved, with first being default payee',
+    'Add Expense detail in below format <br/><code>[Description , Amount , Individual Shares, Payer]</code>'
+  ];
+  private helpingText = [
+    'expense description',
+    'expense amount or expression (50 * 5) in ₹',
+    'expense individual shares (name of the person : ratio of expense share)',
+    'name of the Payer'
   ];
   public detailedExpense: string;
 
@@ -45,7 +53,7 @@ export class SplitWiseComponent {
     const inputs = this.userInput.split(',').map(x => x && x.trim());
     const desc = inputs[0];
     const expdetail = inputs[2];
-    const amount = parseFloat(`${inputs[1] || '0'}`);
+    const amount = this.parseAmount(inputs[1]);
     const shares = this.payees.map(name => ({ name, amount: 0 }));
 
     if (expdetail) {
@@ -74,7 +82,30 @@ export class SplitWiseComponent {
         bill.amount = this.round(amount / this.payees.length);
       });
     }
-    return { desc, amount, shares };
+
+    // Deciding the payee of the expense
+    const payee =
+      this.payees.find(payeeName => this.startsWith(inputs[3], payeeName)) ||
+      this.payees[0];
+
+    return { desc, amount, shares, payee };
+  }
+
+  // to compute amount from entered string
+  parseAmount(amountStr: string) {
+    if (!amountStr || !amountStr.trim()) {
+      return 0;
+    }
+    const amount = parseFloat(amountStr);
+    if (amount.toString() === amountStr) {
+      return amount;
+    }
+
+    try {
+      return new Function(`return ${amountStr}`)();
+    } catch {
+      return amount;
+    }
   }
 
   // Handles the display and addition of payees
@@ -91,7 +122,12 @@ export class SplitWiseComponent {
       this.expenses = new Array<Expense>();
     } else {
       this.detailedExpense = `Person Entered : <code><ol>${list
-        .map(name => `<li>${name}</li>`)
+        .map(
+          (name, i) => `<li>
+          ${name}
+          ${i === 0 ? ' (Default payee)' : ''}
+          </li>`
+        )
         .join('')}</ol>
         ${
           this.expenses.length
@@ -106,28 +142,32 @@ export class SplitWiseComponent {
   }
 
   addExpense(isSubmit: boolean) {
-    const { desc, amount, shares } = this.getExpenseBreakup();
+    const { desc, amount, shares, payee } = this.getExpenseBreakup();
     if (isSubmit) {
       const expense = new Expense(
         this.expenseListKey++,
         this.firstCapital(desc),
         amount,
-        shares
+        shares,
+        payee
       );
       this.expenses.push(expense);
       this.userInput = '';
       this.changeInputType(1);
       this.calculateTotalExpense();
     } else {
-      this.detailedExpense = `Entered Expense details : <code><ul>
+      const inputStage = (this.userInput.match(/,/g) || []).length;
+      this.detailedExpense = `Enter ${this.helpingText[inputStage] ||
+        'Invalid input'} <br/><code><ul>
       <li>Description : ${desc}</li>
       <li>Amount : ${this.currency + amount}</li>
-      <li>Shares : <ol>
+      <li>Paid By : ${payee}</li>
+      <li>Shares :
+        <ol>
         ${shares
-          .filter(s => s.amount)
           .map(s => `<li>${s.name} - ${this.currency + s.amount}</li>`)
           .join('')}
-        </oi>
+        </ol>
       </li>
       </ul></code>
       Press enter to Add`;
@@ -144,14 +184,22 @@ export class SplitWiseComponent {
     this.calculateTotalExpense();
   }
 
+  // Calculates the total expense once an expense is added/deleted
   calculateTotalExpense() {
     let totalExpSum = 0;
+    this.expenseGraph = new Graph();
     const sharedExpense = new Array(this.payees.length).fill(0);
     for (const exp of this.expenses) {
       totalExpSum += exp.amount;
+      const lender = exp.payer;
 
       for (let i = 0; i < exp.shares.length; i++) {
         sharedExpense[i] += exp.shares[i].amount;
+        this.expenseGraph.addExpense(
+          lender,
+          exp.shares[i].name,
+          exp.shares[i].amount
+        );
       }
     }
 
@@ -160,6 +208,56 @@ export class SplitWiseComponent {
       ...sharedExpense.map(amt => this.currency + this.round(amt)),
       this.currency + totalExpSum
     ];
+
+    this.simplifyTransaction();
+  }
+
+  // computes the total transactions needed to settle the dues
+  simplifyTransaction() {
+    this.simpleTransactions = new Array<Tranasaction>();
+    const allExpenseDues = this.expenseGraph.getTotalDue();
+
+    while (allExpenseDues.length) {
+      allExpenseDues.sort((a, b) => a.amount - b.amount);
+      const cPayer = allExpenseDues[0];
+      const cReceiver = allExpenseDues[allExpenseDues.length - 1];
+
+      if (Math.abs(cPayer.amount) === cReceiver.amount) {
+        this.simpleTransactions.push(
+          new Tranasaction(
+            cPayer.name,
+            cReceiver.name,
+            this.round(cReceiver.amount)
+          )
+        );
+        allExpenseDues.pop();
+        allExpenseDues.shift();
+      } else if (Math.abs(cReceiver.amount) > cPayer.amount) {
+        this.simpleTransactions.push(
+          new Tranasaction(
+            cPayer.name,
+            cReceiver.name,
+            this.round(Math.abs(cPayer.amount))
+          )
+        );
+        allExpenseDues.shift();
+        cReceiver.amount += cPayer.amount;
+      } else {
+        this.simpleTransactions.push(
+          new Tranasaction(
+            cPayer.name,
+            cReceiver.name,
+            this.round(cReceiver.amount)
+          )
+        );
+        allExpenseDues.pop();
+        cPayer.amount += cReceiver.amount;
+      }
+    }
+
+    this.simpleTransactions = this.simpleTransactions.filter(
+      transact => transact.amount
+    );
   }
 
   firstCapital(str: string) {
@@ -167,11 +265,10 @@ export class SplitWiseComponent {
   }
 
   startsWith(name: string, fullName: string): boolean {
-    if (!name || !fullName) {
+    if (!name || !name.trim() || !fullName) {
       return false;
     }
-    name = name ? name.trim().toLowerCase() : name;
-    return fullName.toLowerCase().startsWith(name);
+    return fullName.toLowerCase().startsWith(name.trim().toLowerCase());
   }
 
   trackByExp(index: number, item: Expense) {

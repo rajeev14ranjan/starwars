@@ -12,7 +12,7 @@
   border-radius: 2px;
 }
 
-.add {
+.tile {
   padding: 10px;
   margin: 20px 0;
   background-color: #e6e6e6;
@@ -46,4 +46,28 @@ input:focus {
   color: #007bff;
   cursor: pointer;
   border-left: 1px solid lightgray;
+}
+
+.result {
+  padding: 10px;
+}
+
+.exp-payer {
+  float: right;
+  color: grey;
+  font-weight: 100;
+}
+
+.tranasaction {
+  padding: 10px 20px;
+  border-left: 5px solid #007bff;
+  background-color: lightblue;
+  margin-top: 9px;
+  box-shadow: 1px 3px 4px lightgrey;
+  letter-spacing: 1px;
+}
+
+.name {
+  color: #007bff;
+  letter-spacing: 2px;
 }
