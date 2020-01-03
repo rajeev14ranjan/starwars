@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Expense, Graph, Tranasaction } from '../model/app.model';
+import { Expense, Graph, Tranasaction, Share } from '../model/app.model';
 
 @Component({
   selector: 'app-split-wise',
@@ -7,7 +7,7 @@ import { Expense, Graph, Tranasaction } from '../model/app.model';
   styleUrls: ['./split-wise.component.css']
 })
 export class SplitWiseComponent {
-  public payees: Array<string>;
+  public peoples: Array<string>;
   public expenses: Array<Expense>;
   public totalExp: Array<string | number>;
   public userInputType = 0; // 0: people, 1: Bills
@@ -17,20 +17,20 @@ export class SplitWiseComponent {
   public expenseGraph: Graph;
   public simpleTransactions: Array<Tranasaction>;
   private preDefinedDetails = [
-    'Enter comma (,) seperated name of all people involved, with first being default payee',
+    'Enter comma (,) seperated name of all people involved, with first being default Payer',
     'Add Expense detail in below format <br/><code>[Description, Amount, Individual Shares, Payer]</code>'
   ];
   private helpingText = [
     'expense description',
     'expense amount or expression (50 * 5) in ₹',
-    'expense individual shares (name of the person : ratio of expense share)',
-    'name of the Payer'
+    'expense individual shares (name of the Person : ratio of expense share)',
+    'name of the Payers (name of the Payer : ratio of expense share)'
   ];
   public detailedExpense: string;
 
   constructor() {
     this.expenses = new Array<Expense>();
-    this.payees = [];
+    this.peoples = [];
     this.detailedExpense = this.preDefinedDetails[0];
   }
 
@@ -42,7 +42,7 @@ export class SplitWiseComponent {
   entryChanged(e: KeyboardEvent) {
     const isSubmit = e.key === 'Enter';
     if (this.userInputType === 0) {
-      this.addPayees(isSubmit);
+      this.addPeoples(isSubmit);
     } else if (this.userInputType === 1) {
       this.addExpense(isSubmit);
     }
@@ -52,43 +52,64 @@ export class SplitWiseComponent {
   getExpenseBreakup() {
     const inputs = this.userInput.split(',').map(x => x && x.trim());
     const desc = inputs[0];
-    const expdetail = inputs[2];
     const amount = this.parseAmount(inputs[1]);
-    const shares = this.payees.map(name => ({ name, amount: 0 }));
 
+    // Calculating individuals expense shares of people
+    const shares = this.getSharedRatioBreakup(inputs[2], amount, true);
+
+    // Deciding the individual payer of the expense
+    const payers = this.getSharedRatioBreakup(inputs[3], amount, false);
+
+    return { desc, amount, shares, payers };
+  }
+
+  // Computes shares as per ration passed
+  getSharedRatioBreakup(
+    expdetail: string,
+    totalAmount: number,
+    distributeEqually: boolean
+  ): Array<Share> {
+    const shares = this.peoples.map(name => ({ name, amount: 0 }));
+    let totalRatio = 0;
+
+    // Computing the total ration of matech persons
     if (expdetail) {
       const eachExpanse = expdetail.split(' ');
-      const totalRatio = eachExpanse.reduce((sum, bill) => {
+      totalRatio = eachExpanse.reduce((sum, bill) => {
         const [name, ratio] = bill.split(':');
-        const totalMatch = this.payees.filter(payeeName =>
-          this.startsWith(name, payeeName)
+        const totalMatch = this.peoples.filter(peopleName =>
+          this.startsWith(name, peopleName)
         ).length;
         sum += parseFloat(ratio ? ratio : '1') * totalMatch;
         return sum;
       }, 0);
-      eachExpanse.forEach(eachShare => {
-        const [name, ratio] = eachShare.split(':');
 
-        shares.forEach(share => {
-          if (this.startsWith(name, share.name)) {
-            const hisTotal =
-              (parseFloat(ratio ? ratio : '1') * amount) / totalRatio;
-            share.amount = this.round(hisTotal);
-          }
+      if (totalRatio) {
+        eachExpanse.forEach(eachShare => {
+          const [name, ratio] = eachShare.split(':');
+
+          shares.forEach(share => {
+            if (this.startsWith(name, share.name)) {
+              const hisTotal =
+                (parseFloat(ratio ? ratio : '1') * totalAmount) / totalRatio;
+              share.amount = this.round(hisTotal);
+            }
+          });
         });
-      });
-    } else {
-      shares.forEach(bill => {
-        bill.amount = this.round(amount / this.payees.length);
-      });
+      }
     }
 
-    // Deciding the payee of the expense
-    const payee =
-      this.payees.find(payeeName => this.startsWith(inputs[3], payeeName)) ||
-      this.payees[0];
-
-    return { desc, amount, shares, payee };
+    // if none of the persons matched
+    if (totalRatio === 0) {
+      if (distributeEqually) {
+        shares.forEach(bill => {
+          bill.amount = this.round(totalAmount / this.peoples.length);
+        });
+      } else {
+        shares[0].amount = totalAmount;
+      }
+    }
+    return shares;
   }
 
   // to compute amount from entered string
@@ -102,21 +123,21 @@ export class SplitWiseComponent {
     }
 
     try {
-      return new Function(`return ${amountStr}`)();
+      return new Function(`return ${amountStr.replace(/k/g, '*1e3')}`)();
     } catch {
       return amount;
     }
   }
 
-  // Handles the display and addition of payees
-  addPayees(isSubmit: boolean) {
+  // Handles the display and addition of Peoples
+  addPeoples(isSubmit: boolean) {
     const list = this.userInput
       .split(',')
       .filter(name => name && name.trim())
       .map(name => this.firstCapital(name.trim()));
 
     if (isSubmit) {
-      this.payees = list;
+      this.peoples = list;
       this.userInput = '';
       this.changeInputType(1);
       this.expenses = new Array<Expense>();
@@ -125,7 +146,7 @@ export class SplitWiseComponent {
         .map(
           (name, i) => `<li>
           ${name}
-          ${i === 0 ? ' (Default payee)' : ''}
+          ${i === 0 ? ' (Default payer)' : ''}
           </li>`
         )
         .join('')}</ol>
@@ -142,14 +163,14 @@ export class SplitWiseComponent {
   }
 
   addExpense(isSubmit: boolean) {
-    const { desc, amount, shares, payee } = this.getExpenseBreakup();
+    const { desc, amount, shares, payers } = this.getExpenseBreakup();
     if (isSubmit) {
       const expense = new Expense(
         this.expenseListKey++,
         this.firstCapital(desc),
         amount,
         shares,
-        payee
+        payers
       );
       this.expenses.push(expense);
       this.userInput = '';
@@ -161,16 +182,24 @@ export class SplitWiseComponent {
         'Invalid input'} <br/><code><ul>
       <li>Description : ${desc}</li>
       <li>Amount : ${this.currency + amount}</li>
-      <li>Paid By : ${payee}</li>
       <li>Shares :
         <ol>
         ${shares
+          .filter(s => inputStage === 2 || s.amount)
           .map(s => `<li>${s.name} - ${this.currency + s.amount}</li>`)
           .join('')}
         </ol>
       </li>
+      <li>Paid By :
+        <ol>
+        ${payers
+          .filter(p => inputStage === 3 || p.amount)
+          .map(p => `<li>${p.name} - ${this.currency + p.amount}</li>`)
+          .join('')}
+        </ol>
+      </li>
       </ul></code>
-      Press enter to Add`;
+      Press Enter to Add`;
     }
   }
 
@@ -188,18 +217,27 @@ export class SplitWiseComponent {
   calculateTotalExpense() {
     let totalExpSum = 0;
     this.expenseGraph = new Graph();
-    const sharedExpense = new Array(this.payees.length).fill(0);
+    const sharedExpense = new Array(this.peoples.length).fill(0);
     for (const exp of this.expenses) {
-      totalExpSum += exp.amount;
-      const lender = exp.payer;
+      const lenders = exp.payers;
+      const borrowers = exp.shares;
+      const expTotalAmount = exp.amount;
+      totalExpSum += expTotalAmount;
 
-      for (let i = 0; i < exp.shares.length; i++) {
-        sharedExpense[i] += exp.shares[i].amount;
-        this.expenseGraph.addExpense(
-          lender,
-          exp.shares[i].name,
-          exp.shares[i].amount
-        );
+      for (let i = 0; i < borrowers.length; i++) {
+        const borrowerName = borrowers[i].name;
+        const borrowedAmount = borrowers[i].amount;
+        sharedExpense[i] += borrowedAmount;
+
+        lenders.forEach(lender => {
+          if (lender.amount) {
+            this.expenseGraph.addExpense(
+              lender.name,
+              borrowerName,
+              (borrowedAmount * lender.amount) / expTotalAmount
+            );
+          }
+        });
       }
     }
 
@@ -273,5 +311,12 @@ export class SplitWiseComponent {
 
   trackByExp(index: number, item: Expense) {
     return item.id;
+  }
+
+  getPayersName(payers: Array<Share>) {
+    return payers
+      .filter(p => p.amount)
+      .map(p => p.name)
+      .join();
   }
 }

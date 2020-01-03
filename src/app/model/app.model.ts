@@ -49,7 +49,7 @@ export class Expense {
     public description: string,
     public amount: number,
     public shares: Array<Share>,
-    public payer: string
+    public payers: Array<Share>
   ) {}
 }
 

@@ -5,7 +5,7 @@
       <button type="button" class="btn" [ngClass]="userInputType === 0 ? 'btn-primary':'btn-light'"
         (click)="changeInputType(0)">Add Peoples</button>
       <button type="button" class="btn" [ngClass]="userInputType === 1 ? 'btn-primary':'btn-light'"
-        [disabled]="!payees.length" (click)="changeInputType(1)">Add
+        [disabled]="!peoples.length" (click)="changeInputType(1)">Add
         Expenses</button>
     </div>
     <input class="form-control user-input col-m-10" spellcheck="false" [(ngModel)]="userInput"
@@ -16,18 +16,18 @@
 
   <div class="summary">
     <div class="expenses">
-      <table *ngIf="payees.length" class="table table-hover">
+      <table *ngIf="peoples.length" class="table table-hover">
         <thead class="thead-dark">
           <tr>
             <th style="min-width: 40%">Expense Description</th>
-            <th *ngFor="let payee of payees">{{payee}}</th>
+            <th *ngFor="let people of peoples">{{people}}</th>
             <th>Total</th>
             <th class="delete-link">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let exp of expenses;let idx=index;trackBy: trackByExp">
-            <td>{{idx+1}}. {{exp.description}} <span class="exp-payer">- {{exp.payer}}</span></td>
+            <td>{{idx+1}}. {{exp.description}} <span class="exp-payer">- {{getPayersName(exp.payers)}}</span></td>
             <td *ngFor="let share of exp.shares">{{currency + share.amount}}</td>
             <td>{{currency + exp.amount}}</td>
             <td class="delete-link"><a (click)="deleteExpense(exp.id)">✘</a></td>
