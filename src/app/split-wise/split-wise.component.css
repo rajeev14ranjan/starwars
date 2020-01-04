@@ -52,10 +52,14 @@ input:focus {
   padding: 10px;
 }
 
-.exp-payer {
-  float: right;
+.exp-detail {
   color: grey;
-  font-weight: 100;
+  border: 1px solid;
+  border-radius: 50%;
+  margin-left: 5px;
+  padding: 0 6px;
+  font-size: 0.7em;
+  vertical-align: text-bottom;
 }
 
 .tranasaction {
@@ -69,5 +73,14 @@ input:focus {
 
 .name {
   color: #007bff;
-  letter-spacing: 2px;
+}
+
+.popOver-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0px 5px;
+}
+
+.total-list-item {
+  border-bottom: 1px solid #0000001a;
 }

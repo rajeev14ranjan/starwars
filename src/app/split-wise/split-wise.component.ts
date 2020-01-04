@@ -14,6 +14,7 @@ export class SplitWiseComponent {
   public userInput: string;
   public currency = '₹';
   public expenseListKey = 0;
+  public expPopoverId: number;
   public expenseGraph: Graph;
   public simpleTransactions: Array<Tranasaction>;
   private preDefinedDetails = [
@@ -313,10 +314,7 @@ export class SplitWiseComponent {
     return item.id;
   }
 
-  getPayersName(payers: Array<Share>) {
-    return payers
-      .filter(p => p.amount)
-      .map(p => p.name)
-      .join();
+  showExpensePopOver(expId: number) {
+    this.expPopoverId = expId;
   }
 }
