@@ -167,44 +167,6 @@ export class AdminComponent implements OnInit {
     this.floater.showText(this.count++ + '  Test Notification Received', t);
   }
 
-  public testConnection() {
-    if (!this.testURL.startsWith('./') && !this.testURL.startsWith('http')) {
-      this.testURL = './' + this.testURL;
-    }
-
-    let dataP = '';
-    try {
-      dataP = JSON.parse(this.postData);
-    } catch (e) {
-      this.floater.showText(e, 'E');
-      return;
-    }
-
-    if (this.isPost) {
-      this._httpHelper.post(this.testURL, dataP).subscribe(
-        res => {
-          this.testResponse = res;
-          this.floater.showText('Sucess', 'S');
-        },
-        (error: string) => {
-          this.testResponse = error;
-          this.floater.showText('Error Occurred', 'E');
-        }
-      );
-    } else {
-      this._httpHelper.get(this.testURL).subscribe(
-        res => {
-          this.testResponse = res;
-          this.floater.showText('Sucess', 'S');
-        },
-        (error: string) => {
-          this.testResponse = error;
-          this.floater.showText('Error Occurred', 'E');
-        }
-      );
-    }
-  }
-
   public openLogModal(userId: number) {
     this.currentUserName = this.allUsers
       ? this.allUsers.find(x => x.userid === userId).fullname

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { StorageService } from '../service/browser-storage.service';
+import { HttpHelperService } from '../service/http-helper.service';
 
 @Component({
   selector: 'routing-page',
@@ -8,9 +9,18 @@ import { StorageService } from '../service/browser-storage.service';
   styleUrls: ['./routing-component.css']
 })
 export class RoutingComponent implements OnInit, OnDestroy {
-  constructor(private _router: Router, private _localStorage: StorageService) {}
+  public showSpinner: boolean;
+  constructor(
+    private _router: Router,
+    private _localStorage: StorageService,
+    private _http: HttpHelperService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._http.isConnActive.asObservable().subscribe(isActive => {
+      this.showSpinner = isActive;
+    });
+  }
 
   showBar(): boolean {
     const url = this._router.url;

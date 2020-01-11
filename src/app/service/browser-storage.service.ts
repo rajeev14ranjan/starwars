@@ -30,7 +30,7 @@ export class StorageService {
 
   public getAllUsers(): Observable<Array<UserDetail>> {
     const url = `api/stars.php?a=getUser`;
-    return this._dbcon.get(url).pipe(
+    return this._dbcon.get(url, true).pipe(
       map((res: Array<UserDetail>) => {
         this.allUsers = res;
         return res;
@@ -115,7 +115,7 @@ export class StorageService {
       postData.un = this.trim(userName);
       postData.pw = this.hash(this.trim(passWord));
 
-      return this._dbcon.post('./api/stars.php', postData).pipe(
+      return this._dbcon.post('./api/stars.php', postData, true).pipe(
         map((res: any) => {
           if (isLogin) {
             if (res.status) {
@@ -151,7 +151,7 @@ export class StorageService {
       action: 'login'
     };
 
-    return this._dbcon.post(url, postData).pipe(
+    return this._dbcon.post(url, postData, true).pipe(
       map((res: Array<UserDetail>) => {
         if (res && res.length > 0) {
           this.loggedUser = res[0];
@@ -180,7 +180,7 @@ export class StorageService {
     if (this.uniquieLogid) {
       postData['logid'] = this.uniquieLogid;
     }
-    this._dbcon.post('./api/stars.php', postData).subscribe();
+    this._dbcon.post('./api/stars.php', postData, false).subscribe();
   }
 
   public saveFeedback(rating: number, feedback: string) {
@@ -192,7 +192,7 @@ export class StorageService {
       logid: this.uniquieLogid,
       action: 'feedback'
     };
-    return this._dbcon.post('./api/stars.php', postData);
+    return this._dbcon.post('./api/stars.php', postData, true);
   }
 
   public saveUserScore(game: string, score: string) {
@@ -202,22 +202,22 @@ export class StorageService {
       game: game,
       score: score
     };
-    return this._dbcon.post('./api/stars.php', postData);
+    return this._dbcon.post('./api/stars.php', postData, false);
   }
 
   public getFeedback(userId: number): Observable<Array<Feedback>> {
     const url = `./api/stars.php?a=getFeedback&id=${userId}`;
-    return this._dbcon.get(url);
+    return this._dbcon.get(url, true);
   }
 
   public getUserScore(game: string): Observable<Array<UserScore>> {
     const url = `./api/stars.php?a=getUserScore&game=${game}&uid=${this.loggedUser.userid}`;
-    return this._dbcon.get(url);
+    return this._dbcon.get(url, false);
   }
 
   public getLogforUser(userId: number): Observable<Array<Logs>> {
     const url = `./api/stars.php?a=getLogs&id=${userId}`;
-    return this._dbcon.get(url) as Observable<Array<Logs>>;
+    return this._dbcon.get(url, true) as Observable<Array<Logs>>;
   }
 
   public deleteUser(userId: number, userName: string) {
@@ -226,7 +226,7 @@ export class StorageService {
       uid: userId,
       action: 'deleteUser'
     };
-    return this._dbcon.post('./api/stars.php', postData);
+    return this._dbcon.post('./api/stars.php', postData, true);
   }
 
   public hash(passText: string) {

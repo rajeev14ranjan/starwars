@@ -6,3 +6,7 @@
 .status {
   font-size: 15pt;
 }
+
+.rating-stars {
+  user-select: none;
+}

@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpHelperService {
-  public httpOptions = {};
+  private httpOptions = {};
+  private connectionCount = 0;
+  private start: Function;
+  private complete: Function;
+  public isConnActive = new Subject<boolean>();
 
   constructor(private _http: HttpClient) {
     this.httpOptions = {
@@ -14,16 +19,35 @@ export class HttpHelperService {
         'Content-Type': 'application/json'
       })
     };
+    this.start = this.updateActiveCount.bind(this, 1);
+    this.complete = this.updateActiveCount.bind(this, -1);
   }
 
-  public get(url: string): Observable<any> {
+  public updateActiveCount(connectionDelta: number, spinner: boolean) {
+    if (spinner) {
+      this.connectionCount += connectionDelta;
+      this.isConnActive.next(this.connectionCount > 0);
+    }
+  }
+
+  public get(url: string, spinner = false): Observable<any> {
     url += (url.includes('?') ? '&' : '?') + `key=${this.getDbKey()}`;
-    return this._http.get(url);
+    this.start(spinner);
+    return this._http.get(url).pipe(
+      finalize(() => {
+        this.complete(spinner);
+      })
+    );
   }
 
-  public post(url: string, postData: any): Observable<any> {
+  public post(url: string, postData: any, spinner = false): Observable<any> {
     postData['key'] = this.getDbKey();
-    return this._http.post(url, postData, this.httpOptions);
+    this.start(spinner);
+    return this._http.post(url, postData, this.httpOptions).pipe(
+      finalize(() => {
+        this.complete(spinner);
+      })
+    );
   }
 
   public getDbKey() {

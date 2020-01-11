@@ -19,7 +19,7 @@ export class FiddlerComponent {
   public isFetching = false;
   constructor(
     private _storage: StorageService,
-    private _dbcon: HttpHelperService
+    private _dbCon: HttpHelperService
   ) {
     this._storage.checkForLogin();
   }
@@ -30,7 +30,7 @@ export class FiddlerComponent {
     let $requestObs: Observable<any>;
 
     if (this.requestType === 'get') {
-      $requestObs = this._dbcon.get(this.apiUrl);
+      $requestObs = this._dbCon.get(this.apiUrl, true);
     } else {
       let postData = {};
       try {
@@ -43,7 +43,7 @@ export class FiddlerComponent {
         };
         return;
       }
-      $requestObs = this._dbcon.post(this.apiUrl, postData);
+      $requestObs = this._dbCon.post(this.apiUrl, postData, true);
     }
 
     this.isFetching = true;

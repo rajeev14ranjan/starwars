@@ -10,8 +10,8 @@
       </div>
       <div class="modal-body form-group">
         <h5 class="text-success">{{status}}</h5>
-        <rating [max]="max" [(ngModel)]="rating" [customTemplate]="tt" (onHover)="getStatus($event)"
-          (onLeave)="getStatus(rating)"></rating>
+        <rating [max]="max" class="rating-stars" [(ngModel)]="rating" [customTemplate]="tt"
+          (onHover)="getStatus($event)" (onLeave)="getStatus(rating)"></rating>
 
         <br /><br />
         <textarea class="form-control" maxlength="5000" rows="6" resize="none" [(ngModel)]="feedback"
