@@ -16,7 +16,7 @@
       <input type="text" class="form-control user-input" spellcheck="false" [(ngModel)]="userInput"
         (keyup)="entryChanged($event)" />
       <div class="input-group-append">
-        <button class="input-group-text btn btn-info" (click)="entryChanged({key:'Enter'})">⏎</button>
+        <button class="input-group-text btn btn-info" (click)="processEntry(true)">⏎</button>
       </div>
     </div>
     <div class="col-m-10 text-info" [innerHtml]="detailedExpense">

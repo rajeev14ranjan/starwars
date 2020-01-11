@@ -32,7 +32,7 @@ export class SplitWiseComponent {
   ];
   private helpingText = [
     'expense description',
-    'expense amount or expressions [50 * 5, 3.5k, ...]',
+    'expense amount or expressions [200 + 430, 50 * 5, 3.5k ...]',
     'expense individual shares (name of the Person : ratio of expense share)',
     'name of the Payers (name of the Payer : ratio of amount paid)'
   ];
@@ -50,10 +50,14 @@ export class SplitWiseComponent {
   }
 
   entryChanged(e: KeyboardEvent) {
+    this.processEntry(e.key === 'Enter');
+  }
+
+  // handles submission
+  processEntry(isSubmit: boolean) {
     if (!this.userInput || !this.userInput.trim()) {
       return;
     }
-    const isSubmit = e.key === 'Enter';
     if (this.userInputType === 0) {
       this.addPeoples(isSubmit);
     } else if (this.userInputType === 1) {
