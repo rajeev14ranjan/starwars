@@ -57,7 +57,7 @@ export class Share {
   constructor(public name: string, public amount: number) {}
 }
 
-export class Tranasaction {
+export class Transaction {
   constructor(
     public payer: string,
     public receiver: string,

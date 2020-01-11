@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Expense, Graph, Tranasaction, Share } from '../model/app.model';
+import { Expense, Graph, Transaction, Share } from '../model/app.model';
 
 @Component({
   selector: 'app-split-wise',
@@ -16,16 +16,25 @@ export class SplitWiseComponent {
   public expenseListKey = 0;
   public expPopoverId: number;
   public expenseGraph: Graph;
-  public simpleTransactions: Array<Tranasaction>;
+  public simpleTransactions: Array<Transaction>;
   private preDefinedDetails = [
-    'Enter comma (,) seperated name of all people involved, with first being default Payer',
-    'Add Expense detail in below format <br/><code>[Description, Amount, Individual Shares, Payer]</code>'
+    'Enter comma (,) separated name of all people involved, with first being default Payer',
+    'Add Expense detail in below format <br/><code>[Description, Amount, Individual Shares, Payers Shares]</code>'
+  ];
+  private currencies = [
+    { symbol: '₹', name: 'Rupee' },
+    { symbol: '$', name: 'Dollar' },
+    { symbol: '€', name: 'Euro' },
+    { symbol: '£', name: 'Pound' },
+    { symbol: '₣', name: 'Franc' },
+    { symbol: 'د.ك', name: 'Dinar' },
+    { symbol: '', name: 'None' }
   ];
   private helpingText = [
     'expense description',
-    'expense amount or expression (50 * 5) in ₹',
+    'expense amount or expressions [50 * 5, 3.5k, ...]',
     'expense individual shares (name of the Person : ratio of expense share)',
-    'name of the Payers (name of the Payer : ratio of expense share)'
+    'name of the Payers (name of the Payer : ratio of amount paid)'
   ];
   public detailedExpense: string;
 
@@ -41,6 +50,9 @@ export class SplitWiseComponent {
   }
 
   entryChanged(e: KeyboardEvent) {
+    if (!this.userInput || !this.userInput.trim()) {
+      return;
+    }
     const isSubmit = e.key === 'Enter';
     if (this.userInputType === 0) {
       this.addPeoples(isSubmit);
@@ -66,16 +78,16 @@ export class SplitWiseComponent {
 
   // Computes shares as per ration passed
   getSharedRatioBreakup(
-    expdetail: string,
+    expDetail: string,
     totalAmount: number,
     distributeEqually: boolean
   ): Array<Share> {
     const shares = this.peoples.map(name => ({ name, amount: 0 }));
     let totalRatio = 0;
 
-    // Computing the total ration of matech persons
-    if (expdetail) {
-      const eachExpanse = expdetail.split(' ');
+    // Computing the total ration of match persons
+    if (expDetail) {
+      const eachExpanse = expDetail.split(' ');
       totalRatio = eachExpanse.reduce((sum, bill) => {
         const [name, ratio] = bill.split(':');
         const totalMatch = this.peoples.filter(peopleName =>
@@ -135,6 +147,7 @@ export class SplitWiseComponent {
     const list = this.userInput
       .split(',')
       .filter(name => name && name.trim())
+      .filter((name, idx, self) => self.indexOf(name) === idx)
       .map(name => this.firstCapital(name.trim()));
 
     if (isSubmit) {
@@ -204,7 +217,25 @@ export class SplitWiseComponent {
     }
   }
 
-  deleteExpense(removedId: number) {
+  alterExpense(removedId: number, isEdit = false) {
+    if (isEdit) {
+      if (this.userInput && this.userInput.trim()) {
+        return;
+      }
+      const e = this.expenses.find(exp => exp.id === removedId);
+      const shareStr = e.shares
+        .filter(share => share.amount)
+        .map(share => `${share.name}:${share.amount}`)
+        .join(' ');
+      const payerStr = e.payers
+        .filter(payer => payer.amount)
+        .map(payer => `${payer.name}:${payer.amount}`)
+        .join(' ');
+      this.userInput = `${e.description}, ${this.round(
+        e.amount
+      )}, ${shareStr}, ${payerStr}`;
+      this.addExpense(false);
+    }
     this.expenses = this.expenses.filter(exp => exp.id !== removedId);
     this.calculateTotalExpense();
   }
@@ -253,7 +284,7 @@ export class SplitWiseComponent {
 
   // computes the total transactions needed to settle the dues
   simplifyTransaction() {
-    this.simpleTransactions = new Array<Tranasaction>();
+    this.simpleTransactions = new Array<Transaction>();
     const allExpenseDues = this.expenseGraph.getTotalDue();
 
     while (allExpenseDues.length) {
@@ -263,7 +294,7 @@ export class SplitWiseComponent {
 
       if (Math.abs(Math.abs(cPayer.amount) - cReceiver.amount) < 0.001) {
         this.simpleTransactions.push(
-          new Tranasaction(
+          new Transaction(
             cPayer.name,
             cReceiver.name,
             this.round(cReceiver.amount)
@@ -273,7 +304,7 @@ export class SplitWiseComponent {
         allExpenseDues.shift();
       } else if (Math.abs(cReceiver.amount) > cPayer.amount) {
         this.simpleTransactions.push(
-          new Tranasaction(
+          new Transaction(
             cPayer.name,
             cReceiver.name,
             this.round(Math.abs(cPayer.amount))
@@ -283,7 +314,7 @@ export class SplitWiseComponent {
         cReceiver.amount += cPayer.amount;
       } else {
         this.simpleTransactions.push(
-          new Tranasaction(
+          new Transaction(
             cPayer.name,
             cReceiver.name,
             this.round(cReceiver.amount)

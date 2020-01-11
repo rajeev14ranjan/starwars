@@ -5,11 +5,20 @@
       <button type="button" class="btn" [ngClass]="userInputType === 0 ? 'btn-primary':'btn-light'"
         (click)="changeInputType(0)">Add Peoples</button>
       <button type="button" class="btn" [ngClass]="userInputType === 1 ? 'btn-primary':'btn-light'"
-        [disabled]="!peoples.length" (click)="changeInputType(1)">Add
-        Expenses</button>
+        [disabled]="!peoples.length" (click)="changeInputType(1)">Add Expenses</button>
+
     </div>
-    <input class="form-control user-input col-m-10" spellcheck="false" [(ngModel)]="userInput"
-      (keyup)="entryChanged($event)" />
+    <select *ngIf="userInputType === 0 && !expenses.length" class="pull-right currency-dd col-m-10 ls-1"
+      [(ngModel)]="currency">
+      <option *ngFor="let currency of currencies" [value]="currency.symbol">{{currency.name}}</option>
+    </select>
+    <div class="input-group col-p-10">
+      <input type="text" class="form-control user-input" spellcheck="false" [(ngModel)]="userInput"
+        (keyup)="entryChanged($event)" />
+      <div class="input-group-append">
+        <button class="input-group-text btn btn-info" (click)="entryChanged({key:'Enter'})">⏎</button>
+      </div>
+    </div>
     <div class="col-m-10 text-info" [innerHtml]="detailedExpense">
     </div>
   </div>
@@ -33,7 +42,10 @@
             </td>
             <td *ngFor="let share of exp.shares">{{currency + share.amount}}</td>
             <td>{{currency + exp.amount}}</td>
-            <td class="delete-link"><a (click)="deleteExpense(exp.id)">✘</a></td>
+            <td class="delete-link">
+              <a class="col-mr-10" (click)="alterExpense(exp.id, true)">✎</a>
+              <a (click)="alterExpense(exp.id)">✘</a>
+            </td>
           </tr>
           <tr *ngIf="expenses.length" class="table-info">
             <td *ngFor="let item of totalExp">{{item}}</td>
@@ -50,7 +62,7 @@
   <div class="tile box" *ngIf="expenses.length">
     <div class="result">
       <h4 class="text-info col-mb-10">Simplified Debts</h4>
-      <div *ngFor="let transact of simpleTransactions" class="tranasaction">
+      <div *ngFor="let transact of simpleTransactions;let i=index;" class="tranasaction">
         <span class="name ls-2">{{transact.payer}}</span> owes {{currency + transact.amount}} to <span
           class="name ls-2">{{transact.receiver}}</span>
       </div>
@@ -68,7 +80,7 @@
       <ng-container *ngFor="let p of expenses[expPopoverId].payers">
         <li *ngIf="p.amount">
           <span class="name ls-1 col-mr-10">{{p.name}}</span>
-          <span style="float: right;">{{this.currency + p.amount}}</span>
+          <span class="pull-right">{{this.currency + p.amount}}</span>
         </li>
       </ng-container>
     </ul>
