@@ -1,0 +1,86 @@
+.split {
+  padding: 25px;
+}
+
+.title {
+  font-size: 2em;
+  text-transform: capitalize;
+}
+
+.box {
+  border: 1px solid lightgray;
+  border-radius: 2px;
+}
+
+.tile {
+  padding: 10px;
+  margin: 20px 0;
+  background-color: #e6e6e6;
+}
+.btn-light {
+  background-color: #dbdbdb8f;
+  border: 1px solid lightgray;
+}
+
+input,
+input:focus {
+  background-color: #ededed;
+  font-size: 1.2em;
+  color: black;
+  width: 98%;
+}
+
+.title:focus,
+button:focus,
+input:focus {
+  outline: none;
+}
+
+.table {
+  background-color: #e6e6e6;
+}
+
+.delete-link {
+  width: 100px;
+  text-align: center;
+  color: #007bff;
+  cursor: pointer;
+  border-left: 1px solid lightgray;
+}
+
+.result {
+  padding: 10px;
+}
+
+.exp-detail {
+  color: grey;
+  border: 1px solid;
+  border-radius: 50%;
+  margin-left: 5px;
+  padding: 0 6px;
+  font-size: 0.7em;
+  vertical-align: text-bottom;
+}
+
+.tranasaction {
+  padding: 10px 20px;
+  border-left: 5px solid #007bff;
+  background-color: lightblue;
+  margin-top: 9px;
+  box-shadow: 1px 3px 4px lightgrey;
+  letter-spacing: 1px;
+}
+
+.name {
+  color: #007bff;
+}
+
+.popOver-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0px 5px;
+}
+
+.total-list-item {
+  border-bottom: 1px solid #0000001a;
+}

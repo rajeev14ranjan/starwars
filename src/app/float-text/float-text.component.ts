@@ -17,7 +17,7 @@ import { state, trigger, style, transition, animate } from '@angular/animations'
   animations:[
     trigger('float',[
       state('in',style({
-        opacity: '0.7',
+        opacity: '0.9',
         filter: 'blur(0px)'
       })),
       state('out',style({

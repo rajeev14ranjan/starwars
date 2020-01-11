@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { StorageService, UserScore } from '../service/browser-storage.service';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { StorageService } from '../service/browser-storage.service';
+import { UserScore } from '../model/app.model';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { FloatTextComponent } from '../float-text/float-text.component';
 
 @Component({
   selector: 'tic-tac-toe',
@@ -22,6 +24,8 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   public winningConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
   public isAIPlayingFirst = true;
   public gameName = 'tictac';
+
+  @ViewChild('floater') floater: FloatTextComponent;
 
   public styles = {
     'E': { color: '#e9dfd3' },
@@ -76,13 +80,16 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
 
   public gameOver(winner?: string) {
     if (winner == this.aiMark) {
-      this.gameMessage = 'You are defeated. I won! Want to play again ?';
+      this.gameMessage = 'You are defeated. AI won! Want to play again ?';
+      this.floater.showText('Game Lost !', 'E');
       this.aiWin++;
     } else if (winner == this.humanMark) {
       this.gameMessage = 'You won this time, Want to play again ?';
+      this.floater.showText('Game Won !', 'S');
       this.humanWin++;
     } else {
       this.gameMessage = 'Game Tie! You\'re Impressive. Want to play again ?';
+      this.floater.showText('Game Tie !', 'I');
     }
 
     this.totalGame++;
@@ -123,6 +130,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   public startGame() {
     this.isGameInProgress = true;
     this.clearBoard();
+    this.floater.showText('All the best 👍', 'S');
 
     if (this.isAIPlayingFirst = !this.isAIPlayingFirst) {
       this.isAIThinking = true;

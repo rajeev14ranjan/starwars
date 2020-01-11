@@ -14,7 +14,9 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { RoutingService } from './service/routing-service.service';
 import { AdminComponent } from './admin/admin.component';
 import { DotsComponent } from './dots/dots.component';
-import { ModalModule, RatingModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { RatingModule } from 'ngx-bootstrap/rating';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 import { PopUpComponent } from './pop-up/pop-up.component';
 import { FloatTextComponent } from './float-text/float-text.component';
 import { HttpHelperService } from './service/http-helper.service';
@@ -23,7 +25,7 @@ import { SudokuComponent } from './sudoku/sudoku.component';
 import { DashBoardComponent } from './dash-board/dash-board.component';
 import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
 import { FiddlerComponent } from './fiddler/fiddler.component';
-
+import { SplitWiseComponent } from './split-wise/split-wise.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,8 @@ import { FiddlerComponent } from './fiddler/fiddler.component';
     SudokuComponent,
     DashBoardComponent,
     TicTacToeComponent,
-    FiddlerComponent
+    FiddlerComponent,
+    SplitWiseComponent
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),
@@ -48,9 +51,10 @@ import { FiddlerComponent } from './fiddler/fiddler.component';
     BrowserAnimationsModule,
     FormsModule,
     ModalModule.forRoot(),
-    RatingModule.forRoot()
+    RatingModule.forRoot(),
+    PopoverModule.forRoot()
   ],
   providers: [StorageService, RoutingService, Title, HttpHelperService],
   bootstrap: [RoutingComponent]
 })
-export class AppModule { }
+export class AppModule {}
