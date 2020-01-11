@@ -8,11 +8,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./error-page.component.css']
 })
 export class ErrorPageComponent {
-  constructor(private _title:Title, private _router:Router){
+  constructor(private _title: Title, private _router: Router) {
     this._title.setTitle('Page Not found');
   }
 
-  public goTo(url:string){
+  public goTo(url: string) {
     this._router.navigateByUrl(url);
   }
 }

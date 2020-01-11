@@ -1,36 +1,32 @@
-<div class="center"><br/>
-<h3>Welcome to Game of Sudoku</h3>
-<br/><br/>
-<div class="row col-md-12">
-  <div class="col-md-4 col-p-0">
-    <p class="disp">{{displayTxt}}</p>
-    <br/><br/>
+<div class="center"><br />
+  <h3>Welcome to Game of Sudoku</h3>
+  <br /><br />
+  <div class="row col-md-12">
+    <div class="col-md-4 col-p-0">
+      <p class="disp">{{displayTxt}}</p>
+      <br /><br />
 
-    <label class="form-check-label"> Sudoku Hardness: {{hardness}}
-    <input type="range" class="form-control-range" max="80" min="10" [(ngModel)]="hardness" />
-    </label>
+      <label class="form-check-label"> Sudoku Hardness: {{hardness}}
+        <input type="range" class="form-control-range" max="80" min="10" [(ngModel)]="hardness" />
+      </label>
 
-    <div class="bottom">
-      <button class="btn btn-xs btn-success col-m-5" (click)="checkSudoku()">Check</button><br/>
-      <button class="btn btn-xs btn-danger col-m-5" (click)="resetSoduku()">Reset</button><br/><br/>
-      <button class="btn btn-xs btn-primary col-m-5" (click)="prepareNewSoduku()">Get New Sudoku</button><br/>
+      <div class="bottom">
+        <button class="btn btn-xs btn-success col-m-5" (click)="checkSudoku()">Check</button><br />
+        <button class="btn btn-xs btn-danger col-m-5" (click)="resetSoduku()">Reset</button><br /><br />
+        <button class="btn btn-xs btn-primary col-m-5" (click)="prepareNewSoduku()">Get New Sudoku</button><br />
+      </div>
+
     </div>
-    
-  </div>
-  <div class="col-md-8">
-    <div class="grid">
-      <div *ngFor="let row of puzzle; let r= index">
-        <input *ngFor="let col of row; let c = index; trackBy: trackByFn" 
-                [readOnly]="getPrfeillFlag(r,c)"
-                [ngStyle]="getStyle(r,c)"
-                [(ngModel)]="puzzle[r][c]" 
-                (keyup)="entered(r,c)"
-                class="cell">
+    <div class="col-md-8">
+      <div class="grid">
+        <div *ngFor="let row of puzzle; let r= index">
+          <input *ngFor="let col of row; let c = index; trackBy: trackByFn" [readOnly]="getPrfeillFlag(r,c)"
+            [ngStyle]="getStyle(r,c)" [(ngModel)]="puzzle[r][c]" (keyup)="entered(r,c)" class="cell">
+        </div>
       </div>
     </div>
+
   </div>
-  
-</div>
 
 
 </div>

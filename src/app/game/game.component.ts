@@ -3,7 +3,7 @@ import {
   OnInit,
   HostListener,
   ViewChild,
-  OnDestroy,
+  OnDestroy
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { StorageService } from '../service/browser-storage.service';
@@ -14,7 +14,7 @@ import { RoutingService } from '../service/routing-service.service';
 @Component({
   selector: 'game-page',
   templateUrl: './game.component.html',
-  styleUrls: ['./game.component.css'],
+  styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit, OnDestroy {
   public enemyArry = new Array<Point>();
@@ -45,7 +45,7 @@ export class GameComponent implements OnInit, OnDestroy {
     yMin: 0,
     yMax: 0,
     width: 0,
-    height: 0,
+    height: 0
   };
 
   @ViewChild('floater') floater: FloatTextComponent;
@@ -54,7 +54,7 @@ export class GameComponent implements OnInit, OnDestroy {
     private _title: Title,
     private _router: Router,
     private _localStorage: StorageService,
-    private _routinService: RoutingService
+    private _routingService: RoutingService
   ) {
     this._localStorage.checkForLogin();
     this.getHighScore();
@@ -69,7 +69,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._title.setTitle('Game Page');
-    this.footerPos = this._routinService.getCoordinate(
+    this.footerPos = this._routingService.getCoordinate(
       document.getElementById('footerDiv')
     );
     this.isUserAdmin = this._localStorage.isAdmin();
@@ -90,7 +90,7 @@ export class GameComponent implements OnInit, OnDestroy {
   public calculatePlayingArea() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.footerPos = this._routinService.getCoordinate(
+    this.footerPos = this._routingService.getCoordinate(
       document.getElementById('footerDiv')
     );
 
@@ -190,7 +190,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
       if (enemy.y > this.playingArea.yMax) {
         this.enemyArry.splice(e, 1);
-        if (enemy.m < 3) { this.lifeCount -= 1; }
+        if (enemy.m < 3) {
+          this.lifeCount -= 1;
+        }
       }
     }
 

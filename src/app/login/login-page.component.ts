@@ -9,7 +9,7 @@ import { FeedbackComponent } from '../feedback/feedback.component';
 @Component({
   selector: 'login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.css'],
+  styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent implements AfterViewInit {
   public title = 'login-page';

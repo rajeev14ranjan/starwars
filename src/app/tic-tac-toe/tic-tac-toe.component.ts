@@ -21,18 +21,27 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   public isAIThinking = false;
   public ticTacBoard = ['X', 'E', 'O', 'O', 'X', 'O', 'E', 'O', 'X'];
   public boxStyle = ['G', 'E', 'O', 'O', 'G', 'O', 'E', 'O', 'G'];
-  public winningConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+  public winningConditions = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
   public isAIPlayingFirst = true;
   public gameName = 'tictac';
 
   @ViewChild('floater') floater: FloatTextComponent;
 
   public styles = {
-    'E': { color: '#e9dfd3' },
-    'G': { backgroundColor: '#94dc94', color: '#006400' },
-    'X': { backgroundColor: '#e9dfd3', color: '#2a78cd' },
-    'O': { backgroundColor: '#e9dfd3', color: '#b53030' },
-  }
+    E: { color: '#e9dfd3' },
+    G: { backgroundColor: '#94dc94', color: '#006400' },
+    X: { backgroundColor: '#e9dfd3', color: '#2a78cd' },
+    O: { backgroundColor: '#e9dfd3', color: '#b53030' }
+  };
 
   public gameMessage = 'Click on the start game to Play!';
 
@@ -41,7 +50,11 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   public winBgd = 'G';
   public emptyMark = 'E';
 
-  constructor(private _title: Title, private _storage: StorageService, private _router: Router) {
+  constructor(
+    private _title: Title,
+    private _storage: StorageService,
+    private _router: Router
+  ) {
     this._storage.checkForLogin();
   }
 
@@ -55,23 +68,28 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   }
 
   public getOldScore() {
-    this._storage.getUserScore(this.gameName).subscribe(
-      (response: Array<UserScore>) => {
+    this._storage
+      .getUserScore(this.gameName)
+      .subscribe((response: Array<UserScore>) => {
         if (response.length) {
-          let scores = response[0].score.split(',').map(x => parseInt(x));
+          const scores = response[0].score.split(',').map(x => parseInt(x));
           this.humanWin = scores[0];
           this.aiWin = scores[1];
           this.totalGame = scores[2];
         }
-      }
-    )
+      });
   }
 
   public saveCurrentUserScore() {
-    this._storage.saveUserScore(this.gameName, `${this.humanWin},${this.aiWin},${this.totalGame}`).subscribe(
-      response => { },
-      error => { }
-    )
+    this._storage
+      .saveUserScore(
+        this.gameName,
+        `${this.humanWin},${this.aiWin},${this.totalGame}`
+      )
+      .subscribe(
+        response => {},
+        error => {}
+      );
   }
 
   public trackByFn(index: number, item: any) {
@@ -79,32 +97,40 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   }
 
   public gameOver(winner?: string) {
-    if (winner == this.aiMark) {
+    if (winner === this.aiMark) {
       this.gameMessage = 'You are defeated. AI won! Want to play again ?';
       this.floater.showText('Game Lost !', 'E');
       this.aiWin++;
-    } else if (winner == this.humanMark) {
+    } else if (winner === this.humanMark) {
       this.gameMessage = 'You won this time, Want to play again ?';
       this.floater.showText('Game Won !', 'S');
       this.humanWin++;
     } else {
-      this.gameMessage = 'Game Tie! You\'re Impressive. Want to play again ?';
+      this.gameMessage = "Game Tie! You're Impressive. Want to play again ?";
       this.floater.showText('Game Tie !', 'I');
     }
 
     this.totalGame++;
     this.isGameInProgress = false;
     this.computeProgressBar();
-    if (!(this.totalGame % 5)) this.saveCurrentUserScore();
+    if (!(this.totalGame % 5)) {
+      this.saveCurrentUserScore();
+    }
   }
 
   public computeProgressBar() {
-    let filled = this.ticTacBoard.filter(x => x !== this.emptyMark).length;
+    const filled = this.ticTacBoard.filter(x => x !== this.emptyMark).length;
     this.completedPercent = (filled / 9) * 100;
   }
 
   public humanClickOnBox(box: number) {
-    if (!this.isGameInProgress || this.isAIThinking || this.ticTacBoard[box] !== this.emptyMark) return false;
+    if (
+      !this.isGameInProgress ||
+      this.isAIThinking ||
+      this.ticTacBoard[box] !== this.emptyMark
+    ) {
+      return false;
+    }
 
     this.ticTacBoard[box] = this.boxStyle[box] = this.humanMark;
 
@@ -132,7 +158,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     this.clearBoard();
     this.floater.showText('All the best 👍', 'S');
 
-    if (this.isAIPlayingFirst = !this.isAIPlayingFirst) {
+    if ((this.isAIPlayingFirst = !this.isAIPlayingFirst)) {
       this.isAIThinking = true;
       setTimeout(this.playAITurn.bind(this), (Math.random() + 1) * 1000);
       this.gameMessage = `MY TURN, let me think where I should play first...`;
@@ -150,8 +176,10 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   }
 
   public playAITurn() {
-    let box = this.getBestNextMoveBox();
-    if (box !== undefined) this.boxStyle[box] = this.ticTacBoard[box] = this.aiMark;
+    const box = this.getBestNextMoveBox();
+    if (box !== undefined) {
+      this.boxStyle[box] = this.ticTacBoard[box] = this.aiMark;
+    }
 
     if (this.checkForGameWin(this.aiMark, this.ticTacBoard, true)) {
       this.gameOver(this.aiMark);
@@ -166,11 +194,17 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     this.gameMessage = `That was easy, Now it's your turn human...`;
   }
 
-  public checkForGameWin(mark: string, board: Array<string>, applyWinStyle = false) {
+  public checkForGameWin(
+    mark: string,
+    board: Array<string>,
+    applyWinStyle = false
+  ) {
     for (let i = 0; i < this.winningConditions.length; i++) {
-      let [a, b, c] = this.winningConditions[i];
+      const [a, b, c] = this.winningConditions[i];
       if (board[a] == mark && board[b] == mark && board[c] == mark) {
-        if (applyWinStyle) this.boxStyle[a] = this.boxStyle[b] = this.boxStyle[c] = this.winBgd;
+        if (applyWinStyle) {
+          this.boxStyle[a] = this.boxStyle[b] = this.boxStyle[c] = this.winBgd;
+        }
         return true;
       }
     }
@@ -182,34 +216,44 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   }
 
   public getBestNextMoveBox() {
-    let newMove = this.getBestTicTacMove(this.ticTacBoard.slice(0), this.aiMark);
+    const newMove = this.getBestTicTacMove(
+      this.ticTacBoard.slice(0),
+      this.aiMark
+    );
     return newMove.index;
   }
 
-
-  //Provides empty boxes of board
+  // Provides empty boxes of board
   public emptyIndexies(newBoard: Array<string>) {
-    return newBoard.map((x, i) => x == this.emptyMark ? i : -1)
+    return newBoard
+      .map((x, i) => (x === this.emptyMark ? i : -1))
       .filter(x => x > -1)
-      .sort((a, b) => Math.random() > 0.5 ? 1 : -1);
+      .sort((a, b) => (Math.random() > 0.5 ? 1 : -1));
   }
 
   public getBestTicTacMove(newBoard: Array<string>, playerMark: string) {
-    let availSpots = this.emptyIndexies(newBoard);
+    const availSpots = this.emptyIndexies(newBoard);
 
-    if (this.checkForGameWin(this.humanMark, newBoard)) return { score: -10 };
-    else if (this.checkForGameWin(this.aiMark, newBoard)) return { score: 10 };
-    else if (availSpots.length === 0) return { score: 0 };
+    if (this.checkForGameWin(this.humanMark, newBoard)) {
+      return { score: -10 };
+    } else if (this.checkForGameWin(this.aiMark, newBoard)) {
+      return { score: 10 };
+    } else if (availSpots.length === 0) {
+      return { score: 0 };
+    }
 
-    let allMoves = [];
+    const allMoves = [];
 
     for (let spot = 0; spot < availSpots.length; spot++) {
-      let currentMove = {};
+      const currentMove = {};
       currentMove['index'] = availSpots[spot];
 
       newBoard[availSpots[spot]] = playerMark;
 
-      let result = this.getBestTicTacMove(newBoard, playerMark == this.aiMark ? this.humanMark : this.aiMark);
+      const result = this.getBestTicTacMove(
+        newBoard,
+        playerMark === this.aiMark ? this.humanMark : this.aiMark
+      );
       currentMove['score'] = result.score;
 
       newBoard[availSpots[spot]] = this.emptyMark;

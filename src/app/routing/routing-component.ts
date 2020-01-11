@@ -8,41 +8,36 @@ import { StorageService } from '../service/browser-storage.service';
   styleUrls: ['./routing-component.css']
 })
 export class RoutingComponent implements OnInit, OnDestroy {
+  constructor(private _router: Router, private _localStorage: StorageService) {}
 
+  ngOnInit() {}
 
-  constructor(private _router:Router, private _localStorage:StorageService) { }
-
-  ngOnInit() {
-
+  showBar(): boolean {
+    const url = this._router.url;
+    return url !== '/login';
   }
 
-  showBar() : boolean{
-    let url:string = this._router.url;
-    return url != '/login';
-  }
-
-  isAdmin(){
+  isAdmin() {
     return this._localStorage.isAdmin();
   }
 
-  goTO(urlStr:string){
+  goTO(urlStr: string) {
     this._router.navigateByUrl(urlStr);
   }
 
-  userName(){
+  userName() {
     return this._localStorage.loggedUserName;
   }
 
-  logout(){
+  logout() {
     this._localStorage.loggedUserName = null;
     this._localStorage.uniquieLogid = null;
     this._localStorage.deleteAutoLoginToken();
     this._router.navigateByUrl('login');
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this._localStorage.saveUserLog();
     this._localStorage.uniquieLogid = null;
   }
-
 }

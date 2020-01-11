@@ -1,72 +1,71 @@
-.center{
-    margin: auto;
-    align-items: center;
-    text-align: center;
-    padding-bottom: 80px;
-    background: lightgray;
+.center {
+  margin: auto;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 80px;
+  background: lightgray;
 }
 
-.tc{
-    text-align: center;
+.tc {
+  text-align: center;
 }
 
-.grid{
-    margin: 20px;
-    box-shadow: 3px 3px 9px #888888;
-    display: inline-block;
-    white-space: nowrap;
+.grid {
+  margin: 20px;
+  box-shadow: 3px 3px 9px #888888;
+  display: inline-block;
+  white-space: nowrap;
 }
 
-.cell{
-    font-size: 3.5em;
-    text-align: center;
-    height: 100px;
-    width: 105px;
-    padding: 7px;
-    display: inline-block;
-    border: 1px solid gray;
-    cursor: pointer;
-    user-select: none;
-    background-color: rgb(233, 223, 211);
+.cell {
+  font-size: 3.5em;
+  text-align: center;
+  height: 100px;
+  width: 105px;
+  padding: 7px;
+  display: inline-block;
+  border: 1px solid gray;
+  cursor: pointer;
+  user-select: none;
+  background-color: rgb(233, 223, 211);
 }
 
-
-.bottom{
-    bottom: 5%;
-    left: 30%;
-    text-align: center;
-    position: absolute;
+.bottom {
+  bottom: 5%;
+  left: 30%;
+  text-align: center;
+  position: absolute;
 }
 
-.disp{
-    font-size: 1.5em;
-    padding: 10px 15px 0px 10px;
-    margin-left: 10%;
+.disp {
+  font-size: 1.5em;
+  padding: 10px 15px 0px 10px;
+  margin-left: 10%;
 }
 
-.pre{
-    text-align: left;
-    margin-left: 25%;
-    white-space: pre;
-    font-family: consolas;
-    font-size: 120%;
-    color: #0061c3;
+.pre {
+  text-align: left;
+  margin-left: 25%;
+  white-space: pre;
+  font-family: consolas;
+  font-size: 120%;
+  color: #0061c3;
 }
 
-.ar{
-    text-align: right;
+.ar {
+  text-align: right;
 }
 
-.progress{
-    margin-left: 10%;
-    margin-bottom: 15px;
-    height: 3px;
-    overflow: hidden; 
-    background-color: #b7b6b6
+.progress {
+  margin-left: 10%;
+  margin-bottom: 15px;
+  height: 3px;
+  overflow: hidden;
+  background-color: #b7b6b6;
 }
 
-.progress .bar{
-    background-color: darkgreen;
-    transition: width 1s;
-    transition-timing-function : linear;
+.progress .bar {
+  background-color: darkgreen;
+  transition: width 1s;
+  transition-timing-function: linear;
 }

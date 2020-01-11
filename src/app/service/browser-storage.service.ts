@@ -5,7 +5,13 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UAParser } from 'ua-parser-js';
 import { environment } from 'src/environments/environment';
-import { UserDetail, Logs, Feedback, UserScore, LoginToken } from '../model/app.model';
+import {
+  UserDetail,
+  Logs,
+  Feedback,
+  UserScore,
+  LoginToken
+} from '../model/app.model';
 
 @Injectable()
 export class StorageService {
@@ -20,7 +26,7 @@ export class StorageService {
   public isGuestUser: boolean;
   // public isBrowserOnline = Navigator.onLine;
 
-  constructor(private _router: Router, private _dbcon: HttpHelperService) { }
+  constructor(private _router: Router, private _dbcon: HttpHelperService) {}
 
   public getAllUsers(): Observable<Array<UserDetail>> {
     const url = `api/stars.php?a=getUser`;
@@ -277,6 +283,6 @@ export class StorageService {
     const userAgent = navigator.userAgent;
     return `${this.parser.getBrowser(userAgent).name} on ${
       this.parser.getOS(userAgent).name
-      }`;
+    }`;
   }
 }

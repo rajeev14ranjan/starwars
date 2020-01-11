@@ -1,158 +1,160 @@
-.footer{
-    position: absolute;
-    bottom: 0px;
-    left:0px;
-    background: black;
-    height:50px;
-    width:100%;
+.footer {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  background: black;
+  height: 50px;
+  width: 100%;
 }
 
-.score{
-    position: absolute;
-    left:1%;
-    top:10%;
-    padding: 10px;
+.score {
+  position: absolute;
+  left: 1%;
+  top: 10%;
+  padding: 10px;
 
-    text-align: left;
-    
+  text-align: left;
 }
 
-
-dot{
-    position: absolute !important;
+dot {
+  position: absolute !important;
 }
 
-.gun{
-    position: absolute;
-    bottom: 0;
-    width: 60px;
+.gun {
+  position: absolute;
+  bottom: 0;
+  width: 60px;
 }
 
-.top{
-    margin:0px 15px;
-    background: yellow;
-    top:0px;
-    height: 23px;
-    width:30px;
+.top {
+  margin: 0px 15px;
+  background: yellow;
+  top: 0px;
+  height: 23px;
+  width: 30px;
 }
 
-.PowerGun{
-    background: limegreen !important;
+.PowerGun {
+  background: limegreen !important;
 }
 
-.base{
-    background: yellow;
-    height: 27px;
-    width:60px;
+.base {
+  background: yellow;
+  height: 27px;
+  width: 60px;
 }
 
-.col-p-10{
-    padding: 10px;
+.col-p-10 {
+  padding: 10px;
 }
 
-.col-m-5{
-    margin: 5px;
+.col-m-5 {
+  margin: 5px;
 }
-label{
-    color:gray;
-}
-
-td{
-    padding:10px 0px;
-}
-a{
-    cursor: pointer;
-}
-.center{
-    max-width: 80%;
-    margin: auto;
-    align-items: center;
-    text-align: center;
+label {
+  color: gray;
 }
 
-.rules{
-    font-size: 20px;
+td {
+  padding: 10px 0px;
+}
+a {
+  cursor: pointer;
+}
+.center {
+  max-width: 80%;
+  margin: auto;
+  align-items: center;
+  text-align: center;
 }
 
-
-
-.text-mute{
-    color:rgb(91, 189, 255);
-    font-size:11px;
+.rules {
+  font-size: 20px;
 }
 
-.sml{
-    font-size:11px;
+.text-mute {
+  color: rgb(91, 189, 255);
+  font-size: 11px;
 }
 
-.blank{
-    color:white;
-    font-size:11px;
+.sml {
+  font-size: 11px;
 }
 
-.btn-default{
-    border: 1px solid gray;
-    border-radius: .2rem;
+.blank {
+  color: white;
+  font-size: 11px;
 }
 
-.walk{
-    animation: walk 16s ease-out 0s infinite;
-    
+.btn-default {
+  border: 1px solid gray;
+  border-radius: 0.2rem;
 }
 
-@keyframes walk{
-    0%{transform: translateX(-195%);}
-    45%{transform: translateX(200%);}
-    50%{transform: translateX(195%) rotateY(180deg);}
-    95%{transform: translateX(-200%) rotateY(180deg);}
-    100%{transform: translateX(-195%) rotateY(0deg);}
+.walk {
+  animation: walk 16s ease-out 0s infinite;
 }
 
-@media(max-width:600px){
-    .score{
-         font-size: .95rem;
-    }
-    .rules{
-        font-size: 1rem;
-    }
+@keyframes walk {
+  0% {
+    transform: translateX(-195%);
+  }
+  45% {
+    transform: translateX(200%);
+  }
+  50% {
+    transform: translateX(195%) rotateY(180deg);
+  }
+  95% {
+    transform: translateX(-200%) rotateY(180deg);
+  }
+  100% {
+    transform: translateX(-195%) rotateY(0deg);
+  }
 }
 
-@media(max-width:500px){
-    .score{
-         font-size: .85rem;
-    }
-    .rules{
-        font-size: .9rem;
-    }
-    .center{
-        max-width: 99%;
-    }
-    .screenInfo{
-        display: none;
-    }
+@media (max-width: 600px) {
+  .score {
+    font-size: 0.95rem;
+  }
+  .rules {
+    font-size: 1rem;
+  }
 }
 
-@media(max-width:400px){
-    .score{
-         font-size: .65rem;
-    }
-    .rules{
-        font-size: .8rem;
-    }
+@media (max-width: 500px) {
+  .score {
+    font-size: 0.85rem;
+  }
+  .rules {
+    font-size: 0.9rem;
+  }
+  .center {
+    max-width: 99%;
+  }
+  .screenInfo {
+    display: none;
+  }
 }
 
-
-@media(min-width:767px){
-    .card{
-         max-width: 74%; 
-         
-    }
-    
+@media (max-width: 400px) {
+  .score {
+    font-size: 0.65rem;
+  }
+  .rules {
+    font-size: 0.8rem;
+  }
 }
 
-@media(min-width:992px){
-    .card{
-         max-width: 55%; 
-         font-size: 1.2rem;
-    }
+@media (min-width: 767px) {
+  .card {
+    max-width: 74%;
+  }
+}
+
+@media (min-width: 992px) {
+  .card {
+    max-width: 55%;
+    font-size: 1.2rem;
+  }
 }

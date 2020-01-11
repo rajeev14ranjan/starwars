@@ -9,8 +9,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 })
 export class FeedbackComponent {
   @Output() done = new EventEmitter<boolean>();
-  @ViewChild('feedbackModal') feedbackModal : ModalDirective; 
-  constructor(private _strogeService : StorageService) { }
+  @ViewChild('feedbackModal') feedbackModal: ModalDirective;
+  constructor(private _storageService: StorageService) {}
   public max = 5;
   public rating = 0;
   public isReadonly = false;
@@ -19,24 +19,36 @@ export class FeedbackComponent {
   public status = this.default;
   public hoverStar = 0;
 
-  public getStatus(star){
+  public getStatus(star) {
     this.hoverStar = star;
-    switch(star){
-      case 0:  this.status = this.default; break;
-      case 1:  this.status = 'I hated it'; break;
-      case 2:  this.status = "I didn't like it"; break;
-      case 3:  this.status = 'It was okay'; break;
-      case 4:  this.status = 'I liked it'; break;
-      case 5:  this.status = 'I loved it'; break;
+    switch (star) {
+      case 0:
+        this.status = this.default;
+        break;
+      case 1:
+        this.status = 'I hated it';
+        break;
+      case 2:
+        this.status = "I didn't like it";
+        break;
+      case 3:
+        this.status = 'It was okay';
+        break;
+      case 4:
+        this.status = 'I liked it';
+        break;
+      case 5:
+        this.status = 'I loved it';
+        break;
     }
   }
 
-  public show(){
+  public show() {
     this.feedbackModal.show();
     this.reset();
   }
 
-  public reset(){
+  public reset() {
     this.rating = 0;
     this.isReadonly = false;
     this.feedback = '';
@@ -44,16 +56,19 @@ export class FeedbackComponent {
     this.hoverStar = 0;
   }
 
-  public hide(){
-    this.feedbackModal.hide()
+  public hide() {
+    this.feedbackModal.hide();
   }
 
-  public postFeedback(){
-    this._strogeService.saveFeedback(this.rating, this.feedback).subscribe(
-      ans=>{
+  public postFeedback() {
+    this._storageService.saveFeedback(this.rating, this.feedback).subscribe(
+      ans => {
         this.hide();
         this.done.emit(true);
-      },error => {this.hide()});
+      },
+      error => {
+        this.hide();
+      }
+    );
   }
-
 }

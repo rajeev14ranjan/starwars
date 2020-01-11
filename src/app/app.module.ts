@@ -26,6 +26,7 @@ import { DashBoardComponent } from './dash-board/dash-board.component';
 import { TicTacToeComponent } from './tic-tac-toe/tic-tac-toe.component';
 import { FiddlerComponent } from './fiddler/fiddler.component';
 import { SplitWiseComponent } from './split-wise/split-wise.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { SplitWiseComponent } from './split-wise/split-wise.component';
     DashBoardComponent,
     TicTacToeComponent,
     FiddlerComponent,
-    SplitWiseComponent
+    SplitWiseComponent,
+    SpinnerComponent
   ],
   imports: [
     RouterModule.forRoot(AppRoutes),

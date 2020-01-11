@@ -1,85 +1,80 @@
-.ng-invalid.ng-touched.form-control{
-    border: 1px solid red;
-    border-left: 3px solid red;
+.ng-invalid.ng-touched.form-control {
+  border: 1px solid red;
+  border-left: 3px solid red;
 }
 
-.ng-valid.ng-touched.form-control{
-    border: 1px solid green;
-    border-left: 3px solid green;  
+.ng-valid.ng-touched.form-control {
+  border: 1px solid green;
+  border-left: 3px solid green;
 }
 
-a{
-    cursor: pointer;
+a {
+  cursor: pointer;
 }
-.center{
-    /* max-width: 80%; */
-    margin: auto;
-    align-items: center;
-    text-align: center;
-}
-
-.card{
-    background-color: white;
-    /* max-width: 70%; */
-    padding: 30px;
-    border:1px solid lightgray;
-    border-radius: 5px;
-    box-shadow : gray 5px 5px 10px;
-
+.center {
+  /* max-width: 80%; */
+  margin: auto;
+  align-items: center;
+  text-align: center;
 }
 
-
-
-.text-mute{
-    color:rgb(91, 189, 255);
-    font-size:11px;
+.card {
+  background-color: white;
+  /* max-width: 70%; */
+  padding: 30px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  box-shadow: gray 5px 5px 10px;
 }
 
-.sml{
-    font-size:11px;
+.text-mute {
+  color: rgb(91, 189, 255);
+  font-size: 11px;
 }
 
-.blank{
-    color:white;
-    font-size:11px;
+.sml {
+  font-size: 11px;
 }
 
-.lost{
-    opacity: 0.4;
+.blank {
+  color: white;
+  font-size: 11px;
 }
 
-.btn-default{
-    border: 1px solid gray;
-    border-radius: .2rem;
+.lost {
+  opacity: 0.4;
 }
 
-.noWrap{
-    white-space: nowrap;
+.btn-default {
+  border: 1px solid gray;
+  border-radius: 0.2rem;
 }
 
-@media(max-width:500px){
-    .card{
-         font-size: .85rem;
-    }
+.noWrap {
+  white-space: nowrap;
 }
 
-@media(max-width:400px){
-    .card{
-         font-size: .75rem;
-    }
+@media (max-width: 500px) {
+  .card {
+    font-size: 0.85rem;
+  }
 }
 
-
-@media(min-width:767px){
-    .card{
-         max-width: 74%; 
-         
-    }
+@media (max-width: 400px) {
+  .card {
+    font-size: 0.75rem;
+  }
 }
 
-@media(min-width:992px){
-    .card{
-         max-width: 55%; 
-         font-size: 1.2rem;
-    }
+@media (min-width: 767px) {
+  .card {
+    max-width: 74%;
+  }
+}
+
+@media (min-width: 992px) {
+  .card {
+    max-width: 55%;
+    font-size: 1.2rem;
+  }
 }

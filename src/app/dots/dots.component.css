@@ -1,14 +1,14 @@
-.dots{
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    z-index: 999;
+.dots {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  z-index: 999;
 }
 
-.gun{
-    height:60px;
-    width: 90px;
-    bottom: 0px;
-    transform: translateX(-33%)
+.gun {
+  height: 60px;
+  width: 90px;
+  bottom: 0px;
+  transform: translateX(-33%);
 }

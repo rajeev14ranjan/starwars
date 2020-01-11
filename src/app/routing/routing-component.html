@@ -1,34 +1,30 @@
-<nav *ngIf="showBar()" class="navbar navbar-expand-lg navbar-dark bg-dark" style="height: 56px;flex-flow: row nowrap;justify-content: flex-start;">
+<nav *ngIf="showBar()" class="navbar navbar-expand-lg navbar-dark bg-dark"
+  style="height: 56px;flex-flow: row nowrap;justify-content: flex-start;">
   <a class="navbar-brand col-ml-10" (click)="goTO('dashboard')" href="javascript:void(0)">Home</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-       
-      </li>
-      <li class="nav-item">
-       
-      </li>
-      <li class="nav-item dropdown">
-        
-        
-      </li>
-      <li class="nav-item">
-        
-      </li>
+      <li class="nav-item active"> </li>
+      <li class="nav-item"> </li>
+      <li class="nav-item dropdown"> </li>
+      <li class="nav-item"> </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
-     <span  class="navbar-brand mr-sm-2" style="margin-right:20px !important" (click)="goTO('admin')">
-            {{isAdmin()?'Admin Page':'About'}}</span>
+      <span class="navbar-brand mr-sm-2" style="margin-right:20px !important" (click)="goTO('admin')">
+        {{isAdmin()?'Admin Page':'About'}}</span>
       <span class="navbar-brand mr-sm-2 name" style="margin-right:20px !important">
         Welcome {{userName()}}</span>
       <button class="btn btn-outline-info my-2 my-sm-0" (click)="logout()">Logout</button>
     </form>
   </div>
 </nav>
+
 <div class="container">
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </div>
+
+<spinner [show]="false"></spinner>

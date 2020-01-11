@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy
+} from '@angular/core';
 
 @Component({
   selector: 'dot',
@@ -15,7 +22,7 @@ export class DotsComponent implements OnInit, OnDestroy {
   @Input() down = true;
   public dotsId: any;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     if (!this.isDotGun) {

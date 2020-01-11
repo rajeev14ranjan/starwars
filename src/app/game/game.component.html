@@ -1,71 +1,53 @@
-
-
 <div class="center">
 
-    <dot [isDotGun]="true"
-    [x]="gunPosition"
-    [y]="footerPos.top - 70">
-</dot>
+  <dot [isDotGun]="true" [x]="gunPosition" [y]="footerPos.top - 70">
+  </dot>
 
-<dot *ngFor="let dot of enemyArry" 
-    [x]="dot.x" 
-    [y]="0" 
-    [master]="dot.m"  
-    (outY)="dot.y=$event" 
-    [down]="true" >
-</dot>
-<dot *ngFor="let dot of bulletArry" 
-    [x]="dot.x" 
-    [y]="dot.y" 
-    [master]="dot.m" 
-    (outY)="dot.y=$event" 
-    [down]="false">
-</dot>
+  <dot *ngFor="let dot of enemyArry" [x]="dot.x" [y]="0" [master]="dot.m" (outY)="dot.y=$event" [down]="true">
+  </dot>
+  <dot *ngFor="let dot of bulletArry" [x]="dot.x" [y]="dot.y" [master]="dot.m" (outY)="dot.y=$event" [down]="false">
+  </dot>
 
   <float-text #floater></float-text>
   <div class="score text-info">
     High Score : <span *ngIf="highScoreFlag">{{score}} by You!</span>
-    <span *ngIf="!highScoreFlag">{{highScore?.highScore}} on {{highScore?.timestamp | date : 'short'}}</span><br/>
-    Your Score : {{score}} <span *ngIf="highScoreFlag">🏆</span><br/><br/>
-    <span *ngFor="let life of getLifeCount()">{{lifeCount > 6 ?'💚': lifeCount > 3 ? '🧡' : '❤️'}}</span><br/>
-    <div><br/>
+    <span *ngIf="!highScoreFlag">{{highScore?.highScore}} on {{highScore?.timestamp | date : 'short'}}</span><br />
+    Your Score : {{score}} <span *ngIf="highScoreFlag">🏆</span><br /><br />
+    <span *ngFor="let life of getLifeCount()">{{lifeCount > 6 ?'💚': lifeCount > 3 ? '🧡' : '❤️'}}</span><br />
+    <div><br />
 
-    <p class="screenInfo">Screen Size: {{width}} X {{height}} <br/>
-       Playing Area: {{playingArea.width}} X {{playingArea.height}} <br/>
-       Range X: [{{playingArea.xMin}}, {{playingArea.xMax}}]   <br/>
-       Range Y: [{{playingArea.yMin}}, {{playingArea.yMax}}] <br/>
-       Gun Pos: [{{this.gunPosition}}, {{footerPos.top}}] <br/>
-    </p>
-   </div>
+      <p class="screenInfo">Screen Size: {{width}} X {{height}} <br />
+        Playing Area: {{playingArea.width}} X {{playingArea.height}} <br />
+        Range X: [{{playingArea.xMin}}, {{playingArea.xMax}}] <br />
+        Range Y: [{{playingArea.yMin}}, {{playingArea.yMax}}] <br />
+        Gun Pos: [{{this.gunPosition}}, {{footerPos.top}}] <br />
+      </p>
+    </div>
   </div>
-  <br/>
+  <br />
 
   <div *ngIf="gamePreview" class="col-p-10 col-m-5 rules">
-    <img class="walk" style="height:45px;" 
-     src="../../assets/alien.gif">
-    <br/>
-    <h2>WELCOME TO STARS WARS GAME</h2>  
-    Earth is under attack by alien spaceships, shoot them down before they land and destroy your city. You have a space gun with unlimited missiles.<br/> Shoot down the Master Space ships to gain Extra life.<br/> Master ships are harder to shoot as they can dodge your missiles.
+    <img class="walk" style="height:45px;" src="../../assets/alien.gif">
+    <br />
+    <h2>WELCOME TO STARS WARS GAME</h2>
+    Earth is under attack by alien spaceships, shoot them down before they land and destroy your city. You have a space
+    gun with unlimited missiles.<br /> Shoot down the Master Space ships to gain Extra life.<br /> Master ships are
+    harder to shoot as they can dodge your missiles.
     <div class="text-info">
-      <br/>
-      Press [Left Arrow Key] to move your gun Left<br/>
-      Press [Right Arrow Key] to move your gun Right<br/>
-      Press [Up Arrow Key] to shoot enemy spaceships<br/>
-      Press [ SpaceBar ] to START GAME<br/> 
+      <br />
+      Press [Left Arrow Key] to move your gun Left<br />
+      Press [Right Arrow Key] to move your gun Right<br />
+      Press [Up Arrow Key] to shoot enemy spaceships<br />
+      Press [ SpaceBar ] to START GAME<br />
     </div>
   </div>
 
-  <div *ngIf="gameOver"  style="font-size: 7rem">
-    GAME OVER <br/>
+  <div *ngIf="gameOver" style="font-size: 7rem">
+    GAME OVER <br />
     <h3 *ngIf="highScoreFlag">Congratulation for Scoring High Score of {{score}}</h3>
     <h4>Press [ SpaceBar ] to PLAY AGAIN</h4>
   </div>
 
   <div id="footerDiv" class="footer"></div>
-    
+
 </div>
-
-
-
-
-

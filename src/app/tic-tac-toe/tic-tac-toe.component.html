@@ -1,50 +1,48 @@
-<div class="center"><br/>
+<div class="center"><br />
   <h3>Welcome to Game of TicTacToe</h3>
-  <br/><br/>
+  <br /><br />
   <div class="row col-md-12">
     <div class="col-md-6 col-pr-0">
       <p class="disp">{{displayTxt}}</p>
       <div class="progress">
-          <div class="bar" [ngStyle]="{width: completedPercent + '%'}"></div>
-        </div>
+        <div class="bar" [ngStyle]="{width: completedPercent + '%'}"></div>
+      </div>
 
       <div class="col-p-10 pre">
         <tr>
-            <td class="ar">Your Score :</td>
-            <td> {{humanWin}}</td></tr>
-         <tr>
+          <td class="ar">Your Score :</td>
+          <td> {{humanWin}}</td>
+        </tr>
+        <tr>
           <td class="ar">AI Score :</td>
-          <td> {{aiWin}} </td></tr>
+          <td> {{aiWin}} </td>
+        </tr>
         <tr>
           <td class="ar">Total Games :</td>
-          <td> {{totalGame}}</td></tr>
+          <td> {{totalGame}}</td>
+        </tr>
       </div>
-  
+
       <div class="bottom">
-        <button class="btn btn-xs btn-primary col-mr-10" 
-                [disabled]="isGameInProgress" 
-                (click)="startGame()">{{totalGame ? 'Play Again' : 'Start Game'}}</button>
-        <button class="btn btn-xs btn-outline-secondary col-ml-5" 
-                (click)="goTo('dashboard')">Quit</button>
+        <button class="btn btn-xs btn-primary col-mr-10" [disabled]="isGameInProgress"
+          (click)="startGame()">{{totalGame ? 'Play Again' : 'Start Game'}}</button>
+        <button class="btn btn-xs btn-outline-secondary col-ml-5" (click)="goTo('dashboard')">Quit</button>
       </div>
-      
+
     </div>
     <div class="col-md-6 col-pt-25">
       <div class="grid">
         <ng-container *ngFor="let box of ticTacBoard; let i= index; trackBy: trackByFn">
-          <span [ngStyle]="getBoxStyle(i)"
-                [innerHTML]="box" 
-                (click)="humanClickOnBox(i)"
-                class="cell">
+          <span [ngStyle]="getBoxStyle(i)" [innerHTML]="box" (click)="humanClickOnBox(i)" class="cell">
           </span>
           <br *ngIf="(i==2||i == 5)" />
-      </ng-container>
+        </ng-container>
       </div>
-      <br/><br/>
+      <br /><br />
       <span class="text-info">{{gameMessage}}</span>
     </div>
-    
+
   </div>
 </div>
 
-<float-text #floater></float-text>  
+<float-text #floater></float-text>

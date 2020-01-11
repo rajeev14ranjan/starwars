@@ -1,19 +1,11 @@
-<div class="dots" 
-[ngStyle]="{'left.px': x ,'top.px': y,'background': 'transparent'}">
+<div class="dots" [ngStyle]="{'left.px': x ,'top.px': y,'background': 'transparent'}">
 
-<img *ngIf="down && !isDotGun && master < 3" 
-     style="width:45px" 
-     [src]="master == 2 ?'../../assets/blast.gif' : master == 1 ? '../../assets/mss.gif' : '../../assets/ufo-smiley.gif'" 
-     alt="👽" />
+    <img *ngIf="down && !isDotGun && master < 3" style="width:45px"
+        [src]="master == 2 ?'../../assets/blast.gif' : master == 1 ? '../../assets/mss.gif' : '../../assets/ufo-smiley.gif'"
+        alt="👽" />
 
-<img *ngIf="!down && !isDotGun" 
-     style="height:45px" 
-     src="../../assets/missile.png" 
-     alt="☢️" />
+    <img *ngIf="!down && !isDotGun" style="height:45px" src="../../assets/missile.png" alt="☢️" />
 
-<img *ngIf="isDotGun" 
-     class="gun" 
-     src="../../assets/chopper.gif" 
-     alt="GUN" />
+    <img *ngIf="isDotGun" class="gun" src="../../assets/chopper.gif" alt="GUN" />
 
 </div>
