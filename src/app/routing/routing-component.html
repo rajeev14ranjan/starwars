@@ -24,7 +24,7 @@
 </nav>
 
 <div class="container">
-  <router-outlet></router-outlet>
+  <router-outlet>
+    <spinner [show]="showSpinner"></spinner>
+  </router-outlet>
 </div>
-
-<spinner [show]="showSpinner"></spinner>

@@ -13,7 +13,9 @@ import {
   LoginToken
 } from '../model/app.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class StorageService {
   private autoLoginToken = 'starAut0L0g1nTok3n';
   private allUsers: Array<UserDetail>;
