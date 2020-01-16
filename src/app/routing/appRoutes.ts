@@ -1,24 +1,41 @@
 import { Routes } from '@angular/router';
-import { LoginPageComponent } from '../login/login-page.component';
-import { GameComponent } from '../game/game.component';
-import { ErrorPageComponent } from '../error-page/error-page.component';
-import { AdminComponent } from '../admin/admin.component';
-import { SudokuComponent } from '../sudoku/sudoku.component';
-import { DashBoardComponent } from '../dash-board/dash-board.component';
-import { TicTacToeComponent } from '../tic-tac-toe/tic-tac-toe.component';
-import { FiddlerComponent } from '../fiddler/fiddler.component';
-import { SplitWiseComponent } from '../split-wise/split-wise.component';
-
 
 export const AppRoutes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: 'login', component: LoginPageComponent },
-    { path: 'dashboard', component: DashBoardComponent },
-    { path: 'game', component: GameComponent },
-    { path: 'admin', component: AdminComponent },
-    { path: 'sudoku', component: SudokuComponent },
-    { path: 'tictactoe', component: TicTacToeComponent },
-    { path: 'fiddler', component: FiddlerComponent },
-    { path: 'splitwise', component: SplitWiseComponent },
-    { path: '**', component: ErrorPageComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: 'login',
+    loadChildren: './login/login-page.module#LoginPageModule'
+  },
+  {
+    path: 'dashboard',
+    loadChildren: './dash-board/dash-board.module#DashBoardModule'
+  },
+  {
+    path: 'game',
+    loadChildren: './game/game.module#GameModule'
+  },
+  {
+    path: 'admin',
+    loadChildren: './admin/admin.module#AdminModule'
+  },
+  {
+    path: 'sudoku',
+    loadChildren: './sudoku/sudoku.module#SudokuModule'
+  },
+  {
+    path: 'tictactoe',
+    loadChildren: './tic-tac-toe/tic-tac-toe.module#TicTacToeModule'
+  },
+  {
+    path: 'fiddler',
+    loadChildren: './fiddler/fiddler.module#FiddlerModule'
+  },
+  {
+    path: 'splitwise',
+    loadChildren: './split-wise/split-wise.module#SplitWiseModule'
+  },
+  {
+    path: '**',
+    loadChildren: './error-page/error-page.module#ErrorPageModule'
+  }
 ];

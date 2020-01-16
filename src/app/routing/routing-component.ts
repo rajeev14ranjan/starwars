@@ -1,5 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  Router,
+  RouterEvent,
+  NavigationStart,
+  NavigationEnd
+} from '@angular/router';
 import { StorageService } from '../service/browser-storage.service';
 import { HttpHelperService } from '../service/http-helper.service';
 
@@ -9,16 +14,25 @@ import { HttpHelperService } from '../service/http-helper.service';
   styleUrls: ['./routing-component.css']
 })
 export class RoutingComponent implements OnInit, OnDestroy {
-  public showSpinner: boolean;
+  public isRouterLoading: boolean;
+  public isXHRActive: boolean;
   constructor(
     private _router: Router,
     private _localStorage: StorageService,
     private _http: HttpHelperService
-  ) {}
+  ) {
+    _router.events.subscribe((event: RouterEvent): void => {
+      if (event instanceof NavigationStart) {
+        this.isRouterLoading = true;
+      } else if (event instanceof NavigationEnd) {
+        this.isRouterLoading = false;
+      }
+    });
+  }
 
   ngOnInit() {
     this._http.isConnActive.asObservable().subscribe(isActive => {
-      this.showSpinner = isActive;
+      this.isXHRActive = isActive;
     });
   }
 
