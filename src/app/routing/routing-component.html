@@ -25,6 +25,6 @@
 
 <div class="container">
   <router-outlet>
-    <spinner [show]="showSpinner"></spinner>
+    <spinner [show]="isRouterLoading || isXHRActive"></spinner>
   </router-outlet>
 </div>
