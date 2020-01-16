@@ -1,52 +1,54 @@
 import { Routes } from '@angular/router';
-import {
-  LoginPageModule,
-  DashBoardModule,
-  GameModule,
-  AdminModule,
-  SudokuModule,
-  TicTacToeModule,
-  FiddlerModule,
-  SplitWiseModule,
-  ErrorPageModule
-} from './getModules';
 
-export const AppRoutes: Routes = [
+const AppRoutes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
-    loadChildren: LoginPageModule
+    loadChildren: () =>
+      import('../login/login-page.module').then(mod => mod.LoginPageModule)
   },
   {
     path: 'dashboard',
-    loadChildren: DashBoardModule
+    loadChildren: () =>
+      import('../dash-board/dash-board.module').then(mod => mod.DashBoardModule)
   },
   {
     path: 'game',
-    loadChildren: GameModule
+    loadChildren: () =>
+      import('../game/game.module').then(mod => mod.GameModule)
   },
   {
     path: 'admin',
-    loadChildren: AdminModule
+    loadChildren: () =>
+      import('../admin/admin.module').then(mod => mod.AdminModule)
   },
   {
     path: 'sudoku',
-    loadChildren: SudokuModule
+    loadChildren: () =>
+      import('../sudoku/sudoku.module').then(mod => mod.SudokuModule)
   },
   {
     path: 'tictactoe',
-    loadChildren: TicTacToeModule
+    loadChildren: () =>
+      import('../tic-tac-toe/tic-tac-toe.module').then(
+        mod => mod.TicTacToeModule
+      )
   },
   {
     path: 'fiddler',
-    loadChildren: FiddlerModule
+    loadChildren: () =>
+      import('../fiddler/fiddler.module').then(mod => mod.FiddlerModule)
   },
   {
     path: 'splitwise',
-    loadChildren: SplitWiseModule
+    loadChildren: () =>
+      import('../split-wise/split-wise.module').then(mod => mod.SplitWiseModule)
   },
   {
     path: '**',
-    loadChildren: ErrorPageModule
+    loadChildren: () =>
+      import('../error-page/error-page.module').then(mod => mod.ErrorPageModule)
   }
 ];
+
+export { AppRoutes };
