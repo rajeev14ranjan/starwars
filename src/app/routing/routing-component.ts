@@ -37,8 +37,7 @@ export class RoutingComponent implements OnInit, OnDestroy {
   }
 
   showBar(): boolean {
-    const url = this._router.url;
-    return url !== '/login';
+    return this._router.url !== '/login' && !!this._localStorage.loggedUserName;
   }
 
   isAdmin() {
