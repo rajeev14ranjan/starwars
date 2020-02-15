@@ -2,9 +2,17 @@ import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { StorageService } from '../service/browser-storage.service';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
 import { FloatTextComponent } from '../float-text/float-text.component';
 import { FeedbackComponent } from '../feedback/feedback.component';
+
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+import { of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'login-page',
@@ -12,28 +20,22 @@ import { FeedbackComponent } from '../feedback/feedback.component';
   styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent implements AfterViewInit {
-  public title = 'login-page';
-  public un = '';
-  public pw = '';
-  public fn = '';
-  public inprogress = false;
-  public shwPass = false;
-  public failureCnt = 0;
   public isRegMode = false;
-  public isSignUpAllowed = true;
-  public isUserNameValid = true;
-  public isAutoLogin = false;
-  @ViewChild('loginForm') loginForm: NgForm;
+  public alertsIds = [];
+  public validateForm: FormGroup;
+
   @ViewChild('floater') floater: FloatTextComponent;
   @ViewChild('feedback') feedback: FeedbackComponent;
 
   constructor(
     private _localStorage: StorageService,
     private _title: Title,
-    private _router: Router
+    private _router: Router,
+    private fb: FormBuilder
   ) {
     this._title.setTitle('Login Page');
     this._localStorage.autoLoginIfTokenAvailable();
+    this.antFormContructor(fb);
   }
 
   ngAfterViewInit() {
@@ -47,89 +49,58 @@ export class LoginPageComponent implements AfterViewInit {
       }
     }, 100);
 
-    setTimeout(() => {
-      this.floater.showText('Sign Up if you are new to this Page 😊', 'I');
-    }, 1500);
+    this.alertsIds.push(
+      setTimeout(() => {
+        this.floater.showText('Sign Up if you are new to this Page 😊', 'I');
+      }, 1500)
+    );
 
-    setTimeout(() => {
-      this.floater.showText(`You can also login as a Guest 😃`, 'S');
-    }, 5300);
-  }
-
-  public clear() {
-    this.shwPass = false;
-    this.loginForm.form.reset();
-  }
-
-  public verifyUserName() {
-    const messageObj = { msg: '', type: '' };
-    this._localStorage.getFullUserNameValidity(this.un).subscribe(
-      (res: Array<any>) => {
-        if (res && res.length > 0) {
-          const fullName = res[0]['fullname'];
-          this.isSignUpAllowed = false;
-          messageObj.type = this.isRegMode ? 'E' : 'S';
-          messageObj.msg = this.isRegMode
-            ? `This Username is NOT Available`
-            : `Welcome ${fullName}`;
-          this.isUserNameValid = this.isRegMode;
-        } else {
-          this.isSignUpAllowed = true;
-          messageObj.type = this.isRegMode ? 'S' : 'E';
-          messageObj.msg = this.isRegMode
-            ? 'Username Available'
-            : 'No User found, Sign-up if new User';
-          this.isUserNameValid = !this.isRegMode;
-        }
-        this.floater.showText(messageObj.msg, messageObj.type);
-      },
-      error => {
-        this.floater.showText('Cannot Validate Username from server', 'E');
-      }
+    this.alertsIds.push(
+      setTimeout(() => {
+        this.floater.showText(`You can also login as a Guest 😃`, 'S');
+      }, 5300)
     );
   }
 
+  public clearPendingAlerts() {
+    while (this.alertsIds.length) {
+      const id = this.alertsIds.pop();
+      clearTimeout(id);
+    }
+  }
+
   public login() {
+    const fn = this.getFormValue('fullName');
+    const un = this.getFormValue('userName');
+    const pw = this.getFormValue('password');
+    const rem = this.getFormValue('remember');
     if (this.isRegMode) {
-      this._localStorage.getFullUserNameValidity(this.un).subscribe(
-        (res: Array<any>) => {
-          if (res && res.length > 0) {
-            this.floater.showText('This Username is NOT Available', 'E');
-            this.un = '';
-            return;
-          } else {
-            // SignUP
-            this._localStorage
-              .saveCredentials(this.fn, this.un, this.pw)
-              .subscribe(
-                (success: boolean) => {
-                  this.pw = '';
-                  this.isRegMode = false;
-                  this.floater.showText('SignUp Success. Please Login', 'S');
-                },
-                (error: string) => {
-                  this.floater.showText('SignUp Failed', 'E');
-                }
-              );
-          }
+      // Registration
+      this._localStorage.saveCredentials(fn, un, pw).subscribe(
+        (success: boolean) => {
+          this.resetForm();
+          this.setFormValue('password', '');
+          this.setFormValue('userName', un);
+          this.isRegMode = false;
+          this.floater.showText('Please Login with credentials', 'S');
         },
         (error: string) => {
-          this.floater.showText('Server Connection cannot be established', 'E');
+          this.floater.showText('SignUp Failed', 'E');
         }
       );
     } else {
       // Login
-      this._localStorage.checkCredentialValidity(this.un, this.pw).subscribe(
+      this._localStorage.checkCredentialValidity(un, pw).subscribe(
         (response: boolean) => {
           if (response) {
             this._localStorage.uniquieLogid = this.getUniqueID();
             this._localStorage.saveUserLog();
-            this.isAutoLogin
-              ? this._localStorage.saveAutoLoginToken(this.un, this.pw)
+            rem
+              ? this._localStorage.saveAutoLoginToken(un, pw)
               : this._localStorage.deleteAutoLoginToken();
             this._router.navigateByUrl('dashboard');
           } else {
-            this.pw = '';
+            this.setFormValue('password', '');
             this.floater.showText('Incorrect Username or Password', 'E');
           }
         },
@@ -145,6 +116,84 @@ export class LoginPageComponent implements AfterViewInit {
       .toString(36)
       .toUpperCase();
   }
+
+  antFormContructor(fb) {
+    this.validateForm = fb.group({
+      fullName: ['', [Validators.required]],
+      userName: [
+        '',
+        {
+          validators: [Validators.required],
+          asyncValidators: [this.userNameAsyncValidator],
+          updateOn: 'blur'
+        }
+      ],
+      password: ['', [Validators.required]],
+      remember: [false, []]
+    });
+  }
+
+  getFormValue(name) {
+    return this.validateForm.controls[name].value;
+  }
+
+  setFormValue(name, value) {
+    return this.validateForm.controls[name].setValue(value);
+  }
+
+  submitForm = ($event: any) => {
+    $event.preventDefault();
+    this.clearPendingAlerts();
+    if (this.validateForm.valid) {
+      this.login();
+    } else {
+      for (const key in this.validateForm.controls) {
+        this.validateForm.controls[key].markAsDirty();
+        this.validateForm.controls[key].updateValueAndValidity();
+      }
+      this.floater.showText('Complete all Fields', 'E');
+    }
+  };
+
+  resetForm(): void {
+    this.validateForm.reset();
+    for (const key in this.validateForm.controls) {
+      this.validateForm.controls[key].markAsPristine();
+      this.validateForm.controls[key].updateValueAndValidity();
+    }
+  }
+
+  userNameAsyncValidator = (control: FormControl) => {
+    this.clearPendingAlerts();
+    const validationError = { error: true, duplicated: true };
+    return this._localStorage
+      .getFullUserNameValidity(this.getFormValue('userName'))
+      .pipe(
+        map((res: Array<any>) => {
+          if (res && res.length) {
+            this.floater.showText(
+              this.isRegMode
+                ? `This Username is NOT Available`
+                : `Welcome ${res[0]['fullname']}`,
+              this.isRegMode ? 'E' : 'S'
+            );
+            return this.isRegMode ? validationError : null;
+          } else {
+            this.floater.showText(
+              this.isRegMode
+                ? 'Username Available'
+                : 'No User found, Sign-up if new User',
+              this.isRegMode ? 'S' : 'E'
+            );
+            return this.isRegMode ? null : validationError;
+          }
+        }),
+        catchError(error => {
+          this.floater.showText("This site can't be reached", 'E');
+          return of(validationError);
+        })
+      );
+  };
 
   public loginAsGuest() {
     this._localStorage.loggedUserID = 'guest';
