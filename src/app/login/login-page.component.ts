@@ -22,7 +22,7 @@ import { map, catchError } from 'rxjs/operators';
 export class LoginPageComponent implements AfterViewInit {
   public isRegMode = false;
   public alertsIds = [];
-  public validateForm: FormGroup;
+  public loginForm: FormGroup;
 
   @ViewChild('floater') floater: FloatTextComponent;
   @ViewChild('feedback') feedback: FeedbackComponent;
@@ -118,8 +118,8 @@ export class LoginPageComponent implements AfterViewInit {
   }
 
   antFormContructor(fb) {
-    this.validateForm = fb.group({
-      fullName: ['', [Validators.required]],
+    this.loginForm = fb.group({
+      fullName: ['', []],
       userName: [
         '',
         {
@@ -134,32 +134,32 @@ export class LoginPageComponent implements AfterViewInit {
   }
 
   getFormValue(name) {
-    return this.validateForm.controls[name].value;
+    return this.loginForm.controls[name].value;
   }
 
   setFormValue(name, value) {
-    return this.validateForm.controls[name].setValue(value);
+    return this.loginForm.controls[name].setValue(value);
   }
 
   submitForm = ($event: any) => {
     $event.preventDefault();
     this.clearPendingAlerts();
-    if (this.validateForm.valid) {
+    if (this.loginForm.valid) {
       this.login();
     } else {
-      for (const key in this.validateForm.controls) {
-        this.validateForm.controls[key].markAsDirty();
-        this.validateForm.controls[key].updateValueAndValidity();
+      for (const key in this.loginForm.controls) {
+        this.loginForm.controls[key].markAsDirty();
+        this.loginForm.controls[key].updateValueAndValidity();
       }
       this.floater.showText('Complete all Fields', 'E');
     }
   };
 
   resetForm(): void {
-    this.validateForm.reset();
-    for (const key in this.validateForm.controls) {
-      this.validateForm.controls[key].markAsPristine();
-      this.validateForm.controls[key].updateValueAndValidity();
+    this.loginForm.reset();
+    for (const key in this.loginForm.controls) {
+      this.loginForm.controls[key].markAsPristine();
+      this.loginForm.controls[key].updateValueAndValidity();
     }
   }
 
@@ -194,6 +194,14 @@ export class LoginPageComponent implements AfterViewInit {
         })
       );
   };
+
+  onModeChange() {
+    this.isRegMode = !this.isRegMode;
+    this.resetForm();
+    this.loginForm.controls.fullName.setValidators(
+      this.isRegMode ? [Validators.required] : []
+    );
+  }
 
   public loginAsGuest() {
     this._localStorage.loggedUserID = 'guest';

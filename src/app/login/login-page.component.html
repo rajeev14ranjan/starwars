@@ -2,7 +2,7 @@
   <div class="center login-box">
     <form
       nz-form
-      [formGroup]="validateForm"
+      [formGroup]="loginForm"
       class="login-form"
       (ngSubmit)="submitForm($event)"
     >
@@ -78,11 +78,7 @@
           </button>
           <span class="pull-left">
             Or
-            <a
-              class="link"
-              href="javascript:0"
-              (click)="isRegMode = !isRegMode; resetForm()"
-            >
+            <a class="link" href="javascript:0" (click)="onModeChange()">
               {{ isRegMode ? 'login' : 'register' }} now!
             </a>
           </span>
