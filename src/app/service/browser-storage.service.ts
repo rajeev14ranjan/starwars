@@ -99,6 +99,12 @@ export class StorageService {
     return !environment.production || this.loggedUser.access === 'admin';
   }
 
+  public checkForAdmin() {
+    if (this.loggedUser.access !== 'admin' && environment.production) {
+      this._router.navigateByUrl('dashboard');
+    }
+  }
+
   public getFullUserNameValidity(checkUserName: string) {
     const url = './api/stars.php';
     const postData = { action: 'validate', un: checkUserName };

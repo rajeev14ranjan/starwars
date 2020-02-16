@@ -1,37 +1,46 @@
-<div class="modal fade" bsModal #feedbackModal="bs-modal" [config]="{backdrop: true}" tabindex="-1" role="dialog"
-  aria-labelledby="dialog-static-name">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 id="dialog-static-name" class="modal-title pull-left">Feedback & Suggestions</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="feedbackModal?.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body form-group">
-        <h5 class="text-success">{{status}}</h5>
-        <rating [max]="max" class="rating-stars" [(ngModel)]="rating" [customTemplate]="tt"
-          (onHover)="getStatus($event)" (onLeave)="getStatus(rating)"></rating>
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  [nzTitle]="modalTitle"
+  [nzClosable]="false"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="isModalVisible = false"
+  [nzWidth]="600"
+>
+  <ng-template #modalTitle>
+    <h4 class="col-mb-0">Please rate your overall experience</h4>
+  </ng-template>
 
-        <br /><br />
-        <textarea class="form-control" maxlength="5000" rows="6" resize="none" [(ngModel)]="feedback"
-          placeholder="Please provide your valuable feedback and suggestions">
-        </textarea>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-success btn-sm" [disabled]="!rating || !feedback" (click)="postFeedback()">
-          Send Feedback
-        </button>
-        <button style="background-color: lightgray" class="btn btn-sm" (click)="feedbackModal?.hide()">
-          Close
-        </button>
-      </div>
+  <ng-template #modalContent>
+    <div class="col-mb-15">
+      <nz-rate
+        [(ngModel)]="rating"
+        [nzTooltips]="tooltips"
+        [nzAllowClear]="false"
+      ></nz-rate>
     </div>
-  </div>
-</div>
+    <textarea
+      rows="5"
+      nz-input
+      maxlength="5000"
+      [(ngModel)]="feedback"
+      placeholder="Provide your valuable feedback and suggestions"
+    ></textarea>
+  </ng-template>
 
-<ng-template #tt let-i="index" let-v="value">
-  <button class="btn btn-sm btn-{{i < v ? 'success' : 'default'}} star">
-    {{i < v ? '&#9734;' : '&#9734;'}}
-  </button>
-</ng-template>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="isModalVisible = false">
+      Close
+    </button>
+    <button
+      class="col-mr-5"
+      nz-button
+      nzType="primary"
+      [disabled]="!rating || !feedback"
+      (click)="postFeedback()"
+    >
+      <i nz-icon nzType="like" class="va-tt" nzTheme="outline"></i>Submit
+      Feedback
+    </button>
+  </ng-template>
+</nz-modal>

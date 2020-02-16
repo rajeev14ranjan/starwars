@@ -5,6 +5,8 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzRateModule } from 'ng-zorro-antd/rate';
 
 @NgModule({
   imports: [
@@ -13,7 +15,9 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     NzGridModule,
     NzFormModule,
     NzInputModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    NzModalModule,
+    NzRateModule
   ],
   exports: [
     NzButtonModule,
@@ -21,7 +25,9 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     NzGridModule,
     NzFormModule,
     NzInputModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    NzModalModule,
+    NzRateModule
   ]
 })
 export class AntdModule {}

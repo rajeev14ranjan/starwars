@@ -19,6 +19,10 @@ export const AppRoutes: Routes = [
     loadChildren: './admin/admin.module#AdminModule'
   },
   {
+    path: 'about',
+    loadChildren: './about/about.module#AboutModule'
+  },
+  {
     path: 'sudoku',
     loadChildren: './sudoku/sudoku.module#SudokuModule'
   },

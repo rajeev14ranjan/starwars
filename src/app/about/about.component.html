@@ -1,0 +1,130 @@
+<div class="center">
+  <float-text #floater></float-text>
+  <br />
+  <div>
+    <h4>About Project</h4>
+  </div>
+
+  <br />
+  <div class="row col-md-12" style="text-align: center">
+    <div style="margin:1.3rem">
+      <div class="col-md-12 about">
+        <div class="col-md-5" style="float:left">
+          <div
+            class="LI-profile-badge"
+            data-version="v1"
+            data-size="medium"
+            data-locale="en_US"
+            data-type="vertical"
+            data-theme="light"
+            data-vanity="rajeev14ranjan"
+          >
+            <a
+              class="LI-simple-link"
+              href="https://in.linkedin.com/in/rajeev14ranjan?trk=profile-badge"
+              >Rajeev Ranjan</a
+            >
+          </div>
+        </div>
+        <div
+          class="col-md-7"
+          style="word-break:break-word;float:left;padding: 5px;text-align: justify;"
+        >
+          <p>
+            This game was built as a weekend project in Angular 7 without any
+            third party library.
+          </p>
+          <p>
+            I'm an experienced, detailed-oriented, front-end web developer. I
+            have 4+ years of hands-on experience in efficiently coding websites
+            and applications using modern HTML, CSS, JavaScript, and Angular.
+          </p>
+          <p>
+            My web development work has helped grow revenues, accelerate
+            customer acquisition, increase web traffic and deliver an industry
+            leading competitive advantage.
+          </p>
+          <p>
+            If you like my work you can hire me as a freelancer at
+            <a href="https://www.freelancer.in/u/rajeev14ranjan" target="blank"
+              >www.freelancer.in</a
+            >
+          </p>
+          <br /><br />
+          <a (click)="goTo('dashboard')" class="text-info arrow"
+            >← Go back to Dashboard</a
+          >
+          <span class="text-secondary"> | </span>
+          <a (click)="feedback.show()" class="arrow text-primary"
+            >Provide Feedback</a
+          >
+          <a
+            *ngIf="!isGuestUser"
+            (click)="openLogModal(loggedUserID)"
+            class="arrow text-success float-right arrow"
+            >Show my Login History</a
+          >
+        </div>
+      </div>
+    </div>
+    <br />
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  bsModal
+  #logModal="bs-modal"
+  [config]="{ backdrop: true }"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-static-name"
+>
+  <div [ngClass]="'modal-dialog modal-lg'">
+    <div class="modal-content" *ngIf="userLogs && userLogs.length > 0">
+      <div class="modal-header">
+        <h4 id="dialog-static-name" class="modal-title pull-left">
+          Login details of {{ userLogs[0].fullname }}
+        </h4>
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="logModal?.hide()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div
+        class="modal-body"
+        style="max-height: 500px; overflow-y: auto; width: 100%;"
+      >
+        <table class="table table-bordered table-hover">
+          <tr>
+            <th>Time Stamp</th>
+            <th>Match Score</th>
+            <th>Device Details</th>
+            <th>Screen Size</th>
+          </tr>
+          <tr *ngFor="let log of userLogs; let i = index">
+            <td>{{ log.timestamp | date: 'long' }}</td>
+            <td>{{ log.score }}</td>
+            <td>{{ log.useragent }}</td>
+            <td>{{ log.screen }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button
+          style="background-color: lightgray"
+          class="btn btn-sm"
+          (click)="logModal?.hide()"
+        >
+          close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<feedback #feedback (done)="feedbackThanks($event)"></feedback>

@@ -10,3 +10,15 @@
 .rating-stars {
   user-select: none;
 }
+
+.ant-modal-header.ng-star-inserted {
+  padding: 15px 24px;
+}
+
+.ant-modal-body.ng-star-inserted {
+  padding: 10px 24px;
+}
+
+.ant-rate-star.ng-star-inserted.ant-rate-star-full {
+  color: green;
+}

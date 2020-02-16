@@ -42,7 +42,7 @@
   left: -40px;
   opacity: 0;
   box-shadow: 0px 5px 5px #00000052;
-  animation: fadeOut 5s ease-in;
+  animation: fadeOut 15s ease-in;
 }
 
 @keyframes fadeOut {
