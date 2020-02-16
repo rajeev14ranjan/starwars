@@ -6,7 +6,6 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { StorageService } from '../service/browser-storage.service';
-import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'feedback',
@@ -16,7 +15,6 @@ import { ModalDirective } from 'ngx-bootstrap';
 })
 export class FeedbackComponent {
   @Output() done = new EventEmitter<boolean>();
-  @ViewChild('feedbackModal') feedbackModal: ModalDirective;
   constructor(private _storageService: StorageService) {}
   public rating = 0;
   public feedback = '';
@@ -40,7 +38,7 @@ export class FeedbackComponent {
   }
 
   public hide() {
-    this.feedbackModal.hide();
+    this.isModalVisible = false;
   }
 
   public postFeedback() {
