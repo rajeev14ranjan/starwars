@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { StorageService } from '../service/browser-storage.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sudoku',
@@ -9,9 +8,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./sudoku.component.css']
 })
 export class SudokuComponent implements OnInit {
-  public isAdmin: boolean;
-  public isGuestUser: boolean;
-  public loggedUserID: number;
   public puzzle: Array<any>;
   public answer: Array<any>;
   public option: Array<number>;
@@ -27,9 +23,6 @@ export class SudokuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isAdmin = this._localStorage.isAdmin();
-    this.isGuestUser = this._localStorage.isGuestUser;
-    this.loggedUserID = this._localStorage.loggedUser.userid;
     this._title.setTitle('Sudoku');
     this.initializeArrays();
   }
@@ -128,13 +121,17 @@ export class SudokuComponent implements OnInit {
 
   //Generator to return the random option from randomly sorted array
   public getRandomGenerator() {
-    let sOption = this.option.sort((a, b) => Math.floor(Math.random() * 3 - 1));
+    const sOption = this.option.sort(() => Math.floor(Math.random() * 3 - 1));
     let pointer = 0;
 
     return function() {
-      pointer =
-        ((pointer + 1 + Math.random() * sOption.length) >> 0) % sOption.length;
-      return sOption[pointer];
+      const ans = sOption[pointer];
+      pointer++;
+      if (pointer === sOption.length) {
+        pointer = 0;
+        sOption.sort(() => Math.floor(Math.random() * 3 - 1));
+      }
+      return ans;
     };
   }
 

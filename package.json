@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "prod": "ng build --prod --aot",
+    "prod": "ng build --prod --aot --deploy-url js/",
+    "analyze": "ng build --stats-json && webpack-bundle-analyzer dist/StarsWars/stats.json",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -51,6 +52,7 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~3.1.6",
-    "ua-parser-js": "^0.7.18"
+    "ua-parser-js": "^0.7.18",
+    "webpack-bundle-analyzer": "^3.6.0"
   }
 }

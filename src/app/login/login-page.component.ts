@@ -48,25 +48,6 @@ export class LoginPageComponent implements AfterViewInit {
         }
       }
     }, 100);
-
-    this.alertsIds.push(
-      setTimeout(() => {
-        this.floater.showText('Sign Up if you are new to this Page 😊', 'I');
-      }, 1500)
-    );
-
-    this.alertsIds.push(
-      setTimeout(() => {
-        this.floater.showText(`You can also login as a Guest 😃`, 'S');
-      }, 5300)
-    );
-  }
-
-  public clearPendingAlerts() {
-    while (this.alertsIds.length) {
-      const id = this.alertsIds.pop();
-      clearTimeout(id);
-    }
   }
 
   public login() {
@@ -81,6 +62,7 @@ export class LoginPageComponent implements AfterViewInit {
           this.resetForm();
           this.setFormValue('password', '');
           this.setFormValue('userName', un);
+          this.loginForm.controls.fullName.setValidators([]);
           this.isRegMode = false;
           this.floater.showText('Please Login with credentials', 'S');
         },
@@ -143,7 +125,6 @@ export class LoginPageComponent implements AfterViewInit {
 
   submitForm = ($event: any) => {
     $event.preventDefault();
-    this.clearPendingAlerts();
     if (this.loginForm.valid) {
       this.login();
     } else {
@@ -164,7 +145,6 @@ export class LoginPageComponent implements AfterViewInit {
   }
 
   userNameAsyncValidator = (control: FormControl) => {
-    this.clearPendingAlerts();
     const validationError = { error: true, duplicated: true };
     return this._localStorage
       .getFullUserNameValidity(this.getFormValue('userName'))
