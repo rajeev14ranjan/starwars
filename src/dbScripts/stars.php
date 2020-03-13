@@ -270,20 +270,32 @@ function delete_user($data){
     $uid = mysqli_real_escape_string($connection,$data['uid']);
 
     if(!empty($usr) && !empty($uid)){
-
-        $response=array(
+        $isUserOnly = (int)$uid > 2;
+        $resultUser = false;
+        $resultLogs = false;
+         
+        if($isUserOnly){
+            $delUserQuery = "DELETE FROM usertb WHERE username = '". $usr."' AND userid = ". $uid.";";
+            $resultUser = mysqli_query($connection, $delUserQuery);
+        }
+        
+        $delLogsQuery = "DELETE FROM loginlogs WHERE userid = ". $uid.";";
+        $resultLogs = mysqli_query($connection, $delLogsQuery);
+        
+        $delFeedbackQuery = "DELETE FROM `feedbacktb` WHERE `userid` = ". $uid.";";
+        $resultFeedback = mysqli_query($connection, $delFeedbackQuery);
+        
+        
+        if($resultLogs && $resultFeedback && (!$isUserOnly || $resultUser)){
+           $response=array(
+            'status' => 1,
+            'status_message' =>'User deleted Successfully.',
+            );
+        }else{
+            $response=array(
             'status' => 0,
-            'status_message' =>'Not Authorize to delete users.'
+            'status_message' =>'User could not be deleted!',
         );
-
-        $delQuery = $uid > 2? "DELETE FROM usertb WHERE username = '". $usr."' AND userid = ". $uid."; " : "";
-        $delQuery .= "DELETE FROM loginlogs WHERE userid = ". $uid."";
-
-        if(mysqli_query($connection, $delQuery))
-        {    $response=array(
-                'status' => 1,
-                'status_message' =>'User deleted Successfully.'
-                );
         }
 
         header('Content-Type: application/json');
@@ -301,7 +313,7 @@ function insert_Log($data){
     $sc  =   mysqli_real_escape_string($connection,$data["sc"]);
     $ua  =   mysqli_real_escape_string($connection,$data["ua"]);
     $scr  =  mysqli_real_escape_string($connection,$data["scr"]);
-    $ts  = date('D M d Y H:i:s O');
+    $ts  =  date('D M d Y H:i:s O');
     
     $query = "INSERT INTO loginlogs (logid, userid,timestamp,useragent,screen,score) VALUES ('".$logid ."','".$uid ."','".$ts ."','".$ua ."','".$scr ."','".$sc ."') ON DUPLICATE KEY UPDATE score = score + ".$sc ."";
 
