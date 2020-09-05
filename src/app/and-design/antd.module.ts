@@ -7,6 +7,13 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzRateModule } from 'ng-zorro-antd/rate';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+import { en_US, zh_CN, NzI18nService } from 'ng-zorro-antd';
+registerLocaleData(en);
+// registerLocaleData(en_US);
+// registerLocaleData(zh_CN);
 
 @NgModule({
   imports: [
@@ -17,7 +24,8 @@ import { NzRateModule } from 'ng-zorro-antd/rate';
     NzInputModule,
     NzCheckboxModule,
     NzModalModule,
-    NzRateModule
+    NzRateModule,
+    NzDatePickerModule
   ],
   exports: [
     NzButtonModule,
@@ -27,7 +35,9 @@ import { NzRateModule } from 'ng-zorro-antd/rate';
     NzInputModule,
     NzCheckboxModule,
     NzModalModule,
-    NzRateModule
-  ]
+    NzRateModule,
+    NzDatePickerModule
+  ],
+  providers: [NzI18nService]
 })
 export class AntdModule {}

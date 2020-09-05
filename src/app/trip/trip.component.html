@@ -1,0 +1,24 @@
+<div class="trip">
+  <div class="tile box">
+    <span class="text-primary col-p-10 title">
+      Select Place and Duration of Visit
+    </span>
+    <div class="col-p-10">
+      <input
+        type="text"
+        class="form-control user-input"
+        spellcheck="false"
+        [(ngModel)]="userInput"
+        (keyup)="entryChanged($event)"
+      />
+      <div>
+        <nz-date-picker
+          [(ngModel)]="date"
+          (ngModelChange)="demo($event)"
+          nzPlaceHolder="Select month"
+        ></nz-date-picker>
+        <nz-range-picker [nzFormat]="yyyy / MM / dd"></nz-range-picker>
+      </div>
+    </div>
+  </div>
+</div>

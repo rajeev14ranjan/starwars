@@ -1,26 +1,54 @@
 <div class="split">
-  <div class="title text-primary" spellcheck="false" contentEditable="true">Expense Calculator</div>
+  <div class="title text-primary" spellcheck="false" contentEditable="true">
+    Expense Calculator
+  </div>
   <div class="tile box">
     <div class="btn-group col-p-10">
-      <button type="button" class="btn" [ngClass]="userInputType === 0 ? 'btn-primary':'btn-light'"
-        (click)="changeInputType(0)">Add Peoples</button>
-      <button type="button" class="btn" [ngClass]="userInputType === 1 ? 'btn-primary':'btn-light'"
-        [disabled]="!peoples.length" (click)="changeInputType(1)">Add Expenses</button>
-
+      <button
+        type="button"
+        class="btn"
+        [ngClass]="userInputType === 0 ? 'btn-primary' : 'btn-light'"
+        (click)="changeInputType(0)"
+      >
+        Add Peoples
+      </button>
+      <button
+        type="button"
+        class="btn"
+        [ngClass]="userInputType === 1 ? 'btn-primary' : 'btn-light'"
+        [disabled]="!peoples.length"
+        (click)="changeInputType(1)"
+      >
+        Add Expenses
+      </button>
     </div>
-    <select *ngIf="userInputType === 0 && !expenses.length" class="pull-right currency-dd col-m-10 ls-1"
-      [(ngModel)]="currency">
-      <option *ngFor="let currency of currencies" [value]="currency.symbol">{{currency.name}}</option>
+    <select
+      *ngIf="userInputType === 0 && !expenses.length"
+      class="pull-right currency-dd col-m-10 ls-1"
+      [(ngModel)]="currency"
+    >
+      <option *ngFor="let currency of currencies" [value]="currency.symbol">{{
+        currency.name
+      }}</option>
     </select>
     <div class="input-group col-p-10">
-      <input type="text" class="form-control user-input" spellcheck="false" [(ngModel)]="userInput"
-        (keyup)="entryChanged($event)" />
+      <input
+        type="text"
+        class="form-control user-input"
+        spellcheck="false"
+        [(ngModel)]="userInput"
+        (keyup)="entryChanged($event)"
+      />
       <div class="input-group-append">
-        <button class="input-group-text btn btn-info" (click)="processEntry(true)">⏎</button>
+        <button
+          class="input-group-text btn btn-info"
+          (click)="processEntry(true)"
+        >
+          ⏎
+        </button>
       </div>
     </div>
-    <div class="col-m-10 text-info" [innerHtml]="detailedExpense">
-    </div>
+    <div class="col-m-10 text-info" [innerHtml]="detailedExpense"></div>
   </div>
 
   <div class="summary">
@@ -29,26 +57,37 @@
         <thead class="thead-dark">
           <tr>
             <th style="min-width: 40%">Expense Description</th>
-            <th *ngFor="let people of peoples">{{people}}</th>
+            <th *ngFor="let people of peoples">{{ people }}</th>
             <th>Total</th>
             <th class="delete-link">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let exp of expenses;let idx=index;trackBy: trackByExp">
-            <td>{{idx+1}}. {{exp.description}}
-              <span class="exp-detail" placement="right" [popover]="expDetTemp" triggers="hover"
-                (onShown)="showExpensePopOver(idx)">i</span>
+          <tr
+            *ngFor="let exp of expenses; let idx = index; trackBy: trackByExp"
+          >
+            <td>
+              {{ idx + 1 }}. {{ exp.description }}
+              <span
+                class="exp-detail"
+                placement="right"
+                [popover]="expDetTemp"
+                triggers="hover"
+                (onShown)="showExpensePopOver(idx)"
+                >i</span
+              >
             </td>
-            <td *ngFor="let share of exp.shares">{{currency + share.amount}}</td>
-            <td>{{currency + exp.amount}}</td>
+            <td *ngFor="let share of exp.shares">
+              {{ currency + share.amount }}
+            </td>
+            <td>{{ currency + exp.amount }}</td>
             <td class="delete-link">
               <a class="col-mr-10" (click)="alterExpense(exp.id, true)">✎</a>
               <a (click)="alterExpense(exp.id)">✘</a>
             </td>
           </tr>
           <tr *ngIf="expenses.length" class="table-info">
-            <td *ngFor="let item of totalExp">{{item}}</td>
+            <td *ngFor="let item of totalExp">{{ item }}</td>
             <td class="delete-link" (click)="deleteAllExpense()">✘✘✘</td>
           </tr>
           <tr *ngIf="!expenses.length">
@@ -62,11 +101,17 @@
   <div class="tile box" *ngIf="expenses.length">
     <div class="result">
       <h4 class="text-info col-mb-10">Simplified Debts</h4>
-      <div *ngFor="let transact of simpleTransactions;let i=index;" class="tranasaction">
-        <span class="name ls-2">{{transact.payer}}</span> owes {{currency + transact.amount}} to <span
-          class="name ls-2">{{transact.receiver}}</span>
+      <div
+        *ngFor="let transact of simpleTransactions; let i = index"
+        class="tranasaction"
+      >
+        <span class="name ls-2">{{ transact.payer }}</span> owes
+        {{ currency + transact.amount }} to
+        <span class="name ls-2">{{ transact.receiver }}</span>
       </div>
-      <div *ngIf="!simpleTransactions?.length" class="tranasaction ls-2">All debts are settled</div>
+      <div *ngIf="!simpleTransactions?.length" class="tranasaction ls-2">
+        All debts are settled
+      </div>
     </div>
   </div>
 </div>
@@ -75,12 +120,15 @@
   <div>
     <ul class="popOver-list">
       <li class="total-list-item col-mb-4 col-pb-4">
-        <span class="name ls-1">Total {{this.currency + expenses[expPopoverId].amount}} paid by</span>
+        <span class="name ls-1"
+          >Total {{ this.currency + expenses[expPopoverId].amount }} paid
+          by</span
+        >
       </li>
       <ng-container *ngFor="let p of expenses[expPopoverId].payers">
         <li *ngIf="p.amount">
-          <span class="name ls-1 col-mr-10">{{p.name}}</span>
-          <span class="pull-right">{{this.currency + p.amount}}</span>
+          <span class="name ls-1 col-mr-10">{{ p.name }}</span>
+          <span class="pull-right">{{ this.currency + p.amount }}</span>
         </li>
       </ng-container>
     </ul>

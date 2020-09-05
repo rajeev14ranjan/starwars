@@ -1,0 +1,31 @@
+.trip {
+  padding: 25px;
+}
+
+.title {
+  font-size: large;
+}
+
+.box {
+  border: 1px solid lightgray;
+  border-radius: 2px;
+}
+
+.tile {
+  padding: 10px;
+  margin: 20px 0;
+  background-color: #e6e6e6;
+}
+.btn-light {
+  background-color: #dbdbdb8f;
+  border: 1px solid lightgray;
+}
+
+.user-input,
+.user-input:focus {
+  background-color: #ededed;
+  font-size: 1.2em;
+  color: black;
+  width: 50%;
+  display: inline-block;
+}

@@ -31,6 +31,10 @@ export const AppRoutes: Routes = [
     loadChildren: './tic-tac-toe/tic-tac-toe.module#TicTacToeModule'
   },
   {
+    path: 'trip',
+    loadChildren: './trip/trip.module#TripModule'
+  },
+  {
     path: 'fiddler',
     loadChildren: './fiddler/fiddler.module#FiddlerModule'
   },
