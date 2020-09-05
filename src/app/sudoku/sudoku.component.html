@@ -3,9 +3,16 @@
   <br /><br />
   <div class="row col-md-12">
     <div class="col-md-4 col-p-0">
+      <p>
+        <nz-radio-group [(ngModel)]="mode" [nzButtonStyle]="'solid'" [nzSize]="'large'" (ngModelChange)="onModeChange($event)">
+        <label nz-radio-button nzValue="P">Practice</label>
+        <label nz-radio-button nzValue="S">Sovle</label>
+      </nz-radio-group>
+    </p>
       <p class="disp">{{displayTxt}}</p>
       <br /><br />
 
+     <ng-container *ngIf="mode==='P'">
       <label class="form-check-label"> Sudoku Hardness: {{hardness}}
         <input type="range" class="form-control-range" max="80" min="10" [(ngModel)]="hardness" />
       </label>
@@ -15,13 +22,20 @@
         <button class="btn btn-xs btn-danger col-m-5" (click)="resetSoduku()">Reset</button><br /><br />
         <button class="btn btn-xs btn-primary col-m-5" (click)="prepareNewSoduku()">Get New Sudoku</button><br />
       </div>
+     </ng-container> 
+     <ng-container *ngIf="mode==='S'">
+      <br /><br />
+      <button class="btn btn-xs btn-danger col-m-5" (click)="clearSolution()">Clear</button><br />
+      <button class="btn btn-xs btn-success col-m-5" (click)="solveSudoku()">Solve Sudoku</button>
+    </ng-container> 
+      
 
     </div>
     <div class="col-md-8">
       <div class="grid">
         <div *ngFor="let row of puzzle; let r= index">
           <input *ngFor="let col of row; let c = index; trackBy: trackByFn" [readOnly]="getPrfeillFlag(r,c)"
-            [ngStyle]="getStyle(r,c)" [(ngModel)]="puzzle[r][c]" (keyup)="entered(r,c)" class="cell">
+            [ngStyle]="getStyle(r,c)" [(ngModel)]="puzzle[r][c]" (keyup)="entered($event,r,c)" class="cell" type="number" min="1">
         </div>
       </div>
     </div>
