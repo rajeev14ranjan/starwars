@@ -3,15 +3,16 @@ import {
   Router,
   RouterEvent,
   NavigationStart,
-  NavigationEnd
+  NavigationEnd,
 } from '@angular/router';
 import { StorageService } from '../service/browser-storage.service';
 import { HttpHelperService } from '../service/http-helper.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'routing-page',
   templateUrl: './routing-component.html',
-  styleUrls: ['./routing-component.css']
+  styleUrls: ['./routing-component.css'],
 })
 export class RoutingComponent implements OnInit, OnDestroy {
   public isRouterLoading: boolean;
@@ -31,13 +32,16 @@ export class RoutingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._http.isConnActive.asObservable().subscribe(isActive => {
+    this._http.isConnActive.asObservable().subscribe((isActive) => {
       this.isXHRActive = isActive;
     });
   }
 
   showBar(): boolean {
-    return this._router.url !== '/login' && !!this._localStorage.loggedUserName;
+    return (
+      this._router.url !== '/login' &&
+      (!!this._localStorage.loggedUserName || !environment.production)
+    );
   }
 
   isAdmin() {
@@ -49,7 +53,7 @@ export class RoutingComponent implements OnInit, OnDestroy {
   }
 
   userName() {
-    return this._localStorage.loggedUserName;
+    return environment.production ? this._localStorage.loggedUserName : 'Dev';
   }
 
   logout() {

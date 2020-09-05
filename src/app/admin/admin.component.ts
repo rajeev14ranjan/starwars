@@ -12,7 +12,7 @@ import { FeedbackComponent } from '../feedback/feedback.component';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css']
+  styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent implements OnInit {
   public allUsers: Array<UserDetail>;
@@ -40,8 +40,7 @@ export class AdminComponent implements OnInit {
   constructor(
     private _title: Title,
     private _localStorage: StorageService,
-    private _router: Router,
-    private _httpHelper: HttpHelperService
+    private _router: Router
   ) {
     this._localStorage.checkForLogin();
   }
@@ -82,17 +81,17 @@ export class AdminComponent implements OnInit {
 
   public fetchAllUser() {
     this._localStorage.getAllUsers().subscribe(
-      res => {
+      (res) => {
         this.allUsers = res;
       },
-      error => this.floater.showText(error, 'E')
+      (error) => this.floater.showText(error, 'E')
     );
   }
 
   public deleteUser() {
     this._localStorage
       .deleteUser(this.tempUser.userid, this.tempUser.username)
-      .subscribe(res => {
+      .subscribe((res) => {
         if (res.status) {
           this.fetchAllUser();
         }
@@ -133,7 +132,7 @@ export class AdminComponent implements OnInit {
   }
 
   public createDummyUser() {
-    this._localStorage.CreateDummyUser(5).subscribe(res => {
+    this._localStorage.CreateDummyUser(5).subscribe((res) => {
       if (res) {
         this.floater.showText('Dummy User Created Successfully', 'I', 2000);
         this.fetchAllUser();
@@ -169,7 +168,7 @@ export class AdminComponent implements OnInit {
 
   public openLogModal(userId: number) {
     this.currentUserName = this.allUsers
-      ? this.allUsers.find(x => x.userid === userId).fullname
+      ? this.allUsers.find((x) => x.userid === userId).fullname
       : 'you';
     this._localStorage.getLogforUser(userId).subscribe(
       (logs: Array<Logs>) => {
@@ -191,7 +190,7 @@ export class AdminComponent implements OnInit {
 
   public openFeedbackModal(userId: number) {
     this.currentUserName = this.allUsers
-      ? this.allUsers.find(x => x.userid === userId).fullname
+      ? this.allUsers.find((x) => x.userid === userId).fullname
       : '';
     this._localStorage.getFeedback(userId).subscribe(
       (feedbacks: Array<Feedback>) => {
