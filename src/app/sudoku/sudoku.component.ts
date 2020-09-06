@@ -12,7 +12,7 @@ export class SudokuComponent implements OnInit {
   public answer: Array<any>;
   public option: Array<number>;
   public isComplete = false;
-  public displayTxt = 'Practice Sudoku';
+  public displayTxt = 'Enter Sudoku puzzle';
   public size = 9;
   public hardness = 60;
   public prefilled = new Map<number, boolean>();
@@ -233,7 +233,7 @@ export class SudokuComponent implements OnInit {
     this.mode = mode;
     this.clearSudokuSpace();
     if (mode === 'S') {
-      this.displayTxt = 'Enter Sudoku puzzle and click Done';
+      this.displayTxt = 'Enter Sudoku puzzle';
     } else {
       this.displayTxt = 'Practice Sudoku';
     }

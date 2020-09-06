@@ -11,7 +11,7 @@ import { FeedbackComponent } from '../feedback/feedback.component';
 @Component({
   selector: 'about',
   templateUrl: './about.component.html',
-  styleUrls: ['./about.component.css']
+  styleUrls: ['./about.component.css'],
 })
 export class AboutComponent implements OnInit {
   public userLogs: Array<Logs>;
@@ -58,12 +58,23 @@ export class AboutComponent implements OnInit {
 
     const linkedInScripts =
       'https://platform.linkedin.com/badges/js/profile.js';
-    const node = document.createElement('script');
-    node.src = linkedInScripts;
-    node.type = 'text/javascript';
-    node.async = false;
-    node.charset = 'utf-8';
-    document.getElementsByTagName('head')[0].appendChild(node);
+    const script = document.createElement('script');
+    script.src = linkedInScripts;
+    script.type = 'text/javascript';
+    script.async = false;
+    script.onerror = this.handleBadgeError.bind(this);
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  public handleBadgeError() {
+    let link = document.querySelector('.LI-simple-link');
+    let img = document.createElement('img');
+    img.src = '../../assets/badge.png';
+    img.style.maxWidth = '250px';
+    img.style.boxShadow = '3px 3px 3px 2px #00000036';
+    link.innerHTML = '';
+    link.setAttribute('target', '_blank');
+    link.appendChild(img);
   }
 
   public goTo(url: string) {
