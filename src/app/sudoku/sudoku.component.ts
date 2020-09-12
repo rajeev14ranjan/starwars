@@ -424,5 +424,6 @@ export class SudokuComponent implements OnInit {
       }
     }
     this.isSolved = false;
+    this.prefilled.clear();
   }
 }
