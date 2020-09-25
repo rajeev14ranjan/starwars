@@ -9,7 +9,7 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -17,12 +17,13 @@ import { map, catchError } from 'rxjs/operators';
 @Component({
   selector: 'login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.css']
+  styleUrls: ['./login-page.component.css'],
 })
 export class LoginPageComponent implements AfterViewInit {
   public isRegMode = false;
   public alertsIds = [];
   public loginForm: FormGroup;
+  public signUpModalVisible = false;
 
   @ViewChild('floater') floater: FloatTextComponent;
   @ViewChild('feedback') feedback: FeedbackComponent;
@@ -86,7 +87,7 @@ export class LoginPageComponent implements AfterViewInit {
             this.floater.showText('Incorrect Username or Password', 'E');
           }
         },
-        error => {
+        (error) => {
           this.floater.showText('Server Connection cannot be established', 'E');
         }
       );
@@ -94,9 +95,7 @@ export class LoginPageComponent implements AfterViewInit {
   }
 
   public getUniqueID(): string {
-    return Date.now()
-      .toString(36)
-      .toUpperCase();
+    return Date.now().toString(36).toUpperCase();
   }
 
   antFormContructor(fb) {
@@ -107,11 +106,11 @@ export class LoginPageComponent implements AfterViewInit {
         {
           validators: [Validators.required],
           asyncValidators: [this.userNameAsyncValidator],
-          updateOn: 'blur'
-        }
+          updateOn: 'blur',
+        },
       ],
       password: ['', [Validators.required]],
-      remember: [false, []]
+      remember: [false, []],
     });
   }
 
@@ -168,7 +167,7 @@ export class LoginPageComponent implements AfterViewInit {
             return this.isRegMode ? null : validationError;
           }
         }),
-        catchError(error => {
+        catchError((error) => {
           this.floater.showText("This site can't be reached", 'E');
           return of(validationError);
         })
@@ -183,7 +182,12 @@ export class LoginPageComponent implements AfterViewInit {
     );
   }
 
-  public loginAsGuest() {
+  public loginAsGuest(check: boolean) {
+    if (check && !this._localStorage.isGuestLoginAllowed()) {
+      this.signUpModalVisible = true;
+      return;
+    }
+    this.signUpModalVisible = false;
     this._localStorage.loggedUserID = 'guest';
     this._localStorage.loggedUserName = 'Guest';
     this._localStorage.loggedUser.username = 'guest';
@@ -195,9 +199,5 @@ export class LoginPageComponent implements AfterViewInit {
     this._localStorage.uniquieLogid = this.getUniqueID();
     this._localStorage.saveUserLog();
     this._router.navigateByUrl('dashboard');
-  }
-
-  public feedbackThanks(isSuccess: boolean) {
-    this.floater.showText('Thank you for your Valuable feedback', 'I');
   }
 }

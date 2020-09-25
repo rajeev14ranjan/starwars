@@ -10,14 +10,15 @@ import {
   Logs,
   Feedback,
   UserScore,
-  LoginToken
+  LoginToken,
 } from '../model/app.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StorageService {
   private autoLoginToken = 'starAut0L0g1nTok3n';
+  private guestLoginToken = 'starGu3stL0g1nTok3n';
   private allUsers: Array<UserDetail>;
   public uniquieLogid: string;
   public loggedUser = new UserDetail();
@@ -26,6 +27,7 @@ export class StorageService {
   public logScore = 0;
   public parser = new UAParser();
   public isGuestUser: boolean;
+  public maxGuestLoginAllowed = 1;
   // public isBrowserOnline = Navigator.onLine;
 
   constructor(private _router: Router, private _dbcon: HttpHelperService) {}
@@ -59,6 +61,15 @@ export class StorageService {
     }
   }
 
+  public isGuestLoginAllowed(): boolean {
+    let guestLoginCount = parseInt(
+      localStorage.getItem(this.guestLoginToken) || '0',
+      10
+    );
+    localStorage.setItem(this.guestLoginToken, `${guestLoginCount + 1}`);
+    return guestLoginCount < this.maxGuestLoginAllowed;
+  }
+
   public autoLoginIfTokenAvailable() {
     try {
       const token: LoginToken = JSON.parse(
@@ -71,9 +82,7 @@ export class StorageService {
           true
         ).subscribe((response: boolean) => {
           if (response) {
-            this.uniquieLogid = Date.now()
-              .toString(36)
-              .toUpperCase();
+            this.uniquieLogid = Date.now().toString(36).toUpperCase();
             this.saveUserLog();
             this._router.navigateByUrl('dashboard');
           } else {
@@ -156,7 +165,7 @@ export class StorageService {
     const postData = {
       un: checkUserName,
       pw: hashed ? checkPassWord : this.hash(checkPassWord),
-      action: 'login'
+      action: 'login',
     };
 
     return this._dbcon.post(url, postData, true).pipe(
@@ -181,7 +190,7 @@ export class StorageService {
       sc: this.logScore,
       ua: this.getOsBrowser(),
       scr: `${window.innerWidth} x ${window.innerHeight}`,
-      action: 'insertLog'
+      action: 'insertLog',
     };
     this.logScore = 0;
 
@@ -198,7 +207,7 @@ export class StorageService {
       fd: feedback,
       ua: this.getOsBrowser(),
       logid: this.uniquieLogid,
-      action: 'feedback'
+      action: 'feedback',
     };
     return this._dbcon.post('./api/stars.php', postData, true);
   }
@@ -208,7 +217,7 @@ export class StorageService {
       action: 'saveScore',
       id: this.loggedUser.userid,
       game: game,
-      score: score
+      score: score,
     };
     return this._dbcon.post('./api/stars.php', postData, false);
   }
@@ -232,7 +241,7 @@ export class StorageService {
     const postData = {
       usr: userName,
       uid: userId,
-      action: 'deleteUser'
+      action: 'deleteUser',
     };
     return this._dbcon.post('./api/stars.php', postData, true);
   }
@@ -271,7 +280,7 @@ export class StorageService {
       un = un.toLowerCase();
       ps = un;
       cnt--;
-      isInValid = this.allUsers.some(user => user.username === un);
+      isInValid = this.allUsers.some((user) => user.username === un);
     } while (isInValid && cnt > 0);
 
     if (cnt > 0) {

@@ -69,17 +69,17 @@
             *ngIf="!isRegMode"
             class="pull-right link"
             href="javascript:0"
-            (click)="loginAsGuest()"
+            (click)="loginAsGuest(true)"
           >
             Guest Login
           </a>
           <button nz-button class="login-form-button" [nzType]="'primary'">
-            {{ isRegMode ? 'Register' : 'Log In' }}
+            {{ isRegMode ? 'Submit' : 'Sign In' }}
           </button>
           <span class="pull-left">
             Or
             <a class="link" href="javascript:0" (click)="onModeChange()">
-              {{ isRegMode ? 'login' : 'register' }} now!
+              {{ isRegMode ? 'Sign In' : 'Sign Up' }} now!
             </a>
           </span>
         </nz-form-control>
@@ -91,5 +91,37 @@
   </div>
 </div>
 
-<feedback #feedback (done)="feedbackThanks($event)"></feedback>
+<nz-modal
+  [(nzVisible)]="signUpModalVisible"
+  [nzTitle]="modalTitle"
+  [nzClosable]="false"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="signUpModalVisible = false"
+  [nzWidth]="500"
+>
+  <ng-template #modalTitle>
+    <h4 class="col-mb-0 text-primary">Please consider Signing up!</h4>
+  </ng-template>
+
+  <ng-template #modalContent class="col-p-10">
+    <p>You have previously logged in as a Guest User. Sign Up to save your game score and get personalized experience.</p>
+    <p>Signing Up is absolutely free and will only take a moment.</p>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="loginAsGuest(false)">
+      Continue as Guest
+    </button>
+    <button
+      class="col-mr-5"
+      nz-button
+      nzType="primary"
+      (click)="signUpModalVisible = false; isRegMode = true"
+    >Sign Up
+    </button>
+  </ng-template>
+</nz-modal>
+
+
 <float-text #floater></float-text>

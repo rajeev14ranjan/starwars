@@ -119,3 +119,8 @@ a {
   text-decoration: none;
   user-select: none;
 }
+
+::ng-deep.ant-modal-body {
+  padding: 15px 20px 10px;
+  color: #000000bf;
+}

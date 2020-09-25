@@ -5,7 +5,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LoginPageComponent } from './login-page.component';
 import { FloatTextModule } from '../float-text/float-text.module';
-import { FeedbackModule } from '../feedback/feedback.module';
 import { AntdModule } from '../ant-design/antd.module';
 
 const routes: Routes = [{ path: '', component: LoginPageComponent }];
@@ -18,7 +17,6 @@ const routes: Routes = [{ path: '', component: LoginPageComponent }];
     ReactiveFormsModule,
     RouterModule.forChild(routes),
     FloatTextModule,
-    FeedbackModule,
     AntdModule,
   ],
 })
